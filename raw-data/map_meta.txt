@@ -1,0 +1,24 @@
+#SampleID	BarcodeSequence	LinkerPrimerSequence	FileInput	Location 	Yield 	Management	Description 	Management_Description	All
+BB190			BB190.fastq	Collingwood 	Low	Field	Bulk	Field_Bulk	1
+BB191			BB191.fastq	Collingwood 	Low	Field	Bulk	Field_Bulk	1
+BB192			BB192.fastq	Collingwood 	Low	Field	Bulk	Field_Bulk	1
+BB193			BB193.fastq	Collingwood 	Low	Field	Bulk	Field_Bulk	1
+BB195bis			BB195bis.fastq	Collingwood 	Low	Field	Rhizosphere	Field_Rhizosphere	1
+BB195			BB195.fastq	Collingwood 	Low 	Field	Rhizosphere	Field_Rhizosphere	1
+BB197			BB197.fastq	Collingwood 	Low 	Field	Rhizosphere	Field_Rhizosphere	1
+BB198			BB198.fastq	Collingwood 	Low 	Field	Rhizosphere	Field_Rhizosphere	1
+BB200			BB200.fastq	Collingwood 	Low	Forest	Bulk	Forest_Bulk	1
+BB202			BB202.fastq	Collingwood 	Low	Forest	Bulk	Forest_Bulk	1
+BB203			BB203.fastq	Collingwood 	Low	Forest	Bulk	Forest_Bulk	1
+BB204			BB204.fastq	Collingwood 	Low	Forest	Bulk	Forest_Bulk	1
+BB207			BB207.fastq	Collingwood 	Low	Forest	Rhizosphere	Forest_Rhizosphere	1
+BB208			BB208.fastq	Collingwood 	Low	Forest	Rhizosphere	Forest_Rhizosphere	1
+BB209			BB209.fastq	Collingwood 	Low	Forest	Rhizosphere	Forest_Rhizosphere	1
+BB3_1_2			BB3_1_2.fastq	Debert_1	Low	Field	Bulk	Field_Bulk	1
+BB3_1_2R			BB3_1_2R.fastq	Debert_1	Low	Field	Rhizosphere	Field_Rhizosphere	1
+BB3_3_2			BB3_3_2.fastq	Debert_1	Low	Field	Bulk	Field_Bulk	1
+BB3_3_2R			BB3_3_2R.fastq	Debert_1	Low	Field	Rhizosphere	Field_Rhizosphere	1
+BB3_4_2			BB3_4_2.fastq	Debert_1	Low	Field	Bulk	Field_Bulk	1
+BB3_4_2R			BB3_4_2R.fastq	Debert_1	Low	Field	Rhizosphere	Field_Rhizosphere	1
+BB3_5_2			BB3_5_2.fastq	Debert_1	Low	Field	Bulk	Field_Bulk	1
+BB3_5_2R			BB3_5_2R.fastq	Debert_1	Low	Field	Rhizosphere	Field_Rhizosphere	1
