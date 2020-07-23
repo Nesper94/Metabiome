@@ -1,0 +1,6 @@
+*.fastq
+*.pdf
+*.zip
+*.fq.gz
+*.log
+software/
