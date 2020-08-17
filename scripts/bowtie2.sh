@@ -64,12 +64,12 @@ mkdir unaligned
 	for i in $(ls *f-paired.fq.gz -1);do
 		echo "PE alignment: "
 		bowtie2 -x Mix -1 $i -2 $(echo $i | sed 's/f-paired/r-paired/') \
-		--un-conc-gz unaligned/$(echo $i | sed 's/f-paired.fq.gz/PE_unaligned.fq.gz/') \ #Get unaligned reads
+		--un-conc-gz unaligned/$(echo $i | sed 's/f-paired.fq.gz/PE_unaligned.fq.gz/') \
 		-q -p $threads --met-file unaligned/$(echo $i | sed 's/f-paired.fq.gz/PE_summary.txt/');done
 
 ############################Single end (SE) alignment###############################:
 	for i in $(ls *unpaired.fq.gz -1);do
 		echo "SE alignemnt: "
 		bowtie2 -x Mix -U $i \
-		--un-gz unaligned/$(echo $i | sed 's/unpaired.fastq.gz/unpaired.fq.gz/') \ # Get unaligned reads
+		--un-gz unaligned/$(echo $i | sed 's/unpaired.fastq.gz/unpaired.fq.gz/') \
 		-q -p $threads --met-file unaligned/$(echo $i | sed 's/unpaired.fastq.gz/SE_summary.txt/');done
