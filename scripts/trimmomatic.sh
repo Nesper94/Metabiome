@@ -1,7 +1,7 @@
 #!/bin/bash
 # Este script instala y ejecuta Trimmomatic usando como input una carpeta con
 # archivos en formato FastQ con los reads en bruto.
-# 2020-07-10
+# Last updated on: 2020-07-10
 
 echo 'Welcome to the best pipeline ever (?)
 '
@@ -54,6 +54,7 @@ for i in $(ls *R1*.fastq -1);
 do java -jar $trim_loc PE $i $(echo $i | sed 's/R1/R2/') \
 $main_dir/results/trimmed-reads/$(echo $i | sed 's/R1.*/f-paired.fq.gz/') $main_dir/results/trimmed-reads/$(echo $i | sed 's/R1.*/f-unpaired.fq.gz/') \
 $main_dir/results/trimmed-reads/$(echo $i | sed 's/R1.*/r-paired.fq.gz/') $main_dir/results/trimmed-reads/$(echo $i | sed 's/R1.*/r-unpaired.fq.gz/') \
-$trimopt 2>&1 | tee -a ../log-files/trimmomatic.log; done # Cambio
+$trimopt 2>&1 | tee -a ../log-files/trimmomatic.log
+done
 
-exit
+echo "Done. You should now execute Bowtie2 in order to clean contaminant reads."
