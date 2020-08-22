@@ -3,6 +3,8 @@
 # archivos en formato FastQ con los reads en bruto.
 # Last updated on: 2020-08-21
 
+set -e
+
 function usage() {
     echo "Usage: $0 -i <input directory> -o <output directory> [-t <threads>] [--trim-dir <Trimmomatic directory>]"
     echo "Output directory will be created if it doesn't exists."
