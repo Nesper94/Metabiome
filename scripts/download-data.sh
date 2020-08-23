@@ -1,6 +1,7 @@
 #!/bin/bash
+# Install SRA Toolkit and data
 
-# Install SRA Toolkit
+set -e
 
 sudo apt install sra-toolkit
 

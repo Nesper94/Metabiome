@@ -3,6 +3,8 @@
 # Version 1.0
 # 2020-08-14
 
+set -e
+
 echo "Performing bowtie2 alignment. You should have a conda environment \
 in order to run this script:"
 
