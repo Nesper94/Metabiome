@@ -40,14 +40,13 @@ while [[ -n "$1" ]]; do
 				-t )        threads="$2"
 		        shift
 		        ;;
-				-ph )        Phix="$2"
+				-ph )       Phix="$2"
 				    shift
 				    ;;
-				-hu )        Human="$2"
+				-hu )       Human="$2"
 				    shift
 				    ;;
-
-        * )         echo "Option '$1' not recognized"; exit 1
+        * )        echo "Option '$1' not recognized"; exit 1
             ;;
     esac
     shift
@@ -106,7 +105,7 @@ for i in {1..10};do
 '
 ##-------------Concatenating genomes to be aligned-------------------------##:
 
-#cat $host $Phage $Human  > Mixed.fasta
+#cat $host $PhiX $Human  > Mixed.fasta
 
 ##----------Building genome index and bowtie alignment----------------------##:
 echo "Building genome index:"
