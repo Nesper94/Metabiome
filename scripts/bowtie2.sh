@@ -116,13 +116,11 @@ to filter out...'
 		echo "PE alignment: "
     bowtie2 -x Mix -1 $i -2 $(echo $i | sed 's/f-paired/r-paired/') \
 		--un-conc-gz "$out_dir"/$(echo $(basename -- $i) | sed 's/f-paired.fq.gz/paired_unaligned.fq.gz/') \
-		-q -p $threads \
-    2> "$out_dir"/$(echo $(basename -- $i) | sed 's/f-paired.fq.gz/paired_unaligned_summary.txt/');done
+		-q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/f-paired.fq.gz/paired_unaligned_summary.txt/');done
 ##-------------------------Single end (SE) alignment------------------------##:
 
 	for i in "$reads_dir"/*unpaired.fq.gz;do
 		echo "SE alignment: "
 		bowtie2 -x Mix -U $i \
 		--un-gz "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired.fq.gz/unpaired_unaligned.fq.gz/') \
-		-q -p $threads \
-     2> "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired.fq.gz/unpaired_unaligned_summary.txt/');done
+		-q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired.fq.gz/unpaired_unaligned_summary.txt/');done
