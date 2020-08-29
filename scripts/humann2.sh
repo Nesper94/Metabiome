@@ -56,5 +56,5 @@ done
 
 # For loop to run HUMAnN 2.0 on each sample
 for file in "$reads_dir"/*.fq.gz; do
-    humann2 -i "$file" -o "$out_dir"
+    humann2 -i "$file" -o "$out_dir" --threads "$threads"
 done
