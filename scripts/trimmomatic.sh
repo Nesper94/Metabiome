@@ -1,7 +1,7 @@
 #!/bin/bash
 # Este script instala y ejecuta Trimmomatic usando como input una carpeta con
 # archivos en formato FastQ con los reads en bruto.
-# Last updated on: 2020-08-21
+# Last updated on: 2020-08-29
 
 set -e
 
@@ -38,17 +38,12 @@ while [[ -n "$1" ]]; do
     shift
 done
 
-script_dir=$(readlink -f $(dirname "$0")) #Lines to get path to main directory
-main_dir=$(cd $script_dir ; cd .. ; pwd)
-
 if [ ! -d "$input_dir" ]; then
    echo "Error: You need to specify the directory containing reads in FastQ"
    exit 1
 fi
 
 echo "Your read directory is $input_dir"
-
-cd $main_dir
 
 if [ ! -d "$out_dir" ]; then
     echo "Creating directory '$out_dir'"
@@ -58,11 +53,10 @@ fi
 # Install Trimmomatic
 
 if [[ -z "$trim_loc" ]]; then
+    mkdir -p "$trim_loc"
     echo 'Installing Trimmomatic...'
-    wget -nd -P software/ http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-0.39.zip || exit 1
-    cd software/
-    unzip Trimmomatic-0.39.zip
-    cd $main_dir
+    wget -nd -P "$trim_loc" http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-0.39.zip || exit 1
+    unzip "$trim_loc"/Trimmomatic-0.39.zip
 fi
 
 trimmomatic=$(ls "$trim_loc"/trimmomatic*.jar)
@@ -73,15 +67,18 @@ read -p "Write arguments for Trimmomatic: " trimopt
 # Es importante recordar que en Trimmomatic el orden de las opciones indica
 # su orden de ejecución.
 
-cd $input_dir
-
-for i in $(ls *R1*.fastq -1);
-do java -jar $trimmomatic PE -threads ${threads:=4} $i $(echo $i | sed 's/R1/R2/') \
-"$out_dir"/$(echo $i | sed 's/R1.*/f-paired.fq.gz/')   \
-"$out_dir"/$(echo $i | sed 's/R1.*/f-unpaired.fq.gz/') \
-"$out_dir"/$(echo $i | sed 's/R1.*/r-paired.fq.gz/')   \
-"$out_dir"/$(echo $i | sed 's/R1.*/r-unpaired.fq.gz/') \
+for file in "$input_dir"/*R1*.fastq;
+do java -jar $trimmomatic PE -threads ${threads:=4} "$file" $(echo "$file" | sed 's/R1/R2/') \
+"$out_dir"/$(echo "$file" | sed 's/R1.*/f-paired.fq.gz/')   \
+"$out_dir"/$(echo "$file" | sed 's/R1.*/f-unpaired.fq.gz/') \
+"$out_dir"/$(echo "$file" | sed 's/R1.*/r-paired.fq.gz/')   \
+"$out_dir"/$(echo "$file" | sed 's/R1.*/r-unpaired.fq.gz/') \
 $trimopt 2>&1 | tee -a "$out_dir"/trimmomatic.log
+done
+
+# Clean up empty files
+for file in "$out_dir"/*.fq.gz; do
+    [[ ! -s file ]] && rm "$file"
 done
 
 echo "Done. You should now execute Bowtie2 in order to clean contaminant reads."
