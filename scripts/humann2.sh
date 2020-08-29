@@ -1,7 +1,7 @@
 #!/bin/bash
 # HUMAnN 2.0 wrapper script
 # Written by: Phagomica group
-# Last updated on: 2020-08-24
+# Last updated on: 2020-08-29
 
 set -e
 
@@ -16,6 +16,7 @@ if [[ "$#" == 0 ]]; then
     exit 1
 fi
 
+# Parse command line arguments
 while [[ -n "$1" ]]; do
     case "$1" in
         -h|--help ) usage; exit 0
