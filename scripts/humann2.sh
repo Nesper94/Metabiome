@@ -41,9 +41,9 @@ echo "Output directory: ${out_dir:?'Output directory not set'}"
 echo "Number of threads: ${threads:=4}"
 echo "HUMAnN 2.0 version: $(humann2 --version)"
 
-# Verify that input directory exists
-if [ ! -d "$input_dir" ]; then
-   echo "$0: Error: $input_dir is not a valid directory."
+# Verify that reads directory exists
+if [ ! -d "$reads_dir" ]; then
+   echo "$0: Error: $reads_dir is not a valid directory."
    exit 1
 fi
 
