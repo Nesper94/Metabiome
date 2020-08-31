@@ -6,8 +6,15 @@
 set -e
 
 function usage() {
-    echo "Usage: $0 -i <input directory> -o <output directory> [-t <threads>]"
-    echo "Output directory will be created if it doesn't exists."
+    echo "Usage: $0 -i <input directory> -o <output directory> [-t <threads>] [--install-db <DIRECTORY>]"
+    echo ""
+    echo "  <input directory>   directory containing .fq.gz files"
+    echo "  <output directory>  directory to write results. This directory will be created if it doesn't exists."
+    echo ""
+    echo "Options:"
+    echo "  -t              number of threads to use"
+    echo "  --install-db    installs Chocophlan full database in DIRECTORY"
+    echo "  -h, --help      show this help"
 }
 
 if [[ "$#" == 0 ]]; then
@@ -28,6 +35,9 @@ while [[ -n "$1" ]]; do
             shift
             ;;
         -t )        threads="$2"
+            shift
+            ;;
+        --install-db ) humann2_databases --download chocophlan full "$2" # Install Chocophlan database.
             shift
             ;;
         * )         echo "Option '$1' not recognized"; exit 1
