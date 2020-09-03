@@ -1,6 +1,6 @@
 #!/bin/bash
 # Kraken2 wrapper script for the taxonomic binning of reads.
-# Written by: Juan C. Arboleda R.
+# Written by: Phagomica group
 # Last updated on: 2020-08-19
 
 set -e
