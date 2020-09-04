@@ -3,4 +3,6 @@
 *.zip
 *.fq.gz
 *.log
-figs/
+*.png
+*.jpg
+*.jpeg
