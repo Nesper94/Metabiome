@@ -6,15 +6,16 @@
 set -e
 
 function usage() {
-    echo "Usage: $0 -i <input directory> -o <output directory> [-t <threads>] [--install-db <DIRECTORY>]"
+    echo "Usage: $0 -i <input directory> -o <output directory> [-t <threads>]"
     echo ""
     echo "  <input directory>   directory containing .fq.gz files"
     echo "  <output directory>  directory to write results. This directory will be created if it doesn't exists."
     echo ""
     echo "Options:"
     echo "  -t              number of threads to use"
-    echo "  --install-db    installs Chocophlan full database in DIRECTORY"
     echo "  -h, --help      show this help"
+    echo "Note: Before running this script you should have downloaded the nucleotide and protein databases with
+    humann2_databases. Run 'humann2_databases --help' for more info about this."
 }
 
 if [[ "$#" == 0 ]]; then
@@ -35,9 +36,6 @@ while [[ -n "$1" ]]; do
             shift
             ;;
         -t )        threads="$2"
-            shift
-            ;;
-        --install-db ) humann2_databases --download chocophlan full "$2" # Install Chocophlan database.
             shift
             ;;
         * )         echo "Option '$1' not recognized"; exit 1
