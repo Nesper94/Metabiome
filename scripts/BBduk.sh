@@ -1,15 +1,67 @@
+#!/bin/bash
+# BBduk wrapper script for the DNAr 16S picking strategy from metagenomic samples:
+# Written by: Phagomica Group
+# Last updated on: 2020-08-19
+
+set -e
+
+echo "Performing kmer 16S rDNA kmer picking strategy with BBDuk: "
+
+function usage() {
+    echo "Usage: $0 -i <input directory> -o <output directory> \
+		-D <16S_DATABASE> [-e <conda_env>] [-t <threads>]"
+		echo "Output directory will be created if it doesn't exists."
+}
+
+if [[ "$#" == 0 ]]; then
+    echo "No arguments given."
+    usage
+    exit 1
+fi
+
+while [[ -n "$1" ]]; do
+    case "$1" in
+        -h|--help ) usage; exit 0
+            ;;
+        -i )        reads_dir=$(readlink -f "$2")
+            shift
+            ;;
+        -o )        out_dir=$(readlink -f "$2")
+            shift
+            ;;
+        -D )        database=$(readlink -f "$2")
+            shift
+            ;;
+        -e )        conda_env="$2"
+            shift
+            ;;
+        -t )        threads="$2"
+           shift
+            ;;
+        * )        echo "Option '$1' not recognized"; exit 1
+            ;;
+    esac
+    shift
+done
 
 
-echo "Performing kmer 16S rDNA kmer picking strategy with bbDuk: "
+# Output info
+echo "Input directory: ${reads_dir:?'Input directory not set'}"
+echo "Output directory: ${out_dir:?'Output directory not set'}"
+echo "Number of threads: ${threads:=4}"
+echo "Conda environment: ${conda_env:?'=conda environment not set'}"
+echo "Reference database: ${database:?'=reference database not set'}"
 
-##Variables##:
+if [[ ! -d "$out_dir" ]]; then  # Create output directory if it doesn't exists.
+    mkdir "$out_dir"
+fi
 
-threads=$1
-env_path="$CONDA_PREFIX"
-dir="$(pwd)"
-
-echo "Here lies the packages from your environment: $env_path"
-cd $env_path/bin
+###---------------Moving to your conda environment packages location---------##:
+echo 'Lets activate your environment: ' && conda activate "$conda_env"
+##Path to your conda environment
+echo "Here lies the packages from your environment: "
+env_path= echo $CONDA_PREFIX/bin
+cd "$env_path"
 
 ###############Installing required packages###################:
 
@@ -19,15 +71,27 @@ else
 	echo "Installing bbmap" &&  conda install bbmap --yes
 fi
 
-cd dir
-##Matching reads to the 16S RNA SSU from SILVA Database, based on a Kmer approach by BBduk:
+cd "$reads_dir"
+
+##Matching reads to the 16S rDNA SSU from SILVA Database,
+
 #For PE reads:
-for i in $(ls *f-paired.fq.gz -1);do
-  bbduk.sh in=$i in2=$(echo $i | sed 's/f-paired/r-paired/') ref="" outm=$(echo $i | sed 's/f-paired/f-paired-16S/') \
-  outm2=$(echo $i | sed 's/f-paired/r-paired-16S/') outs=$(echo $i | sed 's/f-paired/unpaired-16S/') \
-  stats=$(echo $i | sed 's/f-paired/statistics_16S/') ordered=T ;done
 
 
-for i in $(ls *unpaired.fq.gz -1);do
-  bbduk.sh in=$i ref="" outm=$(echo $i | sed 's/f-paired/unpaired-16S/')  stats=$(echo $i | sed 's/f-paired/statistics_16S/') \
+
+for i in "$reads_dir"/*paired_unaligned.fq.1.gz;do
+  bbduk.sh in=$i in2=$(echo $i | 's/.1.gz/.2.gz/') \
+	ref="$database" outm="$out_dir"/$(echo $(basename -- $i) | sed 's/.1.gz/BBduk_1_16S.fq/') \
+  outm2="$out_dir"/$(echo $(basename -- $i) | sed 's/.1.gz/BBduk_2_16S.fq/') \
+	outs="$out_dir"/$(echo $(basename -- $i) | sed 's/.1.gz/BBduk_single_16S.fq/') \
+  stats="$out_dir"/$(echo $(basename -- $i) | sed 's/fq.1.gz/BBduk_stats.txt/') ordered=T ;done
+
+#For SE reads:
+for i in "$reads_dir"/*unpaired_unaligned.fq.gz;do
+  bbduk.sh in=$i ref="$database" outm="$out_dir"/$(echo $(basename -- $i) | sed 's/.fq.gz/-16S.fq/') \
+	stats="$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_unaligned.fq.gz/unpaired_statistics_16S.txt/') \
   ordered=T;done
+
+####Compressing################:
+cd $out_dir
+gzip *.fq
