@@ -21,7 +21,7 @@ while [[ -n "$1" ]]; do
     case "$1" in
         -h|--help ) usage; exit 0
             ;;
-        -i )        reads_dir=$(readlink -f "$2")
+        -i )        input_dir=$(readlink -f "$2")
             shift
             ;;
         -o )        out_dir=$(readlink -f "$2")
@@ -41,6 +41,12 @@ while [[ -n "$1" ]]; do
 done
 #Output info
 
+# Verify that input directory exists
+if [ ! -d "$input_dir" ]; then
+   echo "$0: Error: $input_dir is not a valid directory."
+   exit 1
+fi
+
 # Download and install #
 wget https://github.com/voutcn/megahit/releases/download/v1.2.9/MEGAHIT-1.2.9-Linux-x86_64-static.tar.gz
 tar zvxf MEGAHIT-1.2.9-Linux-x86_64-static.tar.gz
@@ -50,7 +56,7 @@ cd MEGAHIT-1.2.9-Linux-x86_64-static/bin/
 
 #MEGAHIT options
 
-for i in "$reads_dir"/*f-paired*.fq.gz;do
+for i in "$input_dir"/*f-paired*.fq.gz;do
 	echo "PE assembly"
 	megahit
     -o "$out_dir" \
