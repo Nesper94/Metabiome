@@ -21,7 +21,7 @@ while [[ -n "$1" ]]; do
     case "$1" in
         -h|--help ) usage; exit 0
             ;;
-        -i )        reads_dir=$(readlink -f "$2")
+        -i )        input_dir=$(readlink -f "$2")
             shift
             ;;
         -o )        out_dir=$(readlink -f "$2")
@@ -42,6 +42,12 @@ while [[ -n "$1" ]]; do
     shift
 done
 
+# Verify that input directory exists
+if [ ! -d "$input_dir" ]; then
+   echo "$0: Error: $input_dir is not a valid directory."
+   exit 1
+fi
+
 ##---------------Moving to your conda environment packages location---------##:
 echo 'Lets activate your environment: ' && conda activate "$conda_env"
 ##Path to your conda environment
@@ -58,14 +64,14 @@ else
   metaphlan --yes
 fi
 
-cd "$reads_dir"
+cd "$input_dir"
 
 ##----------------Installing MetaPhlAn database--------------------------##:
 
 metaphlan --install --bowtie2db "$met_database"
 
 # Output info
-echo "Input directory: ${reads_dir:?'Input directory not set'}"
+echo "Input directory: ${input_dir:?'Input directory not set'}"
 echo "Output directory: ${out_dir:?'Output directory not set'}"
 echo "Number of threads: ${threads:=4}"
 echo "MetaPhlAn3 conda environment: ${conda_env:?'conda environment not set'}"
@@ -79,7 +85,7 @@ fi
 ##---------------------------MetaPhlAn profiling----------------------------##:
 ##----------------------PE reads-----------------------------------##:
 
-for i in "$reads_dir"/*paired_unaligned.fq.1.gz;do
+for i in "$input_dir"/*paired_unaligned.fq.1.gz;do
   metaphlan $i,$(echo $i | sed 's/.1.gz/.2.gz/') \
   --input_type fastq --add_viruses  -t rel_ab_w_read_stats --unknown_estimation \
   -o "$out_dir"/$(echo $(basename -- $i) | sed 's/.fq.1.gz/metaphlan_out.txt/') \
@@ -88,7 +94,7 @@ for i in "$reads_dir"/*paired_unaligned.fq.1.gz;do
 
 ##---------------------SE reads------------------------------------##:
 
-for i in "$reads_dir"/*unpaired_unaligned.fq.gz;do
+for i in "$input_dir"/*unpaired_unaligned.fq.gz;do
   metaphlan $i --input_type fastq --add_viruses --unknown_estimation \
   -t rel_ab_w_read_stats -o "$out_dir"/$(echo $(basename -- $i) | sed 's/.fq.gz/metaphlan_out.txt/') \
   --nproc "$threads" --bowtie2out "$out_dir"/$(echo $(basename -- $i) | sed 's/.fq.gz/bowtie2_out/') ;done
