@@ -5,9 +5,6 @@
 
 set -e
 
-echo "Performing bowtie2 alignment. You should have a conda environment \
-in order to run this script:"
-
 function usage() {
     echo "Usage: $0 -i <input directory> -o <output directory> \
 		-ho <host_reference> [-e <conda_env>] [-t <threads>] -ph <PhiX_sequence \
@@ -25,7 +22,7 @@ while [[ -n "$1" ]]; do
     case "$1" in
         -h|--help ) usage; exit 0
             ;;
-        -i )        reads_dir=$(readlink -f "$2")
+        -i )        input_dir=$(readlink -f "$2")
             shift
             ;;
         -o )        out_dir=$(readlink -f "$2")
@@ -54,7 +51,7 @@ done
 
 
 # Output info
-echo "Input directory: ${reads_dir:?'Input directory not set'}"
+echo "Input directory: ${input_dir:?'Input directory not set'}"
 echo "Output directory: ${out_dir:?'Output directory not set'}"
 echo "Number of threads: ${threads:=4}"
 echo "Conda environment: ${conda_env:?'=conda environment not set'}"
@@ -62,9 +59,18 @@ echo "Phix Genome: ${PhiX:?'=PhiX genome not set'}"
 echo "Human Genome: ${Human:?'=Human genome not set'}"
 echo "Bowtie2 version: $(bowtie2  --version)"
 
+# Verify that input directory exists
+if [ ! -d "$input_dir" ]; then
+   echo "$0: Error: $input_dir is not a valid directory."
+   exit 1
+fi
+
 if [[ ! -d "$out_dir" ]]; then  # Create output directory if it doesn't exists.
     mkdir "$out_dir"
 fi
+
+echo "Performing bowtie2 alignment. You should have a conda environment \
+in order to run this script:"
 
 ##---------------Moving to your conda environment packages location---------##:
 echo 'Lets activate your environment: ' && conda activate "$conda_env"
@@ -84,7 +90,7 @@ if [ -e entrez-direct* ]; then
 else
 	echo "Installing entrez-direct: " && conda install entrez-direct --yes
 fi
-cd "$reads_dir"
+cd "$input_dir"
 
 ##------------Downloading Human and PhiX reference genomes-----------------##:
 
@@ -112,14 +118,14 @@ to filter out...'
 
 ##--------------------------Pair end (PE) alignment--------------------------##:
 
-	for i in "$reads_dir"/*f-paired.fq.gz;do
+	for i in "$input_dir"/*f-paired.fq.gz;do
 		echo "PE alignment: "
     bowtie2 -x Mix -1 $i -2 $(echo $i | sed 's/f-paired/r-paired/') \
 		--un-conc-gz "$out_dir"/$(echo $(basename -- $i) | sed 's/f-paired.fq.gz/paired_unaligned.fq.gz/') \
 		-q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/f-paired.fq.gz/paired_unaligned_summary.txt/');done
 ##-------------------------Single end (SE) alignment------------------------##:
 
-	for i in "$reads_dir"/*unpaired.fq.gz;do
+	for i in "$input_dir"/*unpaired.fq.gz;do
 		echo "SE alignment: "
 		bowtie2 -x Mix -U $i \
 		--un-gz "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired.fq.gz/unpaired_unaligned.fq.gz/') \

@@ -22,7 +22,7 @@ while [[ -n "$1" ]]; do
     case "$1" in
         -h|--help ) usage; exit 0
             ;;
-        -i )        reads_dir=$(readlink -f "$2")
+        -i )        input_dir=$(readlink -f "$2")
             shift
             ;;
         -o )        out_dir=$(readlink -f "$2")
@@ -40,6 +40,12 @@ while [[ -n "$1" ]]; do
     shift
 done
 
+# Verify that input directory exists
+if [ ! -d "$input_dir" ]; then
+   echo "$0: Error: $input_dir is not a valid directory."
+   exit 1
+fi
+
 # SPAdes #
 
 wget http://cab.spbu.ru/files/release3.12.0/SPAdes-3.12.0-Linux.tar.gz
@@ -53,16 +59,15 @@ tar -xzf SPAdes-3.12.0-Linux.tar.gz #extraer archivo
 
 # Run metaSPAdes #
 
-for i in "$reads_dir"/*f-paired*.fq.gz;do
+for i in "$input_dir"/*f-paired*.fq.gz;do
 
 	echo " PE assembly"
 	spades.py --meta \
     -o "$out_dir" `# Se asume que ya se agregó el directorio a la variable PATH` \
     -1 "$i" `# Forward files` \
     -2 $(echo "$i" | sed 's/.1.gz/.2.gz/') `# Reverse sequences` \
-    -s "$unpaired_unaligned" `# unpaired. "$reads_dir"/*unpaired_unaligned.fq.gz` \
+    -s "$unpaired_unaligned" `# unpaired. "$input_dir"/*unpaired_unaligned.fq.gz` \
     -t "$2" `#16` \
     -k "$kmers" `# list of k-mer sizes to be use separeted comma(no more than 128)`
 
 done
-
