@@ -6,10 +6,17 @@
 set -e
 
 function usage() {
-    echo "Usage: $0 -i <input directory> -o <output directory> \
-		-ho <host_reference> [-e <conda_env>] [-t <threads>] -ph <PhiX_sequence \
-		-hu <Human_genome>"
-		echo "Output directory will be created if it doesn't exists."
+    echo "Usage: $0 -i <in dir> -o <out dir> -ho <host> -ph <PhiX> -hu <human> [-e <conda_env>] [-t <threads>]"
+    echo ""
+    echo "<in dir>  Input directory containing FASTQ files."
+    echo "<out dir> Directory in which results will be saved. This directory"
+    echo "          will be created if it doesn't exists."
+    echo "<host>    Host reference genome in FASTA format."
+    echo "<PhiX>    PhiX-174 phage reference genome in FASTA format."
+    echo "<human>   Human reference genome in FASTA format."
+    echo ""
+    echo "Options:"
+    echo "-t        Number of threads to use."
 }
 
 if [[ "$#" == 0 ]]; then
@@ -48,7 +55,6 @@ while [[ -n "$1" ]]; do
     esac
     shift
 done
-
 
 # Output info
 echo "Input directory: ${input_dir:?'Input directory not set'}"
