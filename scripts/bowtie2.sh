@@ -136,3 +136,10 @@ to filter out...'
 		bowtie2 -x Mix -U $i \
 		--un-gz "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired.fq.gz/unpaired_unaligned.fq.gz/') \
 		-q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired.fq.gz/unpaired_unaligned_summary.txt/');done
+
+echo "Done."
+echo "You can now use clean reads to:"
+echo "- Assemble genomes using metaspades.sh or megahit.sh."
+echo "- Perform taxonomic binning with kraken2.sh or MetaPhlAn3.sh"
+echo "- Perform functional profiling using humann2.sh"
+echo "- Extract 16S sequences with BBduk.sh"
