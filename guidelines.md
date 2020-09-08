@@ -7,6 +7,12 @@ script should install anything unless necessary.
  **YAML** file using `conda env export --from-history > env-name.yml` so that
 they can be recreated on installation.
 
+- Remember the [KISS principle](https://en.wikipedia.org/wiki/KISS_principle)
+and make things as simple as possible. As Nobel Prize for physics Paul Dirac
+ once stated:  
+> The aim of science is to make difficult things understandable in a simpler
+ way.
+
 - A script should stop execution if called with no arguments:
 ```bash
 if [[ "$#" == 0 ]]; then
