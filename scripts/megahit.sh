@@ -69,8 +69,9 @@ for i in "$input_dir"/*f-paired*.fq.gz;do
     -o "$out_dir"/"$out_name" \
     -1 "$i" `#Forward files(1 files, paired with files in "$pe2")` \
     -2 $(echo "$i" | sed 's/f-paired/r-paired/') `# Reverse files (2 files, paired with files in "$pe1"` \
-    -t "$threads" #\
-#    --no-mercy `# Qué hace esto?`\
-#    --k-list "21,33,55" `# list of k-mer sizes to be use separeted comma(no more than 141)`
-
+    -t "$threads" \
+    --presets meta-large # Optimization for large & complex metagenomes, like soil
+#   --no-mercy `# Qué hace esto?`\
+#   --k-list "21,33,55" `# list of k-mer sizes to be use separeted comma(no more than 141)`
+#   -r/--read  <se>   comma-separated list of fasta/q single-end files
 done
