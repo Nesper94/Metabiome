@@ -5,8 +5,6 @@
 
 set -e
 
-echo "Performing kmer 16S rDNA kmer picking strategy with BBDuk: "
-
 function usage() {
     echo "Usage: $0 -i <input directory> -o <output directory> \
 		-D <16S_DATABASE> [-e <conda_env>] [-t <threads>]"
@@ -52,32 +50,19 @@ echo "Number of threads: ${threads:=4}"
 echo "Conda environment: ${conda_env:?'=conda environment not set'}"
 echo "Reference database: ${database:?'=reference database not set'}"
 
-if [[ ! -d "$out_dir" ]]; then  # Create output directory if it doesn't exists.
+# Verify that input directory exists
+if [ ! -d "$input_dir" ]; then
+   echo "$0: Error: $input_dir is not a valid directory."
+   exit 1
+fi
+# Create output directory if it doesn't exists.
+if [[ ! -d "$out_dir" ]]; then
     mkdir "$out_dir"
 fi
 
-###---------------Moving to your conda environment packages location---------##:
-echo 'Lets activate your environment: ' && conda activate "$conda_env"
-##Path to your conda environment
-echo "Here lies the packages from your environment: "
-env_path= echo $CONDA_PREFIX/bin
-cd "$env_path"
-
-###############Installing required packages###################:
-
-if [ -e bbmap* ];then
-	echo "bbmap is installed"
-else
-	echo "Installing bbmap" &&  conda install bbmap --yes
-fi
-
-cd "$reads_dir"
-
-##Matching reads to the 16S rDNA SSU from SILVA Database,
+##Matching reads against the 16S rDNA SSU from SILVA Database,
 
 #For PE reads:
-
-
 
 for i in "$reads_dir"/*paired_unaligned.fq.1.gz;do
   bbduk.sh in=$i in2=$(echo $i | 's/.1.gz/.2.gz/') \

@@ -42,23 +42,15 @@ while [[ -n "$1" ]]; do
     shift
 done
 
-##---------------Moving to your conda environment packages location---------##:
-echo 'Lets activate your environment: ' && conda activate "$conda_env"
-##Path to your conda environment
-echo "Here lies the packages from your environment: "
-env_path= echo $CONDA_PREFIX/bin
-cd "$env_path"
-
-##-----------------Installing required packages-------------------##:
-#-------------MetaPhlAn3----------#
-if [ -e metaphlan* ];then
-	echo " MetaPhlAn3 installed"
-else
-	echo "Installing MetaPhlAn3" &&  conda install -c bioconda python=3.7 \
-  metaphlan --yes
+# Verify that input directory exists
+if [ ! -d "$input_dir" ]; then
+   echo "$0: Error: $input_dir is not a valid directory."
+   exit 1
 fi
-
-cd "$reads_dir"
+# Create output directory if it doesn't exists.
+if [[ ! -d "$out_dir" ]]; then
+    mkdir "$out_dir"
+fi
 
 ##----------------Installing MetaPhlAn database--------------------------##:
 
@@ -69,16 +61,11 @@ echo "Input directory: ${reads_dir:?'Input directory not set'}"
 echo "Output directory: ${out_dir:?'Output directory not set'}"
 echo "Number of threads: ${threads:=4}"
 echo "MetaPhlAn3 conda environment: ${conda_env:?'conda environment not set'}"
-echo "MetaPhlAn3 database: $conda_env:?=conda environment not set}"
+echo "MetaPhlAn3 database: ${met_database:?'Database not downloaded'}"
 echo "MetaPhlAn3 version: $(metaphlan -v)"
-
-if [[ ! -d "$out_dir" ]]; then  # Create output directory if it doesn't exists.
-    mkdir "$out_dir"
-fi
 
 ##---------------------------MetaPhlAn profiling----------------------------##:
 ##----------------------PE reads-----------------------------------##:
-
 for i in "$reads_dir"/*paired_unaligned.fq.1.gz;do
   metaphlan $i,$(echo $i | sed 's/.1.gz/.2.gz/') \
   --input_type fastq --add_viruses  -t rel_ab_w_read_stats --unknown_estimation \
@@ -87,7 +74,6 @@ for i in "$reads_dir"/*paired_unaligned.fq.1.gz;do
   ;done
 
 ##---------------------SE reads------------------------------------##:
-
 for i in "$reads_dir"/*unpaired_unaligned.fq.gz;do
   metaphlan $i --input_type fastq --add_viruses --unknown_estimation \
   -t rel_ab_w_read_stats -o "$out_dir"/$(echo $(basename -- $i) | sed 's/.fq.gz/metaphlan_out.txt/') \

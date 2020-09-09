@@ -62,29 +62,15 @@ echo "Phix Genome: ${PhiX:?'=PhiX genome not set'}"
 echo "Human Genome: ${Human:?'=Human genome not set'}"
 echo "Bowtie2 version: $(bowtie2  --version)"
 
-if [[ ! -d "$out_dir" ]]; then  # Create output directory if it doesn't exists.
+# Verify that input directory exists
+if [ ! -d "$input_dir" ]; then
+   echo "$0: Error: $input_dir is not a valid directory."
+   exit 1
+fi
+# Create output directory if it doesn't exists.
+if [[ ! -d "$out_dir" ]]; then
     mkdir "$out_dir"
 fi
-
-##---------------Moving to your conda environment packages location---------##:
-echo 'Lets activate your environment: ' && conda activate "$conda_env"
-##Path to your conda environment
-echo "Here lies the packages from your environment: "
-env_path= echo $CONDA_PREFIX/bin
-cd "$env_path"
-
-if [ -e bowtie2* ];then
-	echo "bowtie2 installed"
-else
-	echo "Installing Bowtie2" &&  conda install bowtie2 --yes
-fi
-
-if [ -e entrez-direct* ]; then
-	echo "entrez-direct installed"
-else
-	echo "Installing entrez-direct: " && conda install entrez-direct --yes
-fi
-cd "$reads_dir"
 
 ##------------Downloading Human and PhiX reference genomes-----------------##:
 
