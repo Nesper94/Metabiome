@@ -6,11 +6,21 @@
 set -e
 
 function usage() {
-    echo "Usage: $0 -i <input directory> -o <output directory> \
+    echo "Usage: $0 -i <input_directory> -o <output_directory> \
 		-D <16S_DATABASE> [-e <conda_env>] [-t <threads>]"
-		echo "Output directory will be created if it doesn't exists."
+    echo ""
+    echo "<input_directory>  Input directory containing FASTQ files."
+    echo "<out_directory> Directory in which results will be saved. This directory"
+    echo "          will be created if it doesn't exists."
+    echo "<conda_env>    Current conda environment."
+    echo "<16S_DATABASE>    16S Database directory."
+    echo ""
+    echo "Options:"
+    echo "-t        Number of threads to use."
+
 }
 
+#Saving input orders into variables:
 if [[ "$#" == 0 ]]; then
     echo "No arguments given."
     usage
@@ -42,6 +52,16 @@ while [[ -n "$1" ]]; do
     shift
 done
 
+# Verify that input directory exists
+if [ ! -d "$input_dir" ]; then
+   echo "$0: Error: $input_dir is not a valid directory."
+   exit 1
+fi
+# Create output directory if it doesn't exists.
+if [[ ! -d "$out_dir" ]]; then
+    mkdir "$out_dir"
+fi
+
 
 # Output info
 echo "Input directory: ${input_dir:?'Input directory not set'}"
@@ -50,40 +70,11 @@ echo "Number of threads: ${threads:=4}"
 echo "Conda environment: ${conda_env:?'=conda environment not set'}"
 echo "Reference database: ${database:?'=reference database not set'}"
 
-# Verify that input directory exists
-if [ ! -d "$input_dir" ]; then
-   echo "$0: Error: $input_dir is not a valid directory."
-   exit 1
-<<<<<<< HEAD
-=======
-fi
-
-if [[ ! -d "$out_dir" ]]; then  # Create output directory if it doesn't exists.
-    mkdir "$out_dir"
->>>>>>> c00c0a8afec41a7e0c399797732dd95c86e6f6e0
-fi
-# Create output directory if it doesn't exists.
-if [[ ! -d "$out_dir" ]]; then
-    mkdir "$out_dir"
-fi
-
-<<<<<<< HEAD
 ##Matching reads against the 16S rDNA SSU from SILVA Database,
 
 #For PE reads:
 
 for i in "$reads_dir"/*paired_unaligned.fq.1.gz;do
-=======
-cd "$input_dir"
-
-##Matching reads to the 16S rDNA SSU from SILVA Database,
-
-#For PE reads:
-
-
-
-for i in "$input_dir"/*paired_unaligned.fq.1.gz;do
->>>>>>> c00c0a8afec41a7e0c399797732dd95c86e6f6e0
   bbduk.sh in=$i in2=$(echo $i | 's/.1.gz/.2.gz/') \
 	ref="$database" outm="$out_dir"/$(echo $(basename -- $i) | sed 's/.1.gz/BBduk_1_16S.fq/') \
   outm2="$out_dir"/$(echo $(basename -- $i) | sed 's/.1.gz/BBduk_2_16S.fq/') \
@@ -97,5 +88,9 @@ for i in "$input_dir"/*unpaired_unaligned.fq.gz;do
   ordered=T;done
 
 ####Compressing################:
-cd $out_dir
+cd "$out_dir"
 gzip *.fq
+
+echo "Done."
+echo "You can now use these 16S clean reads to:"
+echo "- Amplicon-based analysis in QIIME2 or Mothur"
