@@ -2,13 +2,17 @@
 # Metagenomic assembly using MEGAHIT-1.2.9
 # Written by: Phagomica_club
 
-sudo apt update -y
 set -e
 
-
 function usage() {
-    echo "Usage: $0 -i <input directory> -o <output directory> [-t <threads>] [-k <kmers>]"
-    echo "Output directory will be created if it doesn't exists."
+    echo "Usage:"
+    echo "  $0 -i <input directory> -o <output directory> [-t <threads>] [OPTIONS]"
+    echo "  Output directory will be created if it doesn't exists."
+    echo ""
+    echo "This is a wrapper script that passes OPTIONS to MEGAHIT, so this is the"
+    echo "documentation for MEGAHIT:"
+    echo ""
+    echo "$(megahit --help)"
 }
 
 if [[ "$#" == 0 ]]; then
@@ -21,7 +25,7 @@ while [[ -n "$1" ]]; do
     case "$1" in
         -h|--help ) usage; exit 0
             ;;
-        -i )        reads_dir=$(readlink -f "$2")
+        -i )        input_dir=$(readlink -f "$2")
             shift
             ;;
         -o )        out_dir=$(readlink -f "$2")
@@ -33,34 +37,41 @@ while [[ -n "$1" ]]; do
         --k-list)   kmer_list="$2"
 		shift
             ;;
-        * )         echo "Option '$1' not recognized"; exit 1
+        * )         mh_opts="$@"
             ;;
     esac
     shift
 
 done
 #Output info
+echo "Input directory: ${input_dir:?'Input directory not set'}"
+echo "Output directory: ${out_dir:?'Output directory not set'}"
+echo "Number of threads: ${threads:=4}"
+echo "MEGAHIT version: $(megahit --version)"
 
-# Download and install #
-wget https://github.com/voutcn/megahit/releases/download/v1.2.9/MEGAHIT-1.2.9-Linux-x86_64-static.tar.gz
-tar zvxf MEGAHIT-1.2.9-Linux-x86_64-static.tar.gz
-cd MEGAHIT-1.2.9-Linux-x86_64-static/bin/
-#./megahit --test  # run on a toy dataset
-#./megahit -1 MY_PE_READ_1.fq.gz -2 MY_PE_READ_2.fq.gz -o MY_OUTPUT_DIR
+# Verify that input directory exists
+if [ ! -d "$input_dir" ]; then
+   echo "$0: Error: $input_dir is not a valid directory."
+   exit 1
+fi
 
-#MEGAHIT options
+# Create output directory if it doesn't exists.
+if [[ ! -d "$out_dir" ]]; then
+    mkdir "$out_dir"
+fi
 
-for i in "$reads_dir"/*f-paired*.fq.gz;do
-	echo "PE assembly"
-	megahit
-    -o "$out_dir" \
+# For the moment this script only runs MEGAHIT on paired-end files
+
+for i in "$input_dir"/*f-paired*.fq.gz;do
+	echo "Performing PE assembly with $(basename $i) and $(basename "$i" | sed 's/f-paired/r-paired/')"
+    out_name=$(basename "$i" | sed 's/f-paired//')
+	megahit \
+    -o "$out_dir"/"$out_name" \
     -1 "$i" `#Forward files(1 files, paired with files in "$pe2")` \
-    -2 $(echo "$i" | sed 's/.1.gz/.2.gz/') `# Reverse files (2 files, paired with files in "$pe1"` \
-    -t/--num-cpu-threads "$2"
-    --no-mercy
-    --k-list "21,33,55" `# list of k-mer sizes to be use separeted comma(no more than 141)`
-
+    -2 $(echo "$i" | sed 's/f-paired/r-paired/') `# Reverse files (2 files, paired with files in "$pe1"` \
+    -t "$threads" "$mh_opts:=''" \
+    --presets meta-large # Optimization for large & complex metagenomes, like soil
+#   --no-mercy `# Qué hace esto?`\
+#   --k-list "21,33,55" `# list of k-mer sizes to be use separeted comma(no more than 141)`
+#   -r/--read  <se>   comma-separated list of fasta/q single-end files
 done
-
-#--k-min "$" minimum kmer size (<= {0}), must be odd number [21]
-#--k-max "$#"

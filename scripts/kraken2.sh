@@ -20,7 +20,7 @@ while [[ -n "$1" ]]; do
     case "$1" in
         -h|--help ) usage; exit 0
             ;;
-        -i )        reads_dir=$(readlink -f "$2")
+        -i )        input_dir=$(readlink -f "$2")
             shift
             ;;
         -o )        out_dir=$(readlink -f "$2")
@@ -39,11 +39,17 @@ while [[ -n "$1" ]]; do
 done
 
 # Output info
-echo "Input directory: ${reads_dir:?'Input directory not set'}"
+echo "Input directory: ${input_dir:?'Input directory not set'}"
 echo "Output directory: ${out_dir:?'Output directory not set'}"
 echo "Number of threads: ${threads:=4}"
 echo "Database name: ${DBNAME:=standard-kraken2-db}"
 echo "Kraken2 version: $(kraken2 -v)"
+
+# Verify that input directory exists
+if [ ! -d "$input_dir" ]; then
+   echo "$0: Error: $input_dir is not a valid directory."
+   exit 1
+fi
 
 if [[ ! -d "$out_dir" ]]; then  # Create output directory if it doesn't exists.
     mkdir "$out_dir"
@@ -59,7 +65,7 @@ if [[ "$DBNAME" == "standard-kraken2-db" ]]; then
 fi
 
 # Classification
-cd "$reads_dir"
+cd "$input_dir"
 # Paired reads
 echo "Classifying paired reads..."
 for file in *f-paired*.fq.gz; do

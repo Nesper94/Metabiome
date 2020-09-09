@@ -1,0 +1,9 @@
+name: humann2
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - humann2
+  - metaphlan2=2.8
+prefix: /BIOS-Share/home/jeperezj/miniconda3/envs/humann2
