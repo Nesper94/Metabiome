@@ -19,6 +19,9 @@ function usage() {
     echo "-t        Number of threads to use."
 }
 
+
+#Saving input orders into variables:
+
 if [[ "$#" == 0 ]]; then
     echo "No arguments given."
     usage
@@ -56,15 +59,6 @@ while [[ -n "$1" ]]; do
     shift
 done
 
-# Output info
-echo "Input directory: ${input_dir:?'Input directory not set'}"
-echo "Output directory: ${out_dir:?'Output directory not set'}"
-echo "Number of threads: ${threads:=4}"
-echo "Conda environment: ${conda_env:?'=conda environment not set'}"
-echo "Phix Genome: ${PhiX:?'=PhiX genome not set'}"
-echo "Human Genome: ${Human:?'=Human genome not set'}"
-echo "Bowtie2 version: $(bowtie2  --version)"
-
 # Verify that input directory exists
 if [ ! -d "$input_dir" ]; then
    echo "$0: Error: $input_dir is not a valid directory."
@@ -75,28 +69,14 @@ if [[ ! -d "$out_dir" ]]; then  # Create output directory if it doesn't exists.
     mkdir "$out_dir"
 fi
 
-echo "Performing bowtie2 alignment. You should have a conda environment \
-in order to run this script:"
-
-##---------------Moving to your conda environment packages location---------##:
-echo 'Lets activate your environment: ' && conda activate "$conda_env"
-##Path to your conda environment
-echo "Here lies the packages from your environment: "
-env_path= echo $CONDA_PREFIX/bin
-cd "$env_path"
-
-if [ -e bowtie2* ];then
-	echo "bowtie2 installed"
-else
-	echo "Installing Bowtie2" &&  conda install bowtie2 --yes
-fi
-
-if [ -e entrez-direct* ]; then
-	echo "entrez-direct installed"
-else
-	echo "Installing entrez-direct: " && conda install entrez-direct --yes
-fi
-cd "$input_dir"
+# Output info
+echo "Input directory: ${input_dir:?'Input directory not set'}"
+echo "Output directory: ${out_dir:?'Output directory not set'}"
+echo "Number of threads: ${threads:=4}"
+echo "Conda environment: ${conda_env:?'=conda environment not set'}"
+echo "Phix Genome: ${PhiX:?'=PhiX genome not set'}"
+echo "Human Genome: ${Human:?'=Human genome not set'}"
+echo "Bowtie2 version: $(bowtie2  --version)"
 
 ##------------Downloading Human and PhiX reference genomes-----------------##:
 
