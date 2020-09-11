@@ -75,7 +75,7 @@ echo "MetaPhlAn3 version: $(metaphlan -v)"
 
 ##---------------------------MetaPhlAn profiling----------------------------##:
 ##----------------------PE reads-----------------------------------##:
-for i in "$reads_dir"/*paired_unaligned.fq.1.gz;do
+for i in "$input_dir"/*paired_unaligned.fq.1.gz;do
   metaphlan $i,$(echo $i | sed 's/.1.gz/.2.gz/') \
   --input_type fastq --add_viruses  -t rel_ab_w_read_stats --unknown_estimation \
   -o "$out_dir"/$(echo $(basename -- $i) | sed 's/.fq.1.gz/metaphlan_out.txt/') \
@@ -83,7 +83,7 @@ for i in "$reads_dir"/*paired_unaligned.fq.1.gz;do
   ;done
 
 ##---------------------SE reads------------------------------------##:
-for i in "$reads_dir"/*unpaired_unaligned.fq.gz;do
+for i in "$input_dir"/*unpaired_unaligned.fq.gz;do
   metaphlan $i --input_type fastq --add_viruses --unknown_estimation \
   -t rel_ab_w_read_stats -o "$out_dir"/$(echo $(basename -- $i) | sed 's/.fq.gz/metaphlan_out.txt/') \
   --nproc "$threads" --bowtie2out "$out_dir"/$(echo $(basename -- $i) | sed 's/.fq.gz/bowtie2_out/') ;done
