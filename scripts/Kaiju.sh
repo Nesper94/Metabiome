@@ -10,7 +10,8 @@ function usage() {
 		-D <database_directory> -d <name_kaiju_database> -e <conda_env> [-t <threads>]"
     echo ""
     echo "<input_directory>  Input directory containing FASTQ files."
-    echo "<output_directory> Directory in which results will be saved. This directory"
+    ec
+    ho "<output_directory> Directory in which results will be saved. This directory"
     echo "          will be created if it doesn't exists."
     echo "<conda_env>    Current conda environment."
     echo "<database_directory>    Kaiju Database directory."
@@ -72,18 +73,19 @@ echo "Number of threads: ${threads:=4}"
 echo "Conda environment: ${conda_env:?'=conda environment not set'}"
 echo "Kaiju reference database: ${database:?'=Kaiju database directory not set'}"
 echo "Kaiju database name: ${name_kaijudb:?'=Kaiju database name not set'}"
-echo "Kaiju version: $(kaiju --version)"
+echo "Kaiju version: $(kaiju -h)"
 
 ###----------------------Making Kaiju Database------------------------------###:
 cd "$database"
 kaiju-makedb -s "$name_kaijudb" -t "$threads"
 
+cd "$out_dir"
 ###----------------------Paired-end reads-----------------------------------###:
 for i in "$input_dir"/*paired_unaligned.fq.1.gz;do
-  kaiju -t "$database"/*mnodes.dmp -f "$database"/*.fmi -i "$i" \
-  -j $(echo $i | sed 's/.1.gz/.2.gz/') -o "$out_dir" -z "$threads";done
+  kaiju -t "$database"/*nodes.dmp -f "$database"/"$name_kaijudb"/*.fmi -i "$i" \
+  -j $(echo $i | sed 's/.1.gz/.2.gz/') -o  $(echo $i | sed 's/.fq.1.gz/_kaiju_out.txt/') -z "$threads";done
 
 ###----------------------Single-end reads-----------------------------------###:
 for i in "$input_dir"/*unpaired_unaligned.fq.gz;do
-  kaiju -t "$database"/*nodes.dmp -f "$database"/*.fmi -i "$i" \
-  -o "$out_dir" -z "$threads";done
+  kaiju -t "$database"/*nodes.dmp -f "$database"/"$name_kaijudb"/*.fmi -i "$i" \
+  -o $(echo $i | sed 's/.fq.gz/_kaiju_out.txt/')  -z "$threads";done
