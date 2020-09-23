@@ -12,7 +12,7 @@ function usage() {
 }
 
 if [[ "$#" == 0 ]]; then
-    echo "No arguments given."
+    echo "Error: No arguments given." >&2
     usage
     exit 1
 fi
@@ -37,7 +37,7 @@ while [[ -n "$1" ]]; do
 done
 
 if [ ! -d "$input_dir" ]; then
-   echo "Error: You need to specify the directory containing reads in FastQ"
+   echo "Error: You need to specify the directory containing reads in FastQ" >&2
    exit 1
 fi
 

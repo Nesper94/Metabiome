@@ -51,7 +51,7 @@ echo "MEGAHIT version: $(megahit --version)"
 
 # Verify that input directory exists
 if [ ! -d "$input_dir" ]; then
-   echo "$0: Error: $input_dir is not a valid directory."
+   echo "$0: Error: $input_dir is not a valid directory." >&2
    exit 1
 fi
 

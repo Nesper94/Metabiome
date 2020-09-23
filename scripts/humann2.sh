@@ -19,7 +19,7 @@ usage() {
 }
 
 if [[ "$#" == 0 ]]; then
-    echo "No arguments given." >&2
+    echo "Error: No arguments given." >&2
     usage
     exit 1
 fi
