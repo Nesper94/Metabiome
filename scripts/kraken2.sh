@@ -11,7 +11,7 @@ function usage() {
 }
 
 if [[ "$#" == 0 ]]; then
-    echo "No arguments given."
+    echo "Error: No arguments given." >&2
     usage
     exit 1
 fi
@@ -32,7 +32,7 @@ while [[ -n "$1" ]]; do
         -t )        threads="$2"
             shift
             ;;
-        * )         echo "Option '$1' not recognized"; exit 1
+        * )         echo "Option '$1' not recognized" >&2; exit 1
             ;;
     esac
     shift
@@ -47,7 +47,7 @@ echo "Kraken2 version: $(kraken2 -v)"
 
 # Verify that input directory exists
 if [ ! -d "$input_dir" ]; then
-   echo "$0: Error: $input_dir is not a valid directory."
+   echo "$0: Error: $input_dir is not a valid directory." >&2
    exit 1
 fi
 
@@ -57,7 +57,7 @@ fi
 
 if [[ "$DBNAME" == "standard-kraken2-db" ]]; then
     echo "Creating standard Kraken2 database..."
-    kraken2-build --standard --db "$DBNAME" # Create standard Kraken 2 database. If -db is not set, then set as DBNAME=SILVA
+    kraken2-build --standard --db "$DBNAME" # Create standard Kraken 2 database.
 
     # Build database
     echo "Building standard Kraken2 database..."

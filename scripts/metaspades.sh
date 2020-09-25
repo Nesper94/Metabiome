@@ -13,7 +13,7 @@ function usage() {
 }
 
 if [[ "$#" == 0 ]]; then
-    echo "No arguments given."
+    echo "Error: No arguments given." >&2
     usage
     exit 1
 fi
@@ -41,7 +41,7 @@ echo "Number of threads: ${threads:=4}"
 
 # Verify that input directory exists
 if [ ! -d "$input_dir" ]; then
-   echo "$0: Error: $input_dir is not a valid directory."
+   echo "$0: Error: $input_dir is not a valid directory." >&2
    exit 1
 fi
 
@@ -69,6 +69,7 @@ for i in "$input_dir"/*.1.fq.gz;do
     -2 $(echo "$i" | sed 's/.1.fq.gz/.2.fq.gz/') `# Reverse sequences` \
     -t "$threads"
 
+    #TO DO
     #"$ms_opts:=''" # Obtain other options for metaSPAdes
 
 
