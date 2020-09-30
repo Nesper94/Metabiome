@@ -43,6 +43,9 @@ fi
 
 echo "Your read directory is $input_dir"
 
+# Activate conda environment
+source activate preprocessing
+
 if [ ! -d "$out_dir" ]; then
     echo "Creating directory '$out_dir'"
 	mkdir -p "$out_dir"

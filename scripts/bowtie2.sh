@@ -19,9 +19,6 @@ function usage() {
     echo "-t        Number of threads to use."
 }
 
-
-#Saving input orders into variables:
-
 if [[ "$#" == 0 ]]; then
     echo "No arguments given."
     usage
@@ -69,6 +66,9 @@ if [[ ! -d "$out_dir" ]]; then  # Create output directory if it doesn't exists.
     mkdir "$out_dir"
 fi
 
+# Activate conda environment
+source activate preprocessing
+
 # Output info
 echo "Input directory: ${input_dir:?'Input directory not set'}"
 echo "Output directory: ${out_dir:?'Output directory not set'}"
@@ -78,7 +78,7 @@ echo "Phix Genome: ${PhiX:?'=PhiX genome not set'}"
 echo "Human Genome: ${Human:?'=Human genome not set'}"
 echo "Bowtie2 version: $(bowtie2  --version)"
 
-##------------Downloading Human and PhiX reference genomes-----------------##:
+##--------------Download Human and PhiX reference genomes-----------------##:
 
 for i in {1..10};do
 	echo "PhiX and human genomes:"
@@ -93,29 +93,33 @@ for i in {1..10};do
 			fi
 	fi;done
 
-##-------------Concatenating genomes to be aligned-------------------------##:
+##-----------------Concatenate genomes to be aligned------------------------##:
 
 cat "$host" "$PhiX" "$Human"  > Mixed.fasta
 
-##----------Building genome index and bowtie alignment----------------------##:
+##---------------Build genome index and bowtie alignment-----------------##:
 echo "Building genome index:"
 bowtie2-build Mixed.fasta Mix --threads $threads && echo 'Indexing genomes \
 to filter out...'
 
 ##--------------------------Pair end (PE) alignment--------------------------##:
 
-	for i in "$input_dir"/*f-paired.fq.gz;do
-		echo "PE alignment: "
+for i in "$input_dir"/*f-paired.fq.gz;do
+    
+    echo "Paired End alignment: "
+    
     bowtie2 -x Mix -1 $i -2 $(echo $i | sed 's/f-paired/r-paired/') \
-		--un-conc-gz "$out_dir"/$(echo $(basename -- $i) | sed 's/f-paired.fq.gz/paired_unaligned.fq.gz/') \
-		-q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/f-paired.fq.gz/paired_unaligned_summary.txt/');done
+    --un-conc-gz "$out_dir"/$(echo $(basename -- $i) | sed 's/f-paired.fq.gz/paired_unaligned.fq.gz/') \
+    -q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/f-paired.fq.gz/paired_unaligned_summary.txt/');done
 ##-------------------------Single end (SE) alignment------------------------##:
 
-	for i in "$input_dir"/*unpaired.fq.gz;do
-		echo "SE alignment: "
-		bowtie2 -x Mix -U $i \
-		--un-gz "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired.fq.gz/unpaired_unaligned.fq.gz/') \
-		-q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired.fq.gz/unpaired_unaligned_summary.txt/');done
+for i in "$input_dir"/*unpaired.fq.gz;do
+    
+    echo "Single End alignment: "
+    
+    bowtie2 -x Mix -U $i \
+    --un-gz "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired.fq.gz/unpaired_unaligned.fq.gz/') \
+    -q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired.fq.gz/unpaired_unaligned_summary.txt/');done
 
 echo "Done."
 echo "You can now use clean reads to:"

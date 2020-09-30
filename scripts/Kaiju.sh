@@ -75,6 +75,9 @@ echo "Kaiju reference database: ${database:?'=Kaiju database directory not set'}
 echo "Kaiju database name: ${name_kaijudb:?'=Kaiju database name not set'}"
 echo "Kaiju version: $(kaiju -h)"
 
+# Activate conda environment
+source activate binning
+
 ###----------------------Making Kaiju Database------------------------------###:
 cd "$database"
 kaiju-makedb -s "$name_kaijudb" -t "$threads"

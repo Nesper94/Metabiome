@@ -57,6 +57,8 @@ fi
 # cd SPAdes-3.12.0-Linux/bin/
 # export PATH="directory_path:$PATH" #add SPAdes installation directory to the PATH variable
 
+# Activate conda environment
+source activate assembly
 
 # Run metaSPAdes #
 

@@ -73,6 +73,9 @@ echo "MetaPhlAn3 conda environment: ${conda_env:?'conda environment not set'}"
 echo "MetaPhlAn3 database: ${met_database:?'Database not downloaded'}"
 echo "MetaPhlAn3 version: $(metaphlan -v)"
 
+# Activate conda environment
+source activate metaphlan
+
 ##---------------------------MetaPhlAn profiling----------------------------##:
 ##----------------------PE reads-----------------------------------##:
 for i in "$input_dir"/*paired_unaligned.fq.1.gz;do

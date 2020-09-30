@@ -60,6 +60,9 @@ if [[ ! -d "$out_dir" ]]; then  # Create output directory if it doesn't exists.
     mkdir "$out_dir"
 fi
 
+# Activate conda environment
+source activate humman2
+
 # Cat paired-end reads and delete original files.
 # HUMAnN2 doesn't use paired-end information: https://forum.biobakery.org/t/paired-end-files-humann2/396/4
 for forward in "$input_dir"/*f-paired*.fq.gz; do

@@ -41,8 +41,11 @@ while [[ -n "$1" ]]; do
             ;;
     esac
     shift
-
 done
+
+# Activate conda environment
+source activate assembly
+
 #Output info
 echo "Input directory: ${input_dir:?'Input directory not set'}"
 echo "Output directory: ${out_dir:?'Output directory not set'}"
