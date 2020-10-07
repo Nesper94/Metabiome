@@ -75,19 +75,23 @@ echo "Human Genome: ${Human:?'=Human genome not set'}"
 echo "Bowtie2 version: $(bowtie2  --version)"
 
 ##--------------Download Human and PhiX reference genomes-----------------##:
+# TODO: Descargar y confirmar un genoma a la vez, es decir, si se descargó bien
+# el genoma del fago, no volver a descargarlo sino seguir intentando con el
+# genoma humano solamente.
 
 for i in {1..10};do
-	echo "PhiX and human genomes:"
-	esearch -db nucleotide -query "NC_001422.1" |	efetch -format fasta > NC_001422.1.fasta \
+	echo "Downloading PhiX and human genomes..."
+	esearch -db nucleotide -query "NC_001422" | efetch -format fasta > NC_001422.fasta \
 	esearch -db nucleotide -query "GCA_000001405.28" | efetch -format fasta > GCA_000001405.28.fasta \
 	echo "Confirming downloaded genomes: "
-	if  [ -e NC_001422.1.fasta ];then
+	if  [ -e NC_001422.fasta ];then
 			echo "PhiX genome was downloaded"
 			if  [ -e GCA_000001405.28.fasta ];then
 				echo "Human genome was downloaded"
 				break
 			fi
-	fi;done
+	fi
+    done
 
 ##-----------------Concatenate genomes to be aligned------------------------##:
 
