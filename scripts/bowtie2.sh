@@ -6,7 +6,7 @@
 set -e
 
 function usage() {
-    echo "Usage: $0 -i <in dir> -o <out dir> -ho <host> -ph <PhiX> -hu <human> [-e <conda_env>] [-t <threads>]"
+    echo "Usage: $0 -i <in dir> -o <out dir> -ho <host> -ph <PhiX> -hu <human> [-t <threads>]"
     echo ""
     echo "<in dir>  Input directory containing FASTQ files."
     echo "<out dir> Directory in which results will be saved. This directory"
@@ -36,9 +36,6 @@ while [[ -n "$1" ]]; do
             shift
             ;;
         -ho )       host=$(readlink -f "$2")
-            shift
-            ;;
-        -e )        conda_env="$2"
             shift
             ;;
         -t )        threads="$2"
@@ -73,7 +70,6 @@ source activate preprocessing
 echo "Input directory: ${input_dir:?'Input directory not set'}"
 echo "Output directory: ${out_dir:?'Output directory not set'}"
 echo "Number of threads: ${threads:=4}"
-echo "Conda environment: ${conda_env:?'=conda environment not set'}"
 echo "Phix Genome: ${PhiX:?'=PhiX genome not set'}"
 echo "Human Genome: ${Human:?'=Human genome not set'}"
 echo "Bowtie2 version: $(bowtie2  --version)"
