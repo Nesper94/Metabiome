@@ -1,7 +1,7 @@
 #!/bin/bash
 # Bowtie2 wrapper script for the filtering of contaminating reads from metagenomic samples:
 # Written by: Phagomica Group
-# Last updated on: 2020-08-27
+# Last updated on: 2020-10-06
 
 set -e
 
@@ -102,24 +102,29 @@ echo "Building genome index:"
 bowtie2-build Mixed.fasta Mix --threads $threads && echo 'Indexing genomes \
 to filter out...'
 
-##--------------------------Pair end (PE) alignment--------------------------##:
+##-----------------Perform Paired end reads (PE) alignment-------------------##:
 
-for i in "$input_dir"/*f-paired.fq.gz;do
+for i in "$input_dir"/*1_paired_trim.fq.gz;do
     
     echo "Paired End alignment: "
     
-    bowtie2 -x Mix -1 $i -2 $(echo $i | sed 's/f-paired/r-paired/') \
-    --un-conc-gz "$out_dir"/$(echo $(basename -- $i) | sed 's/f-paired.fq.gz/paired_unaligned.fq.gz/') \
-    -q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/f-paired.fq.gz/paired_unaligned_summary.txt/');done
-##-------------------------Single end (SE) alignment------------------------##:
+    bowtie2 -x Mix -1 "$i" \
+    -2 $(echo $i | sed 's/1_paired_trim/2_paired_trim/') \
+    --un-conc-gz "$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_trim.fq.gz/paired_bt2.fq.gz/') \
+    -q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_trim.fq.gz/paired_bt2_summary.txt/')
+    done
+    
 
-for i in "$input_dir"/*unpaired.fq.gz;do
+##-----------------Perform Single end reads (SE) alignment-------------------##:
+
+for i in "$input_dir"/*unpaired_trim.fq.gz;do
     
     echo "Single End alignment: "
     
-    bowtie2 -x Mix -U $i \
-    --un-gz "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired.fq.gz/unpaired_unaligned.fq.gz/') \
-    -q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired.fq.gz/unpaired_unaligned_summary.txt/');done
+    bowtie2 -x Mix -U "$i" \
+    --un-gz "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_trim.fq.gz/unpaired_bt2.fq.gz/') \
+    -q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_trim.fq.gz/unpaired_bt2_summary.txt/')
+    done
 
 echo "Done."
 echo "You can now use clean reads to:"
