@@ -126,6 +126,12 @@ for i in "$input_dir"/*unpaired_trim.fq.gz;do
     -q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_trim.fq.gz/unpaired_bt2_summary.txt/')
     done
 
+# Rename files according to the naming convention
+rename 's/paired_bt2.fq.1.gz/1_paired_bt2.fq.gz/' *paired_bt2.fq.1.gz
+rename 's/paired_bt2.fq.2.gz/2_paired_bt2.fq.gz/' *paired_bt2.fq.2.gz
+
+# TODO: Check if rename command works on OS and other Linux
+
 echo "Done."
 echo "You can now use clean reads to:"
 echo "- Assemble genomes using metaspades.sh or megahit.sh."
