@@ -58,10 +58,10 @@ fi
 
 for file in "$input_dir"/*R1*.fastq; do
 trimmomatic PE -threads ${threads:=4} "$file" $(echo "$file" | sed 's/R1/R2/') \
-"$out_dir"/$(basename "$file" | sed 's/R1.*/f-paired.fq.gz/')   \
-"$out_dir"/$(basename "$file" | sed 's/R1.*/f-unpaired.fq.gz/') \
-"$out_dir"/$(basename "$file" | sed 's/R1.*/r-paired.fq.gz/')   \
-"$out_dir"/$(basename "$file" | sed 's/R1.*/r-unpaired.fq.gz/') \
+"$out_dir"/$(basename "$file" | sed 's/R1.*/1_paired_trim.fq.gz/')   \
+"$out_dir"/$(basename "$file" | sed 's/R1.*/1_unpaired_trim.fq.gz/') \
+"$out_dir"/$(basename "$file" | sed 's/R1.*/2_paired_trim.fq.gz/')   \
+"$out_dir"/$(basename "$file" | sed 's/R1.*/2_unpaired_trim.fq.gz/') \
 $trimopt 2>&1 | tee -a "$out_dir"/trimmomatic.log
 done
 

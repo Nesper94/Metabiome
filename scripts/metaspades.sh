@@ -2,10 +2,7 @@
 # Metagenomic assembly using metaSPAdes from SPAdes-3.12.0
 # Written by: Phagomica_club
 
-#Ejecuta el comando de actualización para actualizar los repositorios de paquetes
-# y obtener la información más reciente de los paqutes disponibles(para qué el -y?)
-
-set -e # Para que el script termine si encuentra un error en un comando.
+set -e
 
 function usage() {
     echo "Usage: $0 -i <input directory> -o <output directory> [-t <threads>] [OPTIONS]"
@@ -69,7 +66,8 @@ for i in "$input_dir"/*.1.fq.gz;do
     -o "$out_dir" \
     -1 "$i" `# Forward files` \
     -2 $(echo "$i" | sed 's/.1.fq.gz/.2.fq.gz/') `# Reverse sequences` \
-    -t "$threads"
+    -t "$threads" \
+    "$ms_opts:=''" # Obtain other options for metaSPAdes
 
     #TO DO
     #"$ms_opts:=''" # Obtain other options for metaSPAdes
