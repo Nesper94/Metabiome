@@ -8,7 +8,7 @@ echo "Creating hummann2 environment..."
 conda create --name humann2 --file ../conda-envs/humann2-env.yml
 
 echo "Creating preprocessing environment..."
-conda create --name preprocessing --file preprocessing.yml
+conda create --name preprocessing --file ../conda-envs/preprocessing.yml
 
 # TODO crear ambientes de conda y archivos yml
 
