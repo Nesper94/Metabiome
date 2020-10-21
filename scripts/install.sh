@@ -12,10 +12,10 @@ conda create --name preprocessing --file preprocessing.yml
 
 # TODO crear ambientes de conda y archivos yml
 
-conda create --name binning --file # TODO poner yml
+#conda create --name binning --file # TODO poner yml
 
-conda create --name assembly --file # TODO poner yml
+#conda create --name assembly --file # TODO poner yml
 
-conda create --name metaphlan --file # TODO poner yml
+#conda create --name metaphlan --file # TODO poner yml
 
-conda create --name picking16S --file # TODO poner yml
+#conda create --name picking16S --file # TODO poner yml
