@@ -9,7 +9,7 @@ they can be recreated on installation. It would also be useful to have a
 file with platform-dependent information specifying the version of each
 package. For example with an environment named `humann2`:  
 ```
-conda env export --name humann2 > version-humann2.yml && echo "# Platform $(lsb_release -d)" >> version-humann2.yml
+conda env export --from-history --name humann2 > version-humann2.yml && echo "# Platform $(lsb_release -d)" >> version-humann2.yml
 ```
 
 - Remember the [KISS principle](https://en.wikipedia.org/wiki/KISS_principle)
