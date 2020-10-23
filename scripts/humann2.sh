@@ -19,7 +19,7 @@ usage() {
 }
 
 if [[ "$#" == 0 ]]; then
-    echo "No arguments given." >&2
+    echo "Error: No arguments given." >&2
     usage
     exit 1
 fi
@@ -60,11 +60,14 @@ if [[ ! -d "$out_dir" ]]; then  # Create output directory if it doesn't exists.
     mkdir "$out_dir"
 fi
 
+# Activate conda environment
+source activate humman2
+
 # Cat paired-end reads and delete original files.
 # HUMAnN2 doesn't use paired-end information: https://forum.biobakery.org/t/paired-end-files-humann2/396/4
-for forward in "$input_dir"/*f-paired*.fq.gz; do
-    reverse=$(echo "$forward" | sed 's/f-paired/r-paired/')
-    cat "$forward" "$reverse" > $(echo "$forward" | sed 's/f-paired/paired-reads/') && rm "$forward" "$reverse"
+for forward in "$input_dir"/*1_paired*.fq.gz; do
+    reverse=$(echo "$forward" | sed 's/1_paired/2_paired/')
+    cat "$forward" "$reverse" > $(echo "$forward" | sed 's/1_paired/paired-reads/') && rm "$forward" "$reverse"
 done
 
 # For loop to run HUMAnN 2.0 on each sample

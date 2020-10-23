@@ -41,8 +41,11 @@ while [[ -n "$1" ]]; do
             ;;
     esac
     shift
-
 done
+
+# Activate conda environment
+source activate assembly
+
 #Output info
 echo "Input directory: ${input_dir:?'Input directory not set'}"
 echo "Output directory: ${out_dir:?'Output directory not set'}"
@@ -51,7 +54,7 @@ echo "MEGAHIT version: $(megahit --version)"
 
 # Verify that input directory exists
 if [ ! -d "$input_dir" ]; then
-   echo "$0: Error: $input_dir is not a valid directory."
+   echo "$0: Error: $input_dir is not a valid directory." >&2
    exit 1
 fi
 

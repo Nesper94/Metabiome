@@ -1,0 +1,7 @@
+name: preprocessing
+channels:
+  - bioconda
+  - defaults
+dependencies:
+  - trimmomatic=0.*
+  - bowtie2=2.*

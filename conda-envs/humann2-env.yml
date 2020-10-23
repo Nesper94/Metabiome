@@ -6,4 +6,3 @@ channels:
 dependencies:
   - humann2
   - metaphlan2=2.8
-prefix: /BIOS-Share/home/jeperezj/miniconda3/envs/humann2

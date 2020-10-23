@@ -12,7 +12,7 @@ function usage() {
 }
 
 if [[ "$#" == 0 ]]; then
-    echo "No arguments given."
+    echo "Error: No arguments given." >&2
     usage
     exit 1
 fi
@@ -37,11 +37,14 @@ while [[ -n "$1" ]]; do
 done
 
 if [ ! -d "$input_dir" ]; then
-   echo "Error: You need to specify the directory containing reads in FastQ"
+   echo "Error: You need to specify the directory containing reads in FastQ" >&2
    exit 1
 fi
 
 echo "Your read directory is $input_dir"
+
+# Activate conda environment
+source activate preprocessing
 
 if [ ! -d "$out_dir" ]; then
     echo "Creating directory '$out_dir'"
@@ -55,10 +58,10 @@ fi
 
 for file in "$input_dir"/*R1*.fastq; do
 trimmomatic PE -threads ${threads:=4} "$file" $(echo "$file" | sed 's/R1/R2/') \
-"$out_dir"/$(basename "$file" | sed 's/R1.*/f-paired.fq.gz/')   \
-"$out_dir"/$(basename "$file" | sed 's/R1.*/f-unpaired.fq.gz/') \
-"$out_dir"/$(basename "$file" | sed 's/R1.*/r-paired.fq.gz/')   \
-"$out_dir"/$(basename "$file" | sed 's/R1.*/r-unpaired.fq.gz/') \
+"$out_dir"/$(basename "$file" | sed 's/R1.*/1_paired_trim.fq.gz/')   \
+"$out_dir"/$(basename "$file" | sed 's/R1.*/1_unpaired_trim.fq.gz/') \
+"$out_dir"/$(basename "$file" | sed 's/R1.*/2_paired_trim.fq.gz/')   \
+"$out_dir"/$(basename "$file" | sed 's/R1.*/2_unpaired_trim.fq.gz/') \
 $trimopt 2>&1 | tee -a "$out_dir"/trimmomatic.log
 done
 

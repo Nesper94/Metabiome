@@ -2,10 +2,7 @@
 # Metagenomic assembly using metaSPAdes from SPAdes-3.12.0
 # Written by: Phagomica_club
 
-#Ejecuta el comando de actualización para actualizar los repositorios de paquetes
-# y obtener la información más reciente de los paqutes disponibles(para qué el -y?)
-
-set -e # Para que el script termine si encuentra un error en un comando.
+set -e
 
 function usage() {
     echo "Usage: $0 -i <input directory> -o <output directory> [-t <threads>] [OPTIONS]"
@@ -13,7 +10,7 @@ function usage() {
 }
 
 if [[ "$#" == 0 ]]; then
-    echo "No arguments given."
+    echo "Error: No arguments given." >&2
     usage
     exit 1
 fi
@@ -41,7 +38,7 @@ echo "Number of threads: ${threads:=4}"
 
 # Verify that input directory exists
 if [ ! -d "$input_dir" ]; then
-   echo "$0: Error: $input_dir is not a valid directory."
+   echo "$0: Error: $input_dir is not a valid directory." >&2
    exit 1
 fi
 
@@ -57,6 +54,8 @@ fi
 # cd SPAdes-3.12.0-Linux/bin/
 # export PATH="directory_path:$PATH" #add SPAdes installation directory to the PATH variable
 
+# Activate conda environment
+source activate assembly
 
 # Run metaSPAdes #
 
@@ -67,8 +66,10 @@ for i in "$input_dir"/*.1.fq.gz;do
     -o "$out_dir" \
     -1 "$i" `# Forward files` \
     -2 $(echo "$i" | sed 's/.1.fq.gz/.2.fq.gz/') `# Reverse sequences` \
-    -t "$threads"
+    -t "$threads" \
+    "$ms_opts:=''" # Obtain other options for metaSPAdes
 
+    #TO DO
     #"$ms_opts:=''" # Obtain other options for metaSPAdes
 
 

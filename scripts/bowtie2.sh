@@ -1,12 +1,16 @@
 #!/bin/bash
 # Bowtie2 wrapper script for the filtering of contaminating reads from metagenomic samples:
 # Written by: Phagomica Group
-# Last updated on: 2020-08-27
+# Last updated on: 2020-10-06
 
 set -e
 
 function usage() {
+<<<<<<< HEAD
     echo "Usage: $0 -i <in dir> -o <out dir> -ho <host> [-ph <PhiX>] [-hu <human>] [-t <threads>]"
+=======
+    echo "Usage: $0 -i <in dir> -o <out dir> -ho <host> -ph <PhiX> -hu <human> [-t <threads>]"
+>>>>>>> 9949fe6454db8df869ffbfea71524eab5ed8a87c
     echo ""
     echo "<in dir>  Input directory containing FASTQ files."
     echo "<out dir> Directory in which results will be saved. This directory"
@@ -18,9 +22,6 @@ function usage() {
     echo "Options:"
     echo "<threads> Number of threads to use."
 }
-
-
-#Saving input orders into variables:
 
 if [[ "$#" == 0 ]]; then
     echo "No arguments given." >&2
@@ -96,39 +97,83 @@ if [[ ! -d "$out_dir" ]]; then  # Create output directory if it doesn't exists.
     mkdir "$out_dir"
 fi
 
+# Activate conda environment
+source activate preprocessing
+
 # Output info
 echo "Conda environment: $CONDA_DEFAULT_ENV"
 echo "Input directory: ${input_dir:?'Input directory not set'}"
 echo "Output directory: ${out_dir:?'Output directory not set'}"
 echo "Number of threads: ${threads:=4}"
+<<<<<<< HEAD
 echo "Host Genome: ${host:?'=Host genome not set'}"
+=======
+>>>>>>> 9949fe6454db8df869ffbfea71524eab5ed8a87c
 echo "Phix Genome: ${PhiX:?'=PhiX genome not set'}"
 echo "Human Genome: ${Human:?'=Human genome not set'}"
 echo "Bowtie2 version: $(bowtie2  --version)"
 
+<<<<<<< HEAD
 ##-------------Concatenating genomes to be aligned-------------------------##:
+=======
+##--------------Download Human and PhiX reference genomes-----------------##:
+# TODO: Descargar y confirmar un genoma a la vez, es decir, si se descargó bien
+# el genoma del fago, no volver a descargarlo sino seguir intentando con el
+# genoma humano solamente.
+
+for i in {1..10};do
+	echo "Downloading PhiX and human genomes..."
+	esearch -db nucleotide -query "NC_001422" | efetch -format fasta > NC_001422.fasta \
+	esearch -db nucleotide -query "GCA_000001405.28" | efetch -format fasta > GCA_000001405.28.fasta \
+	echo "Confirming downloaded genomes: "
+	if  [ -e NC_001422.fasta ];then
+			echo "PhiX genome was downloaded"
+			if  [ -e GCA_000001405.28.fasta ];then
+				echo "Human genome was downloaded"
+				break
+			fi
+	fi
+    done
+
+##-----------------Concatenate genomes to be aligned------------------------##:
+>>>>>>> 9949fe6454db8df869ffbfea71524eab5ed8a87c
 
 cat "$host" "$PhiX" "$Human"  > Mixed.fasta
 
-##----------Building genome index and bowtie alignment----------------------##:
+##---------------Build genome index and bowtie alignment-----------------##:
 echo "Building genome index:"
 bowtie2-build Mixed.fasta Mix --threads $threads && echo 'Indexing genomes \
 to filter out...'
 
-##--------------------------Pair end (PE) alignment--------------------------##:
+##-----------------Perform Paired end reads (PE) alignment-------------------##:
 
-	for i in "$input_dir"/*f-paired.fq.gz;do
-		echo "PE alignment: "
-    bowtie2 -x Mix -1 $i -2 $(echo $i | sed 's/f-paired/r-paired/') \
-		--un-conc-gz "$out_dir"/$(echo $(basename -- $i) | sed 's/f-paired.fq.gz/paired_unaligned.fq.gz/') \
-		-q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/f-paired.fq.gz/paired_unaligned_summary.txt/');done
-##-------------------------Single end (SE) alignment------------------------##:
+for i in "$input_dir"/*1_paired_trim.fq.gz;do
+    
+    echo "Paired End alignment: "
+    
+    bowtie2 -x Mix -1 "$i" \
+    -2 $(echo $i | sed 's/1_paired_trim/2_paired_trim/') \
+    --un-conc-gz "$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_trim.fq.gz/paired_bt2.fq.gz/') \
+    -q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_trim.fq.gz/paired_bt2_summary.txt/')
+    done
+    
 
-	for i in "$input_dir"/*unpaired.fq.gz;do
-		echo "SE alignment: "
-		bowtie2 -x Mix -U $i \
-		--un-gz "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired.fq.gz/unpaired_unaligned.fq.gz/') \
-		-q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired.fq.gz/unpaired_unaligned_summary.txt/');done
+##-----------------Perform Single end reads (SE) alignment-------------------##:
+
+for i in "$input_dir"/*unpaired_trim.fq.gz;do
+    
+    echo "Single End alignment: "
+    
+    bowtie2 -x Mix -U "$i" \
+    --un-gz "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_trim.fq.gz/unpaired_bt2.fq.gz/') \
+    -q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_trim.fq.gz/unpaired_bt2_summary.txt/')
+    done
+
+# Rename files according to the naming convention
+rename 's/paired_bt2.fq.1.gz/1_paired_bt2.fq.gz/' *paired_bt2.fq.1.gz
+rename 's/paired_bt2.fq.2.gz/2_paired_bt2.fq.gz/' *paired_bt2.fq.2.gz
+
+# TODO: Check if rename command works on OS and other Linux
 
 echo "Done."
 echo "You can now use clean reads to:"

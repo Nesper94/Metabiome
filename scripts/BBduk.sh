@@ -66,7 +66,10 @@ echo "Output directory: ${out_dir:?'Output directory not set'}"
 echo "Number of threads: ${threads:=4}"
 echo "Reference database: ${database:?'=reference database not set'}"
 
-##Matching reads against the 16S rDNA SSU from SILVA Database,
+# Activate conda environment
+source activate picking16S
+
+##Match reads against the 16S rDNA SSU from SILVA Database,
 
 #For PE reads:
 
@@ -83,7 +86,7 @@ for i in "$input_dir"/*unpaired_unaligned.fq.gz;do
 	stats="$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_unaligned.fq.gz/unpaired_statistics_16S.txt/') \
   ordered=T;done
 
-####Compressing################:
+#### Compress output ################
 cd "$out_dir"
 gzip *.fq
 
