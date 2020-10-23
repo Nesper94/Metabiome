@@ -1,0 +1,7 @@
+name: assembly
+channels:
+  - bioconda
+  - defaults
+dependencies:
+  - spades=
+  - megahit=2.*
