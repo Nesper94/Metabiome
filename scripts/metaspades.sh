@@ -59,13 +59,13 @@ source activate assembly
 
 # Run metaSPAdes #
 
-for i in "$input_dir"/*.1.fq.gz;do
+for i in "$input_dir"/*_1_fq.gz;do
 
-	echo "Performing PE assembly with files $(basename $i) and $(basename $i | sed 's/.1.gz/.2.gz/')"
+	echo "Performing PE assembly with files $(basename $i) and $(basename $i | sed 's/_1_bt2.fq.gz/_2_bt2.fq.gz/')"
 	spades.py --meta \
     -o "$out_dir" \
     -1 "$i" `# Forward files` \
-    -2 $(echo "$i" | sed 's/.1.fq.gz/.2.fq.gz/') `# Reverse sequences` \
+    -2 $(echo "$i" | sed 's/_1_bt2.fq.gz/_2_bt2.fq.gz/') `# Reverse sequences` \
     -t "$threads" \
     "$ms_opts:=''" # Obtain other options for metaSPAdes
 
