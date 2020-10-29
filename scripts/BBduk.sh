@@ -65,7 +65,7 @@ echo "Number of threads: ${threads:=4}"
 echo "Reference database: ${database:?'=reference database not set'}"
 
 ##-----------------------Activate conda environment--------------------------##:
-conda activate picking
+conda activate picking16S
 ##------------Match reads against the 16S rDNA SSU from SILVA Database-------##:
 
 for i in "$input_dir"/*1_paired_bt2.fq.gz;do
