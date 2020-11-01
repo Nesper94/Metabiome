@@ -69,7 +69,7 @@ echo "MetaPhlAn3 database: ${met_database:?'Database not downloaded'}"
 echo "MetaPhlAn3 version: $(metaphlan -v)"
 
 ##----------------Activate conda environment--------------------------------##:
-conda activate mpa
+conda activate metaphlan
 ##---------------------------MetaPhlAn profiling----------------------------##:
 ##----------------------PE reads--------------------------------------------##:
 for i in "$input_dir"/*_1_paired_bt2.fq.gz;do

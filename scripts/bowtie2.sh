@@ -125,8 +125,8 @@ to filter out...'
 
 ##---------------- Rename files according to the naming convention-----------##:
 cd "$out_dir"
-rename _paired_bt2.fq.1.gz _1_paired_bt2.fq.gz *paired_bt2.fq.1.gz
-rename _paired_bt2.fq.2.gz _2_paired_bt2.fq.gz *paired_bt2.fq.2.gz
+rename 's/paired_bt2.fq.1.gz/1_paired_bt2.fq.gz/' *paired_bt2.fq.1.gz
+rename 's/paired_bt2.fq.2.gz/2_paired_bt2.fq.gz/' *paired_bt2.fq.1.gz
 
 ##-------------------------Single end (SE) alignment------------------------##:
 
