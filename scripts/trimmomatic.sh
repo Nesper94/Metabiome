@@ -7,7 +7,7 @@ set -e
 
 function usage() {
     echo "Usage: $0 -i <input directory> -o <output directory> [-t <threads>] 'TRIMMOMATIC_OPTIONS'"
-    echo "Make sure TRIMMOMATIC_OPTIONS are enclosed with quotation marks."
+    echo "Make sure TRIMMOMATIC_OPTIONS are enclosed within quotation marks."
     echo "Output directory will be created if it doesn't exists."
 }
 
@@ -64,6 +64,9 @@ for file in "$input_dir"/*; do
         "$out_dir"/$(basename "$file" | sed 's/R1.*/2_paired_trim.fq.gz/')   \
         "$out_dir"/$(basename "$file" | sed 's/R1.*/2_unpaired_trim.fq.gz/') \
         $trimopt 2>&1 | tee -a "$out_dir"/trimmomatic.log
+        
+        echo "" # Add new line in order to make output easier to read
+        
     elif [[ $file == *.fastq ]] || [[ $file == *.fq.gz ]]; then
         :
     else
