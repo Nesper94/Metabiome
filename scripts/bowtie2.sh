@@ -6,15 +6,14 @@
 set -e
 
 function usage() {
-    echo "Usage: $0 -i <in dir> -o <out dir> -ho <host> [-ph <PhiX>] [-hu <human>] [-t <threads>]"
+    echo "Usage: $0 -i <in dir> -o <out dir> -ho <host> [-ph <PhiX>] [-hu <human>] [-t <threads>] "
     echo ""
     echo "<in dir>  Input directory containing FASTQ files."
     echo "<out dir> Directory in which results will be saved. This directory"
     echo "          will be created if it doesn't exists."
     echo "<host>    Host reference genome in FASTA format."
     echo "<PhiX>    PhiX-174 phage reference genome in FASTA format. (optional)"
-    echo "<human>   Human reference genome in FASTA format.(optional)"
-    echo ""
+    echo "<human>   Human reference genome in FASTA format. (optional)"
     echo "Options:"
     echo "<threads> Number of threads to use."
 }
@@ -106,14 +105,14 @@ echo "Phix Genome: ${PhiX:?'=PhiX genome not set'}"
 echo "Human Genome: ${Human:?'=Human genome not set'}"
 echo "Bowtie2 version: $(bowtie2  --version)"
 
-##-----------------Concatenate genomes to be aligned------------------------##:
-cat "$host" "$PhiX" "$Human"  > Mixed.fasta
-
-##---------------Build genome index and bowtie alignment-----------------##:
-echo "Building genome index:"
-bowtie2-build Mixed.fasta Mix --threads $threads && echo 'Indexing genomes \
-to filter out...'
-
+##------------Concatenate genomes to be aligned and building genomes---------##:
+##First checks if the index is already generated, otherwise it will be generated.
+dir=$(pwd) ##current directory
+echo "$dir"
+[ ! -f "$dir"/Mix.3.bt2 ] \
+&& { echo "Index needs to be generated:" ; \
+     cat "$host" "$PhiX" "$Human"  > Mixed.fasta; \
+     bowtie2-build Mixed.fasta Mix --threads $threads; }
 
 ##--------------------------Pair end (PE) alignment--------------------------##:
 	for i in "$input_dir"/*1_paired_trim.fq.gz;do
@@ -123,11 +122,6 @@ to filter out...'
         -q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_trim.fq.gz/paired_bt2_summary.txt/')
         done
 
-##---------------- Rename files according to the naming convention-----------##:
-cd "$out_dir"
-rename 's/paired_bt2.fq.1.gz/1_paired_bt2.fq.gz/' *paired_bt2.fq.1.gz
-rename 's/paired_bt2.fq.2.gz/2_paired_bt2.fq.gz/' *paired_bt2.fq.1.gz
-
 ##-------------------------Single end (SE) alignment------------------------##:
 
 	for i in "$input_dir"/*unpaired_trim.fq.gz;do
@@ -135,6 +129,11 @@ rename 's/paired_bt2.fq.2.gz/2_paired_bt2.fq.gz/' *paired_bt2.fq.1.gz
 		bowtie2 -x Mix -U $i --un-gz "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_trim/unpaired_bt2/') \
 		-q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_trim.fq.gz/unpaired_bt2_summary.txt/')
     done
+
+##---------------- Rename files according to the naming convention-----------##:
+cd "$out_dir"
+rename 's/paired_bt2.fq.1.gz/1_paired_bt2.fq.gz/' *paired_bt2.fq.1.gz
+rename 's/paired_bt2.fq.2.gz/2_paired_bt2.fq.gz/' *paired_bt2.fq.2.gz
 
 
 echo "Done."
