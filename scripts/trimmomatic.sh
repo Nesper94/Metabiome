@@ -7,7 +7,7 @@ set -e
 
 function usage() {
     echo "Usage: $0 -i <input directory> -o <output directory> [-t <threads>] 'TRIMMOMATIC_OPTIONS'"
-    echo "Make sure TRIMMOMATIC_OPTIONS are enclosed with quotation marks."
+    echo "Make sure TRIMMOMATIC_OPTIONS are enclosed within quotation marks."
     echo "Output directory will be created if it doesn't exists."
 }
 
@@ -56,13 +56,22 @@ fi
 # Es importante recordar que en Trimmomatic el orden de las opciones indica
 # su orden de ejecución.
 
-for file in "$input_dir"/*R1*.fastq; do
-trimmomatic PE -threads ${threads:=4} "$file" $(echo "$file" | sed 's/R1/R2/') \
-"$out_dir"/$(basename "$file" | sed 's/R1.*/1_paired_trim.fq.gz/')   \
-"$out_dir"/$(basename "$file" | sed 's/R1.*/1_unpaired_trim.fq.gz/') \
-"$out_dir"/$(basename "$file" | sed 's/R1.*/2_paired_trim.fq.gz/')   \
-"$out_dir"/$(basename "$file" | sed 's/R1.*/2_unpaired_trim.fq.gz/') \
-$trimopt 2>&1 | tee -a "$out_dir"/trimmomatic.log
+for file in "$input_dir"/*; do
+    if [[ $file == *R1*.fastq ]] || [[ $file == *R1*.fq.gz ]]; then  # Make sure to process only fastq or fq.gz files
+        trimmomatic PE -threads ${threads:=4} "$file" $(echo "$file" | sed 's/R1/R2/') \
+        "$out_dir"/$(basename "$file" | sed 's/R1.*/1_paired_trim.fq.gz/')   \
+        "$out_dir"/$(basename "$file" | sed 's/R1.*/1_unpaired_trim.fq.gz/') \
+        "$out_dir"/$(basename "$file" | sed 's/R1.*/2_paired_trim.fq.gz/')   \
+        "$out_dir"/$(basename "$file" | sed 's/R1.*/2_unpaired_trim.fq.gz/') \
+        $trimopt 2>&1 | tee -a "$out_dir"/trimmomatic.log
+        
+        echo "" # Add new line in order to make output easier to read
+        
+    elif [[ $file == *.fastq ]] || [[ $file == *.fq.gz ]]; then
+        :
+    else
+        echo "$file will not be processed as is not a .fastq or .fq.gz file."
+    fi
 done
 
 echo "Done. You should now execute Bowtie2 in order to clean contaminant reads."

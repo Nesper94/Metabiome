@@ -1,0 +1,7 @@
+name: picking16S
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - bbmap=38.87
