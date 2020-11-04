@@ -57,7 +57,8 @@ fi
 # su orden de ejecución.
 
 for file in "$input_dir"/*; do
-    if [[ $file == *R1*.fastq ]] || [[ $file == *R1*.fq.gz ]]; then  # Make sure to process only fastq or fq.gz files
+    # Make sure to process only fastq, fq.gz or fastq.gz files
+    if [[ $file == *R1*.fastq ]] || [[ $file == *R1*.fq.gz ]] || [[ $file == *R1*.fastq.gz ]]; then
         trimmomatic PE -threads ${threads:=4} "$file" $(echo "$file" | sed 's/R1/R2/') \
         "$out_dir"/$(basename "$file" | sed 's/R1.*/1_paired_trim.fq.gz/')   \
         "$out_dir"/$(basename "$file" | sed 's/R1.*/1_unpaired_trim.fq.gz/') \
