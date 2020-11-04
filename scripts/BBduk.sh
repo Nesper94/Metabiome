@@ -6,26 +6,25 @@
 set -e
 
 function usage() {
-    echo "Usage: $0 -i <input_directory> -o <output_directory> \
-		-D <16S_DATABASE> [-t <threads>]"
-    echo ""
-    echo "<input_directory>  Input directory containing FASTQ files."
-    echo "<out_directory> Directory in which results will be saved. This directory"
-    echo "          will be created if it doesn't exists."
-    echo "<16S_DATABASE>    16S Database directory."
+    echo "Usage: $0 -i <input_directory> -o <output_directory> -D <16S_DATABASE> [-t <threads>]"
     echo ""
     echo "Options:"
-    echo "-t        Number of threads to use."
+    echo "<input_directory>  Input directory containing FASTQ files."
+    echo "<output_directory> Directory in which results will be saved. This directory"
+    echo "will be created if it doesn't exist."
+    echo "<16S_DATABASE> 16S Database directory."
+    echo "<threads>  Number of threads to use. (optional)"
 
 }
 
-##------------------Saving input orders into variables-----------------------##:
+##--------------------------Exiting if input files are missing---------------##:
 if [[ "$#" == 0 ]]; then
     echo "No arguments given." >&2
     usage
     exit 1
 fi
 
+##------------------Saving input orders into variables-----------------------##:
 while [[ -n "$1" ]]; do
     case "$1" in
         -h|--help ) usage; exit 0

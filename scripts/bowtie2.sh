@@ -8,22 +8,24 @@ set -e
 function usage() {
     echo "Usage: $0 -i <in dir> -o <out dir> -ho <host> [-ph <PhiX>] [-hu <human>] [-t <threads>] "
     echo ""
+    echo "Options:"
     echo "<in dir>  Input directory containing FASTQ files."
     echo "<out dir> Directory in which results will be saved. This directory"
-    echo "          will be created if it doesn't exists."
+    echo "will be created if it doesn't exist."
     echo "<host>    Host reference genome in FASTA format."
+    echo "<threads> Number of threads to use. (optional)"
     echo "<PhiX>    PhiX-174 phage reference genome in FASTA format. (optional)"
     echo "<human>   Human reference genome in FASTA format. (optional)"
-    echo "Options:"
-    echo "<threads> Number of threads to use."
 }
 
+##--------------------------Exiting if input files are missing---------------##:
 if [[ "$#" == 0 ]]; then
     echo "No arguments given." >&2
     usage
     exit 1
 fi
 
+##----------------------Saving input orders into variables------------------##:
 while [[ -n "$1" ]]; do
     case "$1" in
         -h|--help ) usage; exit 0
