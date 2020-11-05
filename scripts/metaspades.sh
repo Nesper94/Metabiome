@@ -5,7 +5,8 @@
 set -e
 
 function usage() {
-    echo "Usage: $0 -i <input directory> -o <output directory> [-t <threads>] [OPTIONS]"
+    echo "Usage: $0 -i <input directory> -o <output directory> [-t <threads>] [MetaSPADES_OPTIONS]"
+    echo "WARNING: Make sure to enclose MetaSPADES_OPTIONS within quotation marks."
     echo "Output directory will be created if it doesn't exists."
 }
 
@@ -28,7 +29,7 @@ while [[ -n "$1" ]]; do
         -t )        threads="$2"
             shift
             ;;
-        * )         ms_opts="$@"
+        * )         MetaSPADES_opts="$@"
             ;;
     esac
     shift
@@ -47,31 +48,22 @@ if [[ ! -d "$out_dir" ]]; then
     mkdir "$out_dir"
 fi
 
-# SPAdes #
-
-# wget http://cab.spbu.ru/files/release3.12.0/SPAdes-3.12.0-Linux.tar.gz
-# tar -xzf SPAdes-3.12.0-Linux.tar.gz #extraer archivo
-# cd SPAdes-3.12.0-Linux/bin/
-# export PATH="directory_path:$PATH" #add SPAdes installation directory to the PATH variable
-
 # Activate conda environment
 source activate assembly
 
 # Run metaSPAdes #
 
-for i in "$input_dir"/*_1_fq.gz;do
+forward_file_suffix=1_paired_bt2.fq.gz
+reverse_file_suffix=2_paired_bt2.fq.gz
 
-	echo "Performing PE assembly with files $(basename $i) and $(basename $i | sed 's/_1_bt2.fq.gz/_2_bt2.fq.gz/')"
+for forward_file in "$input_dir"/*$forward_file_suffix; do
+
+	echo "Performing PE assembly with files $(basename $forward_file) and $(basename $forward_file | sed 's/_1_bt2.fq.gz/_2_bt2.fq.gz/')"
 	spades.py --meta \
     -o "$out_dir" \
-    -1 "$i" `# Forward files` \
-    -2 $(echo "$i" | sed 's/_1_bt2.fq.gz/_2_bt2.fq.gz/') `# Reverse sequences` \
+    -1 "$forward_file" \
+    -2 $(echo "$forward_file" | sed 's/$forward_file_suffix/$reverse_file_suffix') `# Reverse sequences` \
     -t "$threads" \
-    "$ms_opts:=''" # Obtain other options for metaSPAdes
-
-    #TO DO
-    #"$ms_opts:=''" # Obtain other options for metaSPAdes
-
+    "$MetaSPADES_opts:=''" # Obtain other options for metaSPAdes
 
 done
-# metaspades.sh -i input -o output -t 20
