@@ -4,17 +4,18 @@
 
 set -e
 
+SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
+source "$SCRIPTS_DIR"/functions.sh
+
 function usage() {
     echo "Usage: $0 -i <input directory> -o <output directory> [-t <threads>] [MetaSPADES_OPTIONS]"
+    echo ""
     echo "WARNING: Make sure to enclose MetaSPADES_OPTIONS within quotation marks."
     echo "Output directory will be created if it doesn't exists."
 }
 
-if [[ "$#" == 0 ]]; then
-    echo "Error: No arguments given." >&2
-    usage
-    exit 1
-fi
+# Exit if command is called with no arguments
+validate_arguments "$#"
 
 while [[ -n "$1" ]]; do
     case "$1" in
@@ -37,19 +38,14 @@ done
 
 echo "Number of threads: ${threads:=4}"
 
-# Verify that input directory exists
-if [ ! -d "$input_dir" ]; then
-   echo "$0: Error: $input_dir is not a valid directory." >&2
-   exit 1
-fi
+# Verify that input directory is set and exists
+validate_input_dir
 
 # Create output directory if it doesn't exists.
-if [[ ! -d "$out_dir" ]]; then
-    mkdir "$out_dir"
-fi
+validate_output_dir
 
 # Activate conda environment
-source activate assembly
+activate_env assembly
 
 # Run metaSPAdes #
 
@@ -62,8 +58,7 @@ for forward_file in "$input_dir"/*$forward_file_suffix; do
 	spades.py --meta \
     -o "$out_dir" \
     -1 "$forward_file" \
-    -2 $(echo "$forward_file" | sed 's/$forward_file_suffix/$reverse_file_suffix') `# Reverse sequences` \
-    -t "$threads" \
-    "$MetaSPADES_opts:=''" # Obtain other options for metaSPAdes
+    -2 $(echo "$forward_file" | sed "s/$forward_file_suffix/$reverse_file_suffix/") `# Reverse sequences` \
+    -t "$threads" #"${MetaSPADES_opts:=''}" # Obtain other options for metaSPAdes
 
 done
