@@ -6,3 +6,4 @@ dependencies:
   - trimmomatic=0.*
   - bowtie2=2.*
   - rename=1.601
+  - entrez-direct=11.0
