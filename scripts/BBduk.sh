@@ -17,14 +17,10 @@ function usage() {
 
 }
 
-##--------------------------Exiting if input files are missing---------------##:
-if [[ "$#" == 0 ]]; then
-    echo "No arguments given." >&2
-    usage
-    exit 1
-fi
+# Exit if command is called with no arguments
+validate_arguments "$#"
 
-##------------------Saving input orders into variables-----------------------##:
+##---------------------Save input parameters into variables------------------##:
 while [[ -n "$1" ]]; do
     case "$1" in
         -h|--help ) usage; exit 0
@@ -47,15 +43,12 @@ while [[ -n "$1" ]]; do
     shift
 done
 
-##---------------------Verify that input directory exists--------------------##:
-if [ ! -d "$input_dir" ]; then
-   echo "$0: Error: $input_dir is not a valid directory." >&2
-   exit 1
-fi
-##----------------Create output directory if it doesn't exists---------------##:
-if [[ ! -d "$out_dir" ]]; then
-    mkdir "$out_dir"
-fi
+# Verify that input directory is set and exists
+validate_input_dir
+
+# Create output directory if it doesn't exists.
+validate_output_dir
+
 ##----------------------------Output info------------------------------------##:
 echo "Conda environment: $CONDA_DEFAULT_ENV"
 echo "Input directory: ${input_dir:?'Input directory not set'}"
@@ -64,26 +57,29 @@ echo "Number of threads: ${threads:=4}"
 echo "Reference database: ${database:?'=reference database not set'}"
 
 ##-----------------------Activate conda environment--------------------------##:
-conda activate picking16S
+activate_env picking16S
+
 ##------------Match reads against the 16S rDNA SSU from SILVA Database-------##:
 
-for i in "$input_dir"/*1_paired_bt2.fq.gz;do
-  echo $i
-  bbduk.sh in=$i in2=$(echo $i | 's/_1_paired_bt2/_2_paired_bt2/') \
+for i in "$input_dir"/*1_paired_bt2.fq.gz; do
+    echo $i
+    bbduk.sh in=$i in2=$(echo $i | 's/_1_paired_bt2/_2_paired_bt2/') \
 	ref="$database" outm="$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/1_paired_bbdk.fq/') \
-  outm2="$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/2_paired_bbdk.fq/') \
+    outm2="$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/2_paired_bbdk.fq/') \
 	outs="$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/singletons_bbdk.fq/') \
-  stats="$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/pe_bbdk_summary.txt/') ordered=T ;done
+    stats="$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/pe_bbdk_summary.txt/') ordered=T
+done
 
 ##----------------------------For SE reads-----------------------------------##:
 
-for i in "$input_dir"/*unpaired_bt2.fq.gz;do
-  bbduk.sh in=$i ref="$database" \
-  outm="$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_bt2.fq.gz/unpaired_bbdk.fq/') \
+for i in "$input_dir"/*unpaired_bt2.fq.gz; do
+    bbduk.sh in=$i ref="$database" \
+    outm="$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_bt2.fq.gz/unpaired_bbdk.fq/') \
 	stats="$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_bt2.fq.gz/unpaired_bbdk_summary.txt/') \
-  ordered=T;done
+    ordered=T
+done
 
-##------------------------------Compressing output---------------------------##:
+##-------------------------------Compress output-----------------------------##:
 cd "$out_dir"
 gzip *.fq
 
