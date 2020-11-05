@@ -16,7 +16,7 @@ function usage() {
 }
 
 if [[ "$#" == 0 ]]; then
-    echo "No arguments given."
+    echo "No arguments given." >&2
     usage
     exit 1
 fi
@@ -37,7 +37,7 @@ while [[ -n "$1" ]]; do
         --k-list)   kmer_list="$2"
 		shift
             ;;
-        * )         mh_opts="$@"
+        * )         MEGAHIT_opts="$@"
             ;;
     esac
     shift
@@ -63,18 +63,22 @@ if [[ ! -d "$out_dir" ]]; then
     mkdir "$out_dir"
 fi
 
-# For the moment this script only runs MEGAHIT on paired-end files
+# Run MEGAHIT on paired-end files
 
-for i in "$input_dir"/*f-paired*.fq.gz;do
-	echo "Performing PE assembly with $(basename $i) and $(basename "$i" | sed 's/f-paired/r-paired/')"
-    out_name=$(basename "$i" | sed 's/f-paired//')
+forward_file_suffix=1_paired_bt2.fq.gz
+reverse_file_suffix=2_paired_bt2.fq.gz
+
+for forward_file in "$input_dir"/*$forward_file_suffix; do
+
+	echo "Performing PE assembly with $(basename $forward_file) and $(basename "$forward_file" | sed 's/f-paired/r-paired/')"
+    
+    out_name=$(basename "$forward_file" | sed 's/1_paired_bt2//')
+    
 	megahit \
     -o "$out_dir"/"$out_name" \
-    -1 "$i" `#Forward files(1 files, paired with files in "$pe2")` \
-    -2 $(echo "$i" | sed 's/f-paired/r-paired/') `# Reverse files (2 files, paired with files in "$pe1"` \
-    -t "$threads" "$mh_opts:=''" \
+    -1 "$forward_file" `#Forward files(1 files, paired with files in "$pe2")` \
+    -2 $(echo "$forward_file" | sed 's/$forward_file_suffix/$reverse_file_suffix/') `# Reverse files (2 files, paired with files in "$pe1"` \
+    -t "$threads" "$MEGAHIT_opts:=''" \
     --presets meta-large # Optimization for large & complex metagenomes, like soil
-#   --no-mercy `# Qué hace esto?`\
-#   --k-list "21,33,55" `# list of k-mer sizes to be use separeted comma(no more than 141)`
-#   -r/--read  <se>   comma-separated list of fasta/q single-end files
+
 done
