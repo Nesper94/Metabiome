@@ -4,6 +4,9 @@
 
 set -e
 
+SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
+source "$SCRIPTS_DIR"/functions.sh
+
 function usage() {
     echo "Usage:"
     echo "  $0 -i <input directory> -o <output directory> [-t <threads>] [OPTIONS]"
@@ -15,11 +18,8 @@ function usage() {
     echo "$(megahit --help)"
 }
 
-if [[ "$#" == 0 ]]; then
-    echo "No arguments given." >&2
-    usage
-    exit 1
-fi
+# Exit if command is called with no arguments
+validate_arguments "$#"
 
 while [[ -n "$1" ]]; do
     case "$1" in
@@ -43,25 +43,20 @@ while [[ -n "$1" ]]; do
     shift
 done
 
+# Verify that input directory is set and exists
+validate_input_dir
+
+# Create output directory if it doesn't exists.
+validate_output_dir
+
 # Activate conda environment
-source activate assembly
+activate_env assembly
 
 #Output info
 echo "Input directory: ${input_dir:?'Input directory not set'}"
 echo "Output directory: ${out_dir:?'Output directory not set'}"
 echo "Number of threads: ${threads:=4}"
 echo "MEGAHIT version: $(megahit --version)"
-
-# Verify that input directory exists
-if [ ! -d "$input_dir" ]; then
-   echo "$0: Error: $input_dir is not a valid directory." >&2
-   exit 1
-fi
-
-# Create output directory if it doesn't exists.
-if [[ ! -d "$out_dir" ]]; then
-    mkdir "$out_dir"
-fi
 
 # Run MEGAHIT on paired-end files
 
@@ -77,7 +72,7 @@ for forward_file in "$input_dir"/*$forward_file_suffix; do
 	megahit \
     -o "$out_dir"/"$out_name" \
     -1 "$forward_file" `#Forward files(1 files, paired with files in "$pe2")` \
-    -2 $(echo "$forward_file" | sed 's/$forward_file_suffix/$reverse_file_suffix/') `# Reverse files (2 files, paired with files in "$pe1"` \
+    -2 $(echo "$forward_file" | sed "s/$forward_file_suffix/$reverse_file_suffix/") `# Reverse files (2 files, paired with files in "$pe1"` \
     -t "$threads" "$MEGAHIT_opts:=''" \
     --presets meta-large # Optimization for large & complex metagenomes, like soil
 
