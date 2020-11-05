@@ -116,18 +116,20 @@ dir=$(pwd) ##current directory
 
 ##--------------------------Pair end (PE) alignment--------------------------##:
 for i in "$input_dir"/*1_paired_trim.fq.gz; do
-    echo "PE alignment: "
+    echo "Performing paired reads alignment..."
     bowtie2 -x Mix -1 $i -2 $(echo $i | sed 's/1_paired_trim/2_paired_trim/') \
     --un-conc-gz "$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_trim/paired_bt2/') \
-    -q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_trim.fq.gz/paired_bt2_summary.txt/')
+    -q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_trim.fq.gz/paired_bt2_summary.txt/') \
+    > /dev/null # Bowtie2 output to terminal is excesive and we don't need it in this case
 done
 
 ##-------------------------Single end (SE) alignment------------------------##:
 
 for i in "$input_dir"/*unpaired_trim.fq.gz; do
-    echo "SE alignment: "
+    echo "Performing single reads alignment..."
     bowtie2 -x Mix -U $i --un-gz "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_trim/unpaired_bt2/') \
-    -q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_trim.fq.gz/unpaired_bt2_summary.txt/')
+    -q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_trim.fq.gz/unpaired_bt2_summary.txt/') \
+    > /dev/null
 done
 
 ##---------------- Rename files according to the naming convention-----------##:
