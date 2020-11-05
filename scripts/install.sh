@@ -14,7 +14,8 @@ conda env create --file ../conda-envs/preprocessing.yml
 
 #conda env create --file # TODO poner yml binning
 
-#conda env create --file # TODO poner yml assembly
+echo "Creating assembly environment..."
+conda env create --file ../conda-envs/assembly.yml
 
 #conda env create --file # TODO poner yml metaphlan
 
