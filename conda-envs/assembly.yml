@@ -3,5 +3,5 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - spades=
+  - spades=3.12.*
   - megahit=2.*
