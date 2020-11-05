@@ -4,4 +4,4 @@ channels:
   - defaults
 dependencies:
   - spades=3.12.*
-  - megahit=2.*
+  - megahit=1.2.*
