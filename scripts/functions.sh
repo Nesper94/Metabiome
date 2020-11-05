@@ -37,7 +37,7 @@ validate_output_dir(){
 activate_env(){
     source activate "$1"
     if [[ "$?" -ne 0 ]]; then
-        echo "$0: Error: Make sure Conda base environment is active bu running 'conda activate'" >&2
+        echo "$0: Error: Make sure Conda base environment is active by running 'conda activate base'" >&2
         exit 1
     fi
 }
