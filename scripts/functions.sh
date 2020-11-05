@@ -10,14 +10,24 @@ validate_arguments(){
 
 # Verify that input directory exists
 validate_input_dir(){
+    if [[ -z "$input_dir" ]]; then
+        echo "$0: Error: Input directory is not set." >&2
+        exit 1
+    fi
+    
     if [[ ! -d "$input_dir" ]]; then
-   echo "$0: Error: $input_dir is not a valid directory." >&2
-   exit 1
-fi
+        echo "$0: Error: $input_dir is not a valid directory." >&2
+        exit 1
+    fi
 }
 
 # Create output directory if it doesn't exists.
 validate_output_dir(){
+    if [[ -z "$out_dir" ]]; then
+        echo "$0: Error: Output directory is not set." >&2
+        exit 1
+    fi
+    
     if [[ ! -d "$out_dir" ]]; then
         mkdir "$out_dir"
     fi

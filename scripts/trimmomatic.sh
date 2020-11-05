@@ -1,9 +1,11 @@
 #!/bin/bash
-# Este script instala y ejecuta Trimmomatic usando como input una carpeta con
-# archivos en formato FastQ con los reads en bruto.
+# Trimmomatic wrapper script to make quality control on FASTQ files
 # Last updated on: 2020-08-29
 
 set -e
+
+SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
+source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
     echo "Usage: $0 -i <input directory> -o <output directory> [-t <threads>] 'TRIMMOMATIC_OPTIONS'"
@@ -11,11 +13,8 @@ function usage() {
     echo "Output directory will be created if it doesn't exists."
 }
 
-if [[ "$#" == 0 ]]; then
-    echo "Error: No arguments given." >&2
-    usage
-    exit 1
-fi
+# Exit if command is called with no arguments
+validate_arguments "$#"
 
 while [[ -n "$1" ]]; do
     case "$1" in
@@ -36,20 +35,21 @@ while [[ -n "$1" ]]; do
     shift
 done
 
-if [ ! -d "$input_dir" ]; then
-   echo "Error: You need to specify the directory containing reads in FastQ" >&2
-   exit 1
-fi
-
-echo "Your read directory is $input_dir"
+# Verify that input directory is set and exists
+validate_input_dir
 
 # Activate conda environment
-source activate preprocessing
+activate_env preprocessing
 
-if [ ! -d "$out_dir" ]; then
-    echo "Creating directory '$out_dir'"
-	mkdir -p "$out_dir"
-fi
+# Create output directory if it doesn't exists.
+validate_output_dir
+
+# Output info
+echo "Conda environment: $CONDA_DEFAULT_ENV"
+echo "Input directory: ${input_dir}"
+echo "Output directory: ${out_dir}"
+echo "Number of threads: ${threads:=4}"
+echo "Trimmomatic version: $(trimmomatic -version)"
 
 # Las opciones utilizadas con los reads de prueba el 2020-07-13
 # fueron: MINLEN:140 TRAILING:25 HEADCROP:20
@@ -57,6 +57,7 @@ fi
 # su orden de ejecución.
 
 for file in "$input_dir"/*; do
+
     # Make sure to process only fastq, fq.gz or fastq.gz files
     if [[ $file == *R1*.fastq ]] || [[ $file == *R1*.fq.gz ]] || [[ $file == *R1*.fastq.gz ]]; then
         trimmomatic PE -threads ${threads:=4} "$file" $(echo "$file" | sed 's/R1/R2/') \
