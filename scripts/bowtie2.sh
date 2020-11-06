@@ -73,7 +73,7 @@ for i in {1..10}; do
           Human=$(readlink -f GCA_000001405.28.fasta)
       fi
     fi
-    
+
     if [ -e "$PhiX" ]; then
       echo "PhiX Genome already downloaded"
       break

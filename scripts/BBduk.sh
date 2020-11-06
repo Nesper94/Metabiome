@@ -5,6 +5,9 @@
 
 set -e
 
+SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
+source "$SCRIPTS_DIR"/functions.sh
+
 function usage() {
     echo "Usage: $0 -i <input_directory> -o <output_directory> -D <16S_DATABASE> [-t <threads>]"
     echo ""
