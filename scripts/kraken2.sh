@@ -6,7 +6,12 @@
 set -e
 
 function usage() {
-    echo "Usage: $0 -i <input directory> -o <output directory> [-db <database name>] [-t <threads>]"
+    echo "Usage: $0 -i <input directory> -o <output directory>"
+    echo ""
+    echo "Options:"
+    echo "  -db database    Database used to assign the taxonomic labels to sequences. (default: standard-kraken2-db)"
+    echo "  -t  NUM         Number of threads to use. (default: 1)"
+    echo ""
     echo "Output directory will be created if it doesn't exists."
 }
 
@@ -44,7 +49,7 @@ source activate binning
 # Output info
 echo "Input directory: ${input_dir:?'Input directory not set'}"
 echo "Output directory: ${out_dir:?'Output directory not set'}"
-echo "Number of threads: ${threads:=4}"
+echo "Number of threads: ${threads:=1}"
 echo "Database name: ${DBNAME:=standard-kraken2-db}"
 echo "Kraken2 version: $(kraken2 -v)"
 
