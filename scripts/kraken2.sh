@@ -21,24 +21,15 @@ if [[ "$#" == 0 ]]; then
     exit 1
 fi
 
+# Get input parameters
 while [[ -n "$1" ]]; do
     case "$1" in
-        -h|--help ) usage; exit 0
-            ;;
-        -i )        input_dir=$(readlink -f "$2")
-            shift
-            ;;
-        -o )        out_dir=$(readlink -f "$2")
-            shift
-            ;;
-        -db )       DBNAME="$2"
-            shift
-            ;;
-        -t )        threads="$2"
-            shift
-            ;;
-        * )         echo "Option '$1' not recognized" >&2; exit 1
-            ;;
+        -h|--help ) usage; exit 0 ;;
+        -i )        input_dir=$(readlink -f "$2"); shift ;;
+        -o )        out_dir=$(readlink -f "$2"); shift ;;
+        -db )       DBNAME="$2"; shift ;;
+        -t )        threads="$2"; shift ;;
+        * )         echo "Option '$1' not recognized" >&2; exit 1 ;;
     esac
     shift
 done
