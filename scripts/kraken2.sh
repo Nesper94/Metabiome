@@ -5,6 +5,9 @@
 
 set -e
 
+SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
+source "$SCRIPTS_DIR"/functions.sh
+
 function usage() {
     echo "Usage: $0 -i <input directory> -o <output directory>"
     echo ""
@@ -15,11 +18,8 @@ function usage() {
     echo "Output directory will be created if it doesn't exists."
 }
 
-if [[ "$#" == 0 ]]; then
-    echo "Error: No arguments given." >&2
-    usage
-    exit 1
-fi
+# Exit if command is called with no arguments
+validate_arguments "$#"
 
 # Get input parameters
 while [[ -n "$1" ]]; do
@@ -34,26 +34,23 @@ while [[ -n "$1" ]]; do
     shift
 done
 
+# Verify that input directory is set and exists
+validate_input_dir
+
+# Create output directory if it doesn't exists.
+validate_output_dir
+
 # Activate conda environment
-source activate binning
+activate_env binning
 
 # Output info
-echo "Input directory: ${input_dir:?'Input directory not set'}"
-echo "Output directory: ${out_dir:?'Output directory not set'}"
+echo "Input directory: ${input_dir}"
+echo "Output directory: ${out_dir}"
 echo "Number of threads: ${threads:=1}"
 echo "Database name: ${DBNAME:=standard-kraken2-db}"
 echo "Kraken2 version: $(kraken2 -v)"
 
-# Verify that input directory exists
-if [ ! -d "$input_dir" ]; then
-   echo "$0: Error: $input_dir is not a valid directory." >&2
-   exit 1
-fi
-
-if [[ ! -d "$out_dir" ]]; then  # Create output directory if it doesn't exists.
-    mkdir "$out_dir"
-fi
-
+# Create standard database
 if [[ "$DBNAME" == "standard-kraken2-db" ]]; then
     echo "Creating standard Kraken2 database..."
     kraken2-build --standard --db "$DBNAME" # Create standard Kraken 2 database.
