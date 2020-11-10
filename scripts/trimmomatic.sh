@@ -9,6 +9,7 @@ source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
     echo "Usage: $0 -i <input directory> -o <output directory> [-t <threads>] 'TRIMMOMATIC_OPTIONS'"
+    echo ""
     echo "Make sure TRIMMOMATIC_OPTIONS are enclosed within quotation marks."
     echo "Output directory will be created if it doesn't exists."
 }
