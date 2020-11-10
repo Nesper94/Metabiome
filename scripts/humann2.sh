@@ -5,72 +5,67 @@
 
 set -e
 
+SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
+source "$SCRIPTS_DIR"/functions.sh
+
 usage() {
-    echo "Usage: $0 -i <input directory> -o <output directory> [-t <threads>]"
+    echo "Usage: $0 -i <input directory> -o <output directory>"
     echo ""
     echo "  <input directory>   directory containing .fq.gz files"
     echo "  <output directory>  directory to write results. This directory will be created if it doesn't exists."
     echo ""
     echo "Options:"
-    echo "  -t              number of threads to use"
-    echo "  -h, --help      show this help"
+    echo "  -t  NUM         Number of threads to use"
+    echo "  -h, --help      Show this help"
     echo "Note: Before running this script you should have downloaded the nucleotide and protein databases with
     humann2_databases. Run 'humann2_databases --help' for more info about this."
 }
 
-if [[ "$#" == 0 ]]; then
-    echo "Error: No arguments given." >&2
-    usage
-    exit 1
-fi
+# Exit if command is called with no arguments
+validate_arguments "$#"
 
 # Parse command line arguments
 while [[ -n "$1" ]]; do
     case "$1" in
-        -h|--help ) usage; exit 0
-            ;;
-        -i )        input_dir=$(readlink -f "$2")
-            shift
-            ;;
-        -o )        out_dir=$(readlink -f "$2")
-            shift
-            ;;
-        -t )        threads="$2"
-            shift
-            ;;
-        * )         echo "Option '$1' not recognized"; exit 1
-            ;;
+        -h|--help ) usage; exit 0 ;;
+        -i )        input_dir=$(readlink -f "$2"); shift ;;
+        -o )        out_dir=$(readlink -f "$2"); shift ;;
+        -t )        threads="$2"; shift ;;
+        * )         echo "Option '$1' not recognized"; exit 1 ;;
     esac
     shift
 done
 
-# Useful output info
-echo "Input directory: ${input_dir:?'Input directory not set'}"
-echo "Output directory: ${out_dir:?'Output directory not set'}"
-echo "Number of threads: ${threads:=4}"
-echo "HUMAnN 2.0 version: $(humann2 --version)"
+# Verify that input directory is set and exists
+validate_input_dir
 
-# Verify that input directory exists
-if [ ! -d "$input_dir" ]; then
-   echo "$0: Error: $input_dir is not a valid directory." >&2
-   exit 1
-fi
-
-if [[ ! -d "$out_dir" ]]; then  # Create output directory if it doesn't exists.
-    mkdir "$out_dir"
-fi
+# Create output directory if it doesn't exists.
+validate_output_dir
 
 # Activate conda environment
-source activate humman2
+activate_env humman2
+
+# Useful output info
+echo "Input directory: ${input_dir}"
+echo "Output directory: ${out_dir}"
+echo "Number of threads: ${threads:=1}"
+echo "HUMAnN 2.0 version: $(humann2 --version)"
+
+# Create temporary directory to save paired reads
+mkdir "$out_dir"/tmp
 
 # Cat paired-end reads and delete original files.
 # HUMAnN2 doesn't use paired-end information: https://forum.biobakery.org/t/paired-end-files-humann2/396/4
-for forward in "$input_dir"/*1_paired*.fq.gz; do
-    reverse=$(echo "$forward" | sed 's/1_paired/2_paired/')
-    cat "$forward" "$reverse" > $(echo "$forward" | sed 's/1_paired/paired-reads/') && rm "$forward" "$reverse"
+for forward in "$input_dir"/*_1_paired*.fq.gz; do
+    reverse=$(echo "$forward" | sed 's/_1_paired/_2_paired/')
+    TARGET="$out_dir"/tmp/$(basename "$forward" | sed 's/_1_paired/_paired-reads/')
+    cat "$forward" "$reverse" > "$TARGET"
 done
 
 # For loop to run HUMAnN 2.0 on each sample
-for file in "$input_dir"/*.fq.gz; do
+for file in "$out_dir"/tmp/*.fq.gz; do
     humann2 -i "$file" -o "$out_dir" --threads "$threads"
 done
+
+# Delete temporary directory
+rm -rf "$out_dir"/tmp
