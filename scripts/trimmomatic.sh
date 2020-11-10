@@ -18,19 +18,11 @@ validate_arguments "$#"
 
 while [[ -n "$1" ]]; do
     case "$1" in
-        -h|--help ) usage; exit 0
-            ;;
-        -i )        input_dir=$(readlink -f "$2")
-            shift
-            ;;
-        -o )        out_dir=$(readlink -f "$2")
-            shift
-            ;;
-        -t )        threads="$2"
-            shift
-            ;;
-        * )         trimopt="$@"
-            ;;
+        -h|--help ) usage; exit 0 ;;
+        -i )        input_dir=$(readlink -f "$2"); shift ;;
+        -o )        out_dir=$(readlink -f "$2"); shift ;;
+        -t )        threads="$2"; shift ;;
+        * )         trimopt="$@" ;;
     esac
     shift
 done
@@ -38,11 +30,11 @@ done
 # Verify that input directory is set and exists
 validate_input_dir
 
-# Activate conda environment
-activate_env preprocessing
-
 # Create output directory if it doesn't exists.
 validate_output_dir
+
+# Activate conda environment
+activate_env preprocessing
 
 # Output info
 echo "Conda environment: $CONDA_DEFAULT_ENV"
@@ -66,9 +58,9 @@ for file in "$input_dir"/*; do
         "$out_dir"/$(basename "$file" | sed 's/R1.*/2_paired_trim.fq.gz/')   \
         "$out_dir"/$(basename "$file" | sed 's/R1.*/2_unpaired_trim.fq.gz/') \
         $trimopt 2>&1 | tee -a "$out_dir"/trimmomatic.log
-        
+
         echo "" # Add new line in order to make output easier to read
-        
+
     elif [[ $file == *.fastq ]] || [[ $file == *.fq.gz ]]; then
         :
     else
