@@ -54,7 +54,7 @@ echo "HUMAnN 2.0 version: $(humann2 --version)"
 # Create temporary directory to save paired reads
 mkdir "$out_dir"/tmp
 
-# Cat paired-end reads and delete original files.
+# Cat paired-end reads and save to tmp/.
 # HUMAnN2 doesn't use paired-end information: https://forum.biobakery.org/t/paired-end-files-humann2/396/4
 for forward in "$input_dir"/*_1_paired*.fq.gz; do
     reverse=$(echo "$forward" | sed 's/_1_paired/_2_paired/')
