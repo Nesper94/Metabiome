@@ -61,20 +61,28 @@ if [[ "$DBNAME" == "standard-kraken2-db" ]]; then
 fi
 
 # Classification
-cd "$input_dir"
+
+FORWARD_FILE_SUFFIX=1_paired_bt2.fq.gz
+REVERSE_FILE_SUFFIX=2_paired_bt2.fq.gz
+
 # Paired reads
 echo "Classifying paired reads..."
-for file in *f-paired*.fq.gz; do
-    kraken2 --paired --db "$DBNAME" --threads "$threads" --classified-out "$out_dir"/${file}-classified-seqs#.fq \
-    --unclassified-out "$out_dir"/${file}-unclassified-seqs#.fq \
-    --report "$out_dir"/${file}-report.txt \
-    "$file" $(echo "$file" | sed 's/f-paired/r-paired/')
+for forward_file in "$input_dir"/*"$FORWARD_FILE_SUFFIX"; do
+    kraken2 --paired \
+    --db "$DBNAME" \
+    --threads "$threads" \
+    --classified-out "$out_dir"/${forward_file}-classified-seqs#.fq \
+    --unclassified-out "$out_dir"/${forward_file}-unclassified-seqs#.fq \
+    --report "$out_dir"/${forward_file}-report.txt \
+    "$forward_file" $(echo "$forward_file" | sed "s/$FORWARD_FILE_SUFFIX/$REVERSE_FILE_SUFFIX/")
 done
 
 # Unpaired reads
 echo "Classifying unpaired reads..."
-for file in *unpaired.fq.gz; do
-    kraken2 --db "$DBNAME" --threads "$threads" --classified-out "$out_dir"/${file}-classified-seqs.fq \
+for file in "$input_dir"/*unpaired*fq.gz; do
+    kraken2 --db "$DBNAME" \
+    --threads "$threads" \
+    --classified-out "$out_dir"/${file}-classified-seqs.fq \
     --unclassified-out "$out_dir"/${file}-unclassified-seqs.fq \
     --report "$out_dir"/${file}-report.txt \
     "$file"
