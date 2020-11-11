@@ -1,0 +1,7 @@
+name: mb-read-binning
+channels:
+  - bioconda
+  - defaults
+dependencies:
+  - kraken2=2.1.1
+  - kaiju=1.7.4
