@@ -54,9 +54,11 @@ reverse_file_suffix=2_paired_bt2.fq.gz
 
 for forward_file in "$input_dir"/*$forward_file_suffix; do
 
-	echo "Performing PE assembly with files $(basename $forward_file) and $(basename $forward_file | sed 's/_1_bt2.fq.gz/_2_bt2.fq.gz/')"
+	echo "Performing PE assembly with files $(basename $forward_file) and $(basename $forward_file | sed "s/$forward_file_suffix/$reverse_file_suffix/")"
+	file_dir="$out_dir"/$(basename "$forward_file")
+	mkdir "$file_dir"
 	spades.py --meta \
-    -o "$out_dir" \
+    -o "$file_dir" \
     -1 "$forward_file" \
     -2 $(echo "$forward_file" | sed "s/$forward_file_suffix/$reverse_file_suffix/") `# Reverse sequences` \
     -t "$threads" #"${MetaSPADES_opts:=''}" # Obtain other options for metaSPAdes

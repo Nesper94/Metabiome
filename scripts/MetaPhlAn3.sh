@@ -64,7 +64,7 @@ activate_env metaphlan
 echo "Conda environment: $CONDA_DEFAULT_ENV"
 echo "Input directory: ${input_dir:?'Input directory not set'}"
 echo "Output directory: ${out_dir:?'Output directory not set'}"
-echo "Number of threads: ${threads:=4}"
+echo "Number of threads: ${threads:=1}"
 echo "MetaPhlAn3 database: ${met_database:?'Database not downloaded'}"
 echo "MetaPhlAn3 version: $(metaphlan -v)"
 
