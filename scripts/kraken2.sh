@@ -12,7 +12,7 @@ function usage() {
     echo "Usage: $0 -i <input directory> -o <output directory> [Options]"
     echo ""
     echo "Options:"
-    echo "  -db database    Database used to assign the taxonomic labels to sequences (default: standard-kraken2-db)"
+    echo "  -db database    Path to database used to assign the taxonomic labels to sequences (default: standard-kraken2-db)"
     echo "  -t  NUM         Number of threads to use (default: 1)"
     echo ""
     echo "Output directory will be created if it doesn't exists."
@@ -54,10 +54,6 @@ echo "Kraken2 version: $(kraken2 -v)"
 if [[ "$DBNAME" == "standard-kraken2-db" ]]; then
     echo "Creating standard Kraken2 database..."
     kraken2-build --standard --threads "$threads" --db "$DBNAME" # Create standard Kraken 2 database.
-
-    # Build database
-    echo "Building standard Kraken2 database..."
-    kraken2-build --standard --threads "$threads" --db $DBNAME
 fi
 
 # Classification
