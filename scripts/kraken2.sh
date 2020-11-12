@@ -9,7 +9,7 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: $0 -i <input directory> -o <output directory>"
+    echo "Usage: $0 -i <input directory> -o <output directory> [Options]"
     echo ""
     echo "Options:"
     echo "  -db database    Database used to assign the taxonomic labels to sequences (default: standard-kraken2-db)"
@@ -53,7 +53,7 @@ echo "Kraken2 version: $(kraken2 -v)"
 # Create standard database
 if [[ "$DBNAME" == "standard-kraken2-db" ]]; then
     echo "Creating standard Kraken2 database..."
-    kraken2-build --standard --db "$DBNAME" # Create standard Kraken 2 database.
+    kraken2-build --standard --threads "$threads" --db "$DBNAME" # Create standard Kraken 2 database.
 
     # Build database
     echo "Building standard Kraken2 database..."
