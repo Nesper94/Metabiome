@@ -56,7 +56,7 @@ validate_output_dir
 echo "Conda environment: $CONDA_DEFAULT_ENV"
 echo "Input directory: ${input_dir:?'Input directory not set'}"
 echo "Output directory: ${out_dir:?'Output directory not set'}"
-echo "Number of threads: ${threads:=4}"
+echo "Number of threads: ${threads:=1}"
 echo "Reference database: ${database:?'=reference database not set'}"
 
 ##-----------------------Activate conda environment--------------------------##:
