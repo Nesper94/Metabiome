@@ -7,3 +7,5 @@ dependencies:
   - bowtie2=2.*
   - rename=1.601
   - entrez-direct=11.0
+  - fastqc=0.11.8
+  - multiqc=1.6
