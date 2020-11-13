@@ -52,7 +52,7 @@ echo "Database name: ${DBNAME:=standard-kraken2-db}"
 echo "Kraken2 version: $(kraken2 -v)"
 
 # Create standard database
-if [[ "$DBNAME" == "standard-kraken2-db" ]]; then
+if [[ "$DBNAME" == "standard-kraken2-db" ]] && [[ ! -d "$DBNAME" ]]; then
     echo "Creating standard Kraken2 database..."
     kraken2-build --standard --threads "$threads" --db "$DBNAME" # Create standard Kraken 2 database.
 fi
