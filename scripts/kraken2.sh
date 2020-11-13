@@ -9,11 +9,12 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: $0 -i <input directory> -o <output directory> [Options]"
+    echo "Usage: $0 [Options] -i <input directory> -o <output directory>"
     echo ""
     echo "Options:"
     echo "  -db database    Path to database used to assign the taxonomic labels to sequences (default: standard-kraken2-db)"
     echo "  -t  NUM         Number of threads to use (default: 1)"
+    echo "  -h, --help      Show this help"
     echo ""
     echo "Output directory will be created if it doesn't exists."
 }

@@ -8,7 +8,7 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: $0 -i <input directory> -o <output directory> [-t <threads>] [MetaSPADES_OPTIONS]"
+    echo "Usage: $0 -i <input directory> -o <output directory> [-t <threads>] ['MetaSPADES_OPTIONS']"
     echo ""
     echo "WARNING: Make sure to enclose MetaSPADES_OPTIONS within quotation marks."
     echo "Output directory will be created if it doesn't exists."
