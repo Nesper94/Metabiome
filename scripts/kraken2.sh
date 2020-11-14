@@ -54,7 +54,12 @@ echo "Kraken2 version: $(kraken2 -v)"
 # Create standard database
 if [[ "$DBNAME" == "standard-kraken2-db" ]] && [[ ! -d "$DBNAME" ]]; then
     echo "Creating standard Kraken2 database..."
-    kraken2-build --standard --threads "$threads" --db "$DBNAME" # Create standard Kraken 2 database.
+    # Create standard Kraken 2 database.
+    # Installing Kraken2 through Conda using a YML file brings troubles when
+    # Kraken2 tries to use rsync, for this reason we use the flag --use-ftp
+    # See: https://github.com/bioconda/bioconda-recipes/issues/14076#issuecomment-474396810
+    # and: https://www.biostars.org/p/423118/#428376
+    kraken2-build --standard --threads "$threads" --db "$DBNAME" --use-ftp
 fi
 
 # Classification
