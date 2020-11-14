@@ -8,24 +8,27 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: $0 -i <input directory> -o <output directory> [-t <threads>] ['TRIMMOMATIC_OPTIONS']"
+    echo "Usage: metabiome trimmomatic [Options] -i <input directory> -o <output directory> -opts TRIMMOMATIC_OPTIONS"
     echo ""
-    echo "Make sure TRIMMOMATIC_OPTIONS are enclosed within quotation marks."
+    echo "Options:"
+    echo "  -t NUM        Number of threads to use (default: 4)"
+    echo "  -h, --help    Show this help"
+    echo
     echo "Output directory will be created if it doesn't exists."
 }
 
 # Exit if command is called with no arguments
 validate_arguments "$#"
 
-while [[ -n "$1" ]]; do
+while (("$#")); do
     case "$1" in
         -h|--help ) usage; exit 0 ;;
-        -i )        input_dir=$(readlink -f "$2"); shift ;;
-        -o )        out_dir=$(readlink -f "$2"); shift ;;
-        -t )        threads="$2"; shift ;;
-        * )         trimopt="$@" ;;
+        -i )        input_dir=$(readlink -f "$2"); shift 2 ;;
+        -o )        out_dir=$(readlink -f "$2"); shift 2 ;;
+        -t )        threads="$2"; shift 2 ;;
+        -opts )     shift; trimopt="$@"; break ;;
+        * )         echo "Unknown option: $1"; exit 1 ;;
     esac
-    shift
 done
 
 # Verify that input directory is set and exists
@@ -43,6 +46,8 @@ echo "Input directory: ${input_dir}"
 echo "Output directory: ${out_dir}"
 echo "Number of threads: ${threads:=4}"
 echo "Trimmomatic version: $(trimmomatic -version)"
+echo "Trimmomatic called with options: $trimopt"
+echo
 
 # Las opciones utilizadas con los reads de prueba el 2020-07-13
 # fueron: MINLEN:140 TRAILING:25 HEADCROP:20
@@ -60,12 +65,12 @@ for file in "$input_dir"/*; do
         "$out_dir"/$(basename "$file" | sed 's/R1.*/2_unpaired_trim.fq.gz/') \
         $trimopt 2>&1 | tee -a "$out_dir"/trimmomatic.log
 
-        echo "" # Add new line in order to make output easier to read
+        echo # Add new line in order to make output easier to read
 
     elif [[ $file == *.fastq ]] || [[ $file == *.fq.gz ]]; then
         :
     else
-        echo "$file will not be processed as is not a .fastq or .fq.gz file."
+        echo -e "$(basename $file) will not be processed as is not a .fastq or .fq.gz file.\n"
     fi
 done
 
