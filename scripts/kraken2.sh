@@ -83,9 +83,10 @@ for forward_file in "$input_dir"/*"$FORWARD_FILE_SUFFIX"; do
     kraken2 --paired \
         --db "$DBNAME" \
         --threads "$threads" \
-        --classified-out "$out_dir"/${core_name}_classified_seqs#.fq \
-        --unclassified-out "$out_dir"/${core_name}_unclassified_seqs#.fq \
-        --report "$out_dir"/${core_name}_report.txt \
+        --classified-out "$out_dir"/${core_name}_paired_classified_seqs#.fq \
+        --unclassified-out "$out_dir"/${core_name}_paired_unclassified_seqs#.fq \
+        --report "$out_dir"/${core_name}_paired_report.txt \
+        --output "$out_dir"/${core_name}_paired_kraken2_out.tsv \
         "$forward_file" "$reverse_file"
 done
 
@@ -101,5 +102,6 @@ for file in "$input_dir"/*unpaired*fq.gz; do
         --classified-out "$out_dir"/${core_name}_classified_seqs.fq \
         --unclassified-out "$out_dir"/${core_name}_unclassified_seqs.fq \
         --report "$out_dir"/${core_name}_report.txt \
+        --output "$out_dir"/${core_name}_kraken2_out.tsv \
         "$file"
 done
