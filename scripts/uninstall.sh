@@ -3,6 +3,9 @@
 # Written by: Phagomica group
 # Last updated on: 2020-10-22
 
+SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
+source "$SCRIPTS_DIR"/config.sh
+
 # Remove Conda environments
 remove_envs(){
   echo "Removing hummann2 environment..."
@@ -24,10 +27,15 @@ remove_envs(){
   conda env remove --name picking16S
 }
 
+remove_links(){
+  echo "Unlinking metabiome from $COMPLETION_DIR"
+  unlink "$COMPLETION_DIR"/metabiome
+}
+
 while true; do
   read -p "Are you sure to uninstall Metabiome? [y/n] " answer
   case "$answer" in
-    [Yy]* ) remove_envs; break;;
+    [Yy]* ) remove_envs; remove_links; break;;
     [Nn]* ) exit;;
     * )     echo "Please answer yes or no.";;
   esac
