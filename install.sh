@@ -3,8 +3,8 @@
 # Written by: Phagomica group
 # Last updated on: 2020-10-22
 
-SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
-source "$SCRIPTS_DIR"/config.sh
+METABIOME_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
+source "$METABIOME_DIR"/scripts/config.sh
 
 # Create Conda environments
 echo "Creating hummann2 environment..."
