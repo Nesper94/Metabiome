@@ -1,4 +1,4 @@
-name: metaphlan
+name: metabiome-metaphlan
 channels:
   - conda-forge
   - bioconda

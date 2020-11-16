@@ -1,4 +1,4 @@
-name: mb-read-binning
+name: metabiome-read-binning
 channels:
   - bioconda
   - defaults
