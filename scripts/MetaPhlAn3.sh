@@ -9,7 +9,7 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: $0 -i <input_directory> -o <output_directory> -d <database_directory> [-t <threads>] "
+    echo "Usage: metabiome metaphlan3 -i <input_directory> -o <output_directory> -d <database_directory> [-t <threads>] "
     echo ""
     echo "Options:"
     echo "<input_directory>  Input directory containing FASTQ files."

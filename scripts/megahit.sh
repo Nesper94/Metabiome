@@ -8,8 +8,7 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage:"
-    echo "  $0 -i <input directory> -o <output directory> [-t <threads>] [OPTIONS]"
+    echo "Usage: metabiome megahit -i <input directory> -o <output directory> [-t <threads>] [OPTIONS]"
     echo "  Output directory will be created if it doesn't exists."
     echo ""
     echo "This is a wrapper script that passes OPTIONS to MEGAHIT, so this is the"
