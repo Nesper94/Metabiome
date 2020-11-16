@@ -8,21 +8,21 @@ source "$METABIOME_DIR"/scripts/config.sh
 
 # Create Conda environments
 echo "Creating hummann2 environment..."
-conda env create --file ../conda-envs/humann2-env.yml
+conda env create --file "$METABIOME_DIR"/conda-envs/humann2-env.yml
 
 echo "Creating preprocessing environment..."
-conda env create --file ../conda-envs/preprocessing.yml
+conda env create --file "$METABIOME_DIR"/conda-envs/preprocessing.yml
 
-# TODO crear ambientes de conda y archivos yml
-
-#conda env create --file # TODO poner yml binning
+echo "Creating read-based binning environment..."
+conda env create --file "$METABIOME_DIR"/conda-envs/read-binning.yml
 
 echo "Creating assembly environment..."
-conda env create --file ../conda-envs/assembly.yml
+conda env create --file "$METABIOME_DIR"/conda-envs/assembly.yml
 
-#conda env create --file # TODO poner yml metaphlan
+echo "Creating MetaPhlAn3 environment..."
+conda env create --file "$METABIOME_DIR"/conda-envs/metaphlan.yml
 
-#conda env create --file # TODO poner yml picking16S
+#conda env create --file # TODO: poner yml picking16S
 
 # Copy link to bash completion script
 if [[ ! -d "$COMPLETION_DIR" ]]; then
