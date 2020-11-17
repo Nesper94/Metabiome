@@ -114,6 +114,6 @@ for binner in "${soft[@]}";do
     metawrap binning "$binner" $forward_file $(echo "$forward_file" | sed "s/$forward_file_suffix/$reverse_file_suffix/") \
      --single-end $(echo "$forward_file" | sed "s/$forward_file_suffix/$forward_unpaired_file_suffix/") \
     $(echo "$forward_file" | sed "s/$forward_file_suffix/$reverse_unpaired_file_suffix/" --interleaved \
-    -a "$assembly" -o $(echo "$binner" | sed 's/--//g') -t "$threads" -m "$ram" )
+    -a "$assembly" -o $(echo "$binner" | sed 's/--//g') -t "$threads" -m "$ram" 
   done
 done
