@@ -1,7 +1,7 @@
 #!/bin/bash
 # Bowtie2 wrapper script for the filtering of contaminating reads from metagenomic samples:
 # Written by: Phagomica Group
-# Last updated on: 2020-26-10
+# Last updated on: 2020-13-11
 
 set -e
 
@@ -15,7 +15,7 @@ function usage() {
     echo "<in dir>  Input directory containing FASTQ files."
     echo "<out dir> Directory in which results will be saved. This directory"
     echo "will be created if it doesn't exist."
-    echo "<host>    Host reference genome in FASTA format."
+    echo "<host>    Host reference genome in FASTA format. (optional)"
     echo "<threads> Number of threads to use. (optional)"
     echo "<PhiX>    PhiX-174 phage reference genome in FASTA format. (optional)"
     echo "<human>   Human reference genome in FASTA format. (optional)"
@@ -99,20 +99,24 @@ validate_output_dir
 echo "Conda environment: $CONDA_DEFAULT_ENV"
 echo "Input directory: ${input_dir}"
 echo "Output directory: ${out_dir}"
-echo "Number of threads: ${threads:=4}"
+echo "Number of threads: ${threads:=1}"
 echo "Host Genome: ${host:?'=Host genome not set'}"
 echo "Phix Genome: ${PhiX:?'=PhiX genome not set'}"
 echo "Human Genome: ${Human:?'=Human genome not set'}"
 echo "Bowtie2 version: $(bowtie2  --version)"
 
-##------------Concatenate genomes to be aligned and build genomes---------##:
+##------------Concatenate genomes to be aligned and build genome index-------##:
 ##First checks if the index is already generated, otherwise it will be generated.
+if [ -f "$host" ];then ##checks if the host sequence file is provided.
+    cat "$host" "$PhiX" "$Human" > Mixed.fasta
+else
+    cat "$PhiX" "$Human" > Mixed.fasta
+fi
+##--------------------Indexing the mixed fasta-------------------------------##:
 dir=$(pwd) ##current directory
-
-[ ! -f "$dir"/Mix.3.bt2 ] \
-&& { echo "Index needs to be generated:" ; \
-     cat "$host" "$PhiX" "$Human"  > Mixed.fasta; \
-     bowtie2-build Mixed.fasta Mix --threads $threads; }
+[ ! -f "$dir"/Mix.3.bt2 ] \ ##Checks if the index is already generated
+&& { echo "Index needs to be generated:";
+    bowtie2-build Mixed.fasta Mix --threads "$threads";}
 
 ##--------------------------Pair end (PE) alignment--------------------------##:
 for i in "$input_dir"/*1_paired_trim.fq.gz; do
