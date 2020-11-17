@@ -12,7 +12,7 @@ function usage() {
     echo "Usage: $0 -i <input_directory> -o <output_directory> -d <database_directory> [-t <threads>] "
     echo ""
     echo "Options:"
-    echo "<input_directory>  Input directory containing FASTQ files."
+    echo "<input_directory>  Input directory containing clean FASTQ files."
     echo "<output_directory> Directory in which results will be saved. This directory"
     echo "will be created if it doesn't exist."
     echo "<database_directory>  MetaPhlan3 Database directory."
