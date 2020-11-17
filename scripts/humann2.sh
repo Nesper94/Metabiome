@@ -9,7 +9,7 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 usage() {
-    echo "Usage: $0 -i <input directory> -o <output directory>"
+    echo "Usage: metabiome humann2 [Options] -i <input directory> -o <output directory>"
     echo ""
     echo "  <input directory>   directory containing .fq.gz files"
     echo "  <output directory>  directory to write results. This directory will be created if it doesn't exists."

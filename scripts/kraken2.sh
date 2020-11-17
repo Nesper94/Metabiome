@@ -9,11 +9,12 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: $0 -i <input directory> -o <output directory>"
+    echo "Usage: metabiome kraken2 [Options] -i <input directory> -o <output directory>"
     echo ""
     echo "Options:"
-    echo "  -db database    Database used to assign the taxonomic labels to sequences (default: standard-kraken2-db)"
+    echo "  -db database    Path to database used to assign the taxonomic labels to sequences (default: standard-kraken2-db)"
     echo "  -t  NUM         Number of threads to use (default: 1)"
+    echo "  -h, --help      Show this help"
     echo ""
     echo "Output directory will be created if it doesn't exists."
 }
@@ -49,41 +50,58 @@ echo "Output directory: ${out_dir}"
 echo "Number of threads: ${threads:=1}"
 echo "Database name: ${DBNAME:=standard-kraken2-db}"
 echo "Kraken2 version: $(kraken2 -v)"
+echo
 
-# Create standard database
-if [[ "$DBNAME" == "standard-kraken2-db" ]]; then
-    echo "Creating standard Kraken2 database..."
-    kraken2-build --standard --db "$DBNAME" # Create standard Kraken 2 database.
+# Download and create database
+if [[ ! -d "$DBNAME" ]]; then
+    echo "Creating $DBNAME database..."
+    # Create standard Kraken 2 database.
+    # Installing Kraken2 through Conda using a YML file brings troubles when
+    # Kraken2 tries to use rsync, for this reason we use the flag --use-ftp
+    # See: https://github.com/bioconda/bioconda-recipes/issues/14076#issuecomment-474396810
+    # and: https://www.biostars.org/p/423118/#428376
+    kraken2-build --standard --db "$DBNAME" --use-ftp
 
-    # Build database
-    echo "Building standard Kraken2 database..."
-    kraken2-build --standard --threads "$threads" --db $DBNAME
+    # Build database (yes, it seems lke we are repeating the previous command, but
+    # this is a necessary step)
+    echo "Building $DBNAME database..."
+    kraken2-build --standard --threads "$threads" --db "$DBNAME" --use-ftp
 fi
 
 # Classification
 
-FORWARD_FILE_SUFFIX=1_paired_bt2.fq.gz
-REVERSE_FILE_SUFFIX=2_paired_bt2.fq.gz
+FORWARD_FILE_SUFFIX=_1_paired_bt2.fq.gz
+REVERSE_FILE_SUFFIX=_2_paired_bt2.fq.gz
 
 # Paired reads
 echo "Classifying paired reads..."
 for forward_file in "$input_dir"/*"$FORWARD_FILE_SUFFIX"; do
+
+    reverse_file=$(echo "$forward_file" | sed "s/$FORWARD_FILE_SUFFIX/$REVERSE_FILE_SUFFIX/")
+    core_name=$(basename -- "$forward_file" | sed "s/$FORWARD_FILE_SUFFIX//")
+
     kraken2 --paired \
-    --db "$DBNAME" \
-    --threads "$threads" \
-    --classified-out "$out_dir"/${forward_file}-classified-seqs#.fq \
-    --unclassified-out "$out_dir"/${forward_file}-unclassified-seqs#.fq \
-    --report "$out_dir"/${forward_file}-report.txt \
-    "$forward_file" $(echo "$forward_file" | sed "s/$FORWARD_FILE_SUFFIX/$REVERSE_FILE_SUFFIX/")
+        --db "$DBNAME" \
+        --threads "$threads" \
+        --classified-out "$out_dir"/${core_name}_paired_classified_seqs#.fq \
+        --unclassified-out "$out_dir"/${core_name}_paired_unclassified_seqs#.fq \
+        --report "$out_dir"/${core_name}_paired_report.txt \
+        --output "$out_dir"/${core_name}_paired_kraken2_out.tsv \
+        "$forward_file" "$reverse_file"
 done
 
 # Unpaired reads
 echo "Classifying unpaired reads..."
 for file in "$input_dir"/*unpaired*fq.gz; do
+
+    filename=$(basename -- "$file")
+    core_name="${filename%%.*}"
+
     kraken2 --db "$DBNAME" \
-    --threads "$threads" \
-    --classified-out "$out_dir"/${file}-classified-seqs.fq \
-    --unclassified-out "$out_dir"/${file}-unclassified-seqs.fq \
-    --report "$out_dir"/${file}-report.txt \
-    "$file"
+        --threads "$threads" \
+        --classified-out "$out_dir"/${core_name}_classified_seqs.fq \
+        --unclassified-out "$out_dir"/${core_name}_unclassified_seqs.fq \
+        --report "$out_dir"/${core_name}_report.txt \
+        --output "$out_dir"/${core_name}_kraken2_out.tsv \
+        "$file"
 done
