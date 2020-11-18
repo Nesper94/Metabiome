@@ -86,14 +86,6 @@ echo "Kaiju reference database: ${database:?'=Kaiju database directory not set'}
 echo "Kaiju database name: ${name_kaijudb:?'=Kaiju database name not set'}"
 echo "Kaiju version: $(kaiju -h)"
 
-<<<<<<< HEAD
-
-=======
-##---------------------Activate conda environment----------------------------##:
-activate_env metabiome-read-binning
->>>>>>> 8efcdc94dc042cb8b534fb759d373ee8100efb04
-
-
 ###----------------------Making Kaiju Database-------------------------------##:
 cd "$database"
 kaiju-makedb -s "$name_kaijudb" -t "$threads"
