@@ -83,7 +83,7 @@ echo "Kaiju database name: ${name_kaijudb:?'=Kaiju database name not set'}"
 echo "Kaiju version: $(kaiju -h)"
 
 ##---------------------Activate conda environment----------------------------##:
-activate_env binning
+activate_env metabiome-read-binning
 
 
 ###----------------------Making Kaiju Database-------------------------------##:

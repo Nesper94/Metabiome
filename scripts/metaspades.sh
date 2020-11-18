@@ -45,7 +45,7 @@ validate_input_dir
 validate_output_dir
 
 # Activate conda environment
-activate_env assembly
+activate_env metabiome-assembly
 
 # Run metaSPAdes #
 

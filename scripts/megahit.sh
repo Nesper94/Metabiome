@@ -21,7 +21,7 @@ function usage() {
 validate_arguments "$#"
 
 # Activate conda environment
-activate_env assembly
+activate_env metabiome-assembly
 
 while [[ -n "$1" ]]; do
     case "$1" in

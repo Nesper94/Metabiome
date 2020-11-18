@@ -60,7 +60,7 @@ echo "Number of threads: ${threads:=1}"
 echo "Reference database: ${database:?'=reference database not set'}"
 
 ##-----------------------Activate conda environment--------------------------##:
-activate_env picking16S
+activate_env metabiome-picking16S
 
 ##------------Match reads against the 16S rDNA SSU from SILVA Database-------##:
 

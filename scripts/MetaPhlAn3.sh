@@ -52,7 +52,7 @@ validate_input_dir
 ##---------------Create output directory if it doesn't exists---------------##:
 validate_output_dir
 ##----------------Activate conda environment--------------------------------##:
-activate_env metaphlan
+activate_env metabiome-metaphlan
 
 ##----------------Installing MetaPhlAn database-----------------------------##:
 ##First checks if MetaPhlAn3 database already generated, otherwise it will be generated.
