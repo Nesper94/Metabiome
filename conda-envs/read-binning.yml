@@ -1,7 +1,8 @@
 name: metabiome-read-binning
 channels:
   - bioconda
+  - conda-forge
   - defaults
 dependencies:
-  - kraken2=2.1.1
-  - kaiju=1.7.4
+  - kraken2=2.1
+  - kaiju=1.7
