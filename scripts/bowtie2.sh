@@ -1,4 +1,4 @@
-#!/bin/bash
+ls#!/bin/bash
 # Bowtie2 wrapper script for the filtering of contaminating reads from metagenomic samples:
 # Written by: Phagomica Group
 # Last updated on: 2020-13-11
@@ -54,7 +54,7 @@ while [[ -n "$1" ]]; do
 done
 
 ##----------------------Activate Conda environment-----------------------------##:
-activate_env metabiome-preprocessing
+activate_env preprocessing
 
 ##------------Download Human and PhiX reference genomes-----------------##:
 ##Highlight: Next code downloads PhiX and Human genome and checks if the downloads
