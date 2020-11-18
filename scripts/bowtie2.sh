@@ -54,7 +54,7 @@ while [[ -n "$1" ]]; do
 done
 
 ##----------------------Activate Conda environment-----------------------------##:
-activate_env preprocessing
+activate_env metabiome-preprocessing
 
 ##------------Download Human and PhiX reference genomes-----------------##:
 ##Highlight: Next code downloads PhiX and Human genome and checks if the downloads

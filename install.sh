@@ -28,4 +28,4 @@ conda env create --file "$METABIOME_DIR"/conda-envs/metaphlan.yml
 if [[ ! -d "$COMPLETION_DIR" ]]; then
   mkdir -p "$COMPLETION_DIR"
 fi
-ln -s "$SCRIPTS_DIR"/_metabiome "$COMPLETION_DIR"/metabiome
+ln -s "$METABIOME_DIR"/scripts/_metabiome "$COMPLETION_DIR"/metabiome

@@ -65,7 +65,7 @@ validate_input_dir
 ##---------------Create output directory if it doesn't exists---------------##:
 validate_output_dir
 ##----------------Activate conda environment--------------------------------##:
-activate_env metawrap
+activate_env metabiome-metawrap
 ##---------------Output info-------------------------------------------------##:
 echo "Conda environment: $CONDA_DEFAULT_ENV"
 echo "Input directory: ${input_dir:?'Input directory not set'}"
@@ -114,6 +114,6 @@ for binner in "${soft[@]}";do
     metawrap binning "$binner" $forward_file $(echo "$forward_file" | sed "s/$forward_file_suffix/$reverse_file_suffix/") \
      --single-end $(echo "$forward_file" | sed "s/$forward_file_suffix/$forward_unpaired_file_suffix/") \
     $(echo "$forward_file" | sed "s/$forward_file_suffix/$reverse_unpaired_file_suffix/" --interleaved \
-    -a "$assembly" -o $(echo "$binner" | sed 's/--//g') -t "$threads" -m "$ram" 
+    -a "$assembly" -o $(echo "$binner" | sed 's/--//g') -t "$threads" -m "$ram"
   done
 done
