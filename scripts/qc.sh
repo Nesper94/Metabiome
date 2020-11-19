@@ -35,7 +35,7 @@ validate_input_dir
 validate_output_dir
 
 # Activate conda environment
-echo activate_env preprocessing
+activate_env preprocessing
 
 # Output info
 echo "Conda environment: $CONDA_DEFAULT_ENV"
@@ -47,7 +47,7 @@ echo "Number of threads: ${threads:=2}"
 
 # Make sure to process only fastq, fq.gz or fastq.gz files
 
-echo fastqc -o "$out_dir" "$input_dir"/*@(.fastq|.fastq.gz|.fq.gz)
+fastqc -o "$out_dir" "$input_dir"/*@(.fastq|.fastq.gz|.fq.gz)
 
-echo multiqc -o "$out_dir" "$out_dir"
+multiqc -o "$out_dir" "$out_dir"
 
