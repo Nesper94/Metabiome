@@ -73,6 +73,9 @@ validate_input_dir
 ##---------------Create output directory if it doesn't exists----------------##:
 validate_output_dir
 
+##---------------------Activate conda environment----------------------------##:
+activate_env binning
+
 ##---------------Output info-------------------------------------------------##:
 echo "Conda environment: $CONDA_DEFAULT_ENV"
 echo "Input directory: ${input_dir:?'Input directory not set'}"
@@ -81,10 +84,6 @@ echo "Number of threads: ${threads:=1}"
 echo "Kaiju reference database: ${database:?'=Kaiju database directory not set'}"
 echo "Kaiju database name: ${name_kaijudb:?'=Kaiju database name not set'}"
 echo "Kaiju version: $(kaiju -h)"
-
-##---------------------Activate conda environment----------------------------##:
-activate_env metabiome-read-binning
-
 
 ###----------------------Making Kaiju Database-------------------------------##:
 cd "$database"
