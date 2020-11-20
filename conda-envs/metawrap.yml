@@ -1,0 +1,7 @@
+name: metabiome-metawrap
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - metawrap=1.2
