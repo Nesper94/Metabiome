@@ -1,4 +1,4 @@
-name: metabiome-assembly
+name: metabiome-genome-assembly
 channels:
   - bioconda
   - defaults
