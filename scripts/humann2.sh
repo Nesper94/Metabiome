@@ -43,7 +43,7 @@ validate_input_dir
 validate_output_dir
 
 # Activate conda environment
-activate_env metabiome-humman2
+activate_env metabiome-humann2
 
 # Useful output info
 echo "Input directory: ${input_dir}"
