@@ -29,13 +29,15 @@ remove_envs(){
 
 remove_links(){
   echo "Unlinking metabiome from $COMPLETION_DIR"
-  unlink "$COMPLETION_DIR"/metabiome
+  unlink "$AT_INSTALL_COMPLETION_DIR"/metabiome
 }
 
 while true; do
   read -p "Are you sure to uninstall Metabiome? [y/n] " answer
   case "$answer" in
-    [Yy]* ) remove_envs; remove_links; break;;
+    [Yy]* ) remove_envs; remove_links
+            sed -i.bak '/AT_INSTALL_COMPLETION_DIR/d' "$SCRIPTS_DIR"/config.sh
+            rm "$SCRIPTS_DIR"/config.sh.bak; break;;
     [Nn]* ) exit;;
     * )     echo "Please answer yes or no.";;
   esac

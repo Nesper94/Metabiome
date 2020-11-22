@@ -29,3 +29,4 @@ if [[ ! -d "$COMPLETION_DIR" ]]; then
   mkdir -p "$COMPLETION_DIR"
 fi
 ln -s "$METABIOME_DIR"/scripts/_metabiome "$COMPLETION_DIR"/metabiome
+echo "AT_INSTALL_COMPLETION_DIR=$COMPLETION_DIR" >> "$METABIOME_DIR"/scripts/config.sh
