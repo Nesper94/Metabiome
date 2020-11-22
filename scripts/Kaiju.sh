@@ -74,7 +74,7 @@ validate_input_dir
 validate_output_dir
 
 ##---------------------Activate conda environment----------------------------##:
-activate_env binning
+activate_env metabiome-taxonomic-binning
 
 ##---------------Output info-------------------------------------------------##:
 echo "Conda environment: $CONDA_DEFAULT_ENV"
