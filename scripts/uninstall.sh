@@ -9,22 +9,22 @@ source "$SCRIPTS_DIR"/config.sh
 # Remove Conda environments
 remove_envs(){
   echo "Removing hummann2 environment..."
-  conda env remove --name hummann2
+  conda env remove --name metabiome-humann2
 
   echo "Removing preprocessing environment..."
-  conda env remove --name preprocessing
+  conda env remove --name metabiome-preprocessing
 
   echo "Removing binning environment..."
-  conda env remove --name binning
+  conda env remove --name metabiome-taxonomic-binning
 
   echo "Removing assembly environment..."
-  conda env remove --name assembly
+  conda env remove --name metabiome-genome-assembly
 
   echo "Removing metaphlan environment..."
-  conda env remove --name metaphlan
+  conda env remove --name metabiome-metaphlan
 
   echo "Removing picking16S environment..."
-  conda env remove --name picking16S
+  conda env remove --name metabiome-picking16S
 }
 
 remove_links(){
