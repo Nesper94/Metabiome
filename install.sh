@@ -13,6 +13,9 @@ create_link(){
 # Create link to metabiome.sh
 echo "$PATH" | grep -q "$HOME/.local/bin"
 if [[ "$?" -eq 0 ]]; then
+    if [[ ! -d "$HOME"/.local/bin/ ]]; then
+        mkdir -p "$HOME"/.local/bin/
+    fi
     create_link
 else
     while true; do
