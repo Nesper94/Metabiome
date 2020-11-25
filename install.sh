@@ -7,6 +7,7 @@ METABIOME_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$METABIOME_DIR"/scripts/config.sh
 
 create_link(){
+    echo "Creating symlink in $HOME/.local/bin/"
     ln -s "$METABIOME_DIR"/scripts/metabiome.sh "$HOME"/.local/bin/metabiome
 }
 
@@ -54,5 +55,6 @@ conda env create --file "$METABIOME_DIR"/conda-envs/metaphlan.yml
 if [[ ! -d "$COMPLETION_DIR" ]]; then
   mkdir -p "$COMPLETION_DIR"
 fi
+echo "Installing completion script..."
 ln -s "$METABIOME_DIR"/scripts/_metabiome "$COMPLETION_DIR"/metabiome
 echo "AT_INSTALL_COMPLETION_DIR=$COMPLETION_DIR" >> "$METABIOME_DIR"/scripts/config.sh
