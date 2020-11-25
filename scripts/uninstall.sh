@@ -28,6 +28,8 @@ remove_envs(){
 }
 
 remove_links(){
+  echo "Uninstalling metabiome..."
+  unlink "$HOME"/.local/bin/metabiome
   echo "Unlinking metabiome from $COMPLETION_DIR"
   unlink "$AT_INSTALL_COMPLETION_DIR"/metabiome
 }
