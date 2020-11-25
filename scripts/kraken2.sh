@@ -42,7 +42,7 @@ validate_input_dir
 validate_output_dir
 
 # Activate conda environment
-activate_env metabiome-read-binning
+activate_env metabiome-taxonomic-binning
 
 # Output info
 echo "Input directory: ${input_dir}"

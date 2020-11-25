@@ -1,7 +1,7 @@
 name: metabiome-picking16S
 channels:
-  - conda-forge
   - bioconda
+  - conda-forge
   - defaults
 dependencies:
   - bbmap=38.87

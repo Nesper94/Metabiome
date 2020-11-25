@@ -6,6 +6,33 @@
 METABIOME_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$METABIOME_DIR"/scripts/config.sh
 
+create_link(){
+    echo "Creating symlink in $HOME/.local/bin/"
+    ln -s "$METABIOME_DIR"/scripts/metabiome.sh "$HOME"/.local/bin/metabiome
+}
+
+# Create link to metabiome.sh
+echo "$PATH" | grep -q "$HOME/.local/bin"
+if [[ "$?" -eq 0 ]]; then
+    if [[ ! -d "$HOME"/.local/bin/ ]]; then
+        mkdir -p "$HOME"/.local/bin/
+    fi
+    create_link
+else
+    while true; do
+        read -p "$HOME/.local/bin is not in your PATH, do you want to add it? [y/n] " answer
+        case "$answer" in
+            [Yy]* ) if [[ ! -d "$HOME"/.local/bin/ ]]; then
+                        mkdir -p "$HOME"/.local/bin/
+                    fi
+                    echo "PATH=$PATH:$HOME/.local/bin" >> "$HOME"/.bashrc
+                    create_link; break;;
+            [Nn]* ) echo "Aborting installation..."; exit;;
+            * )     echo "Please answer yes or no.";;
+        esac
+    done
+fi
+
 # Create Conda environments
 echo "Creating hummann2 environment..."
 conda env create --file "$METABIOME_DIR"/conda-envs/humann2-env.yml
@@ -28,4 +55,6 @@ conda env create --file "$METABIOME_DIR"/conda-envs/metaphlan.yml
 if [[ ! -d "$COMPLETION_DIR" ]]; then
   mkdir -p "$COMPLETION_DIR"
 fi
+echo "Installing completion script..."
 ln -s "$METABIOME_DIR"/scripts/_metabiome "$COMPLETION_DIR"/metabiome
+echo "AT_INSTALL_COMPLETION_DIR=$COMPLETION_DIR" >> "$METABIOME_DIR"/scripts/config.sh
