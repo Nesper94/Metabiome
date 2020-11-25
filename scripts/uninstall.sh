@@ -3,9 +3,6 @@
 # Written by: Phagomica group
 # Last updated on: 2020-10-22
 
-SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
-source "$SCRIPTS_DIR"/config.sh
-
 # Remove Conda environments
 remove_envs(){
   echo "Removing hummann2 environment..."

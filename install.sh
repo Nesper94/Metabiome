@@ -4,7 +4,6 @@
 # Last updated on: 2020-10-22
 
 METABIOME_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
-source "$METABIOME_DIR"/scripts/config.sh
 
 # Create link to metabiome.sh
 create_link(){
@@ -26,28 +25,28 @@ create_link(){
 create_envs(){
     echo "Creating hummann2 environment..."
     conda env create --file "$METABIOME_DIR"/conda-envs/humann2-env.yml
-    
+
     echo "Creating preprocessing environment..."
     conda env create --file "$METABIOME_DIR"/conda-envs/preprocessing.yml
-    
+
     echo "Creating read-based binning environment..."
     conda env create --file "$METABIOME_DIR"/conda-envs/read-binning.yml
-    
+
     echo "Creating assembly environment..."
     conda env create --file "$METABIOME_DIR"/conda-envs/assembly.yml
-    
+
     echo "Creating MetaPhlAn3 environment..."
     conda env create --file "$METABIOME_DIR"/conda-envs/metaphlan.yml
-    
+
     #conda env create --file # TODO: poner yml picking16S
 }
 
 # Source completion script
 install_completion(){
     echo "Installing completion script..."
-    
+
     cat <<- EOF >> ~/.bash_profile
-    
+
     # >>Metabiome>>
     # Contents in this block are managed by Metabiome
     if [[ -f "$METABIOME_DIR"/scripts/_metabiome ]]; then
