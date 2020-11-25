@@ -9,14 +9,15 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: metabiome bbduk -i <input_directory> -o <output_directory> -D <16S_DATABASE> [-t <threads>]"
+    echo "Usage: metabiome bbduk -i <input_directory> -o <output_directory> -D <16S_DATABASE> [-t <threads>] [BBduk_OPTIONS]"
     echo ""
     echo "Options:"
     echo "<input_directory>  Input directory containing clean FASTQ files."
     echo "<output_directory> Directory in which results will be saved. This directory"
     echo "will be created if it doesn't exist."
     echo "<16S_DATABASE> 16S Database directory."
-    echo "<threads>  Number of threads to use. (optional)"
+    echo "<threads>  Number of threads to use. (default=1)"
+    echo "<BBduk_OPTIONS BBduk's options (optional). Make sure to enclose BBduk_OPTIONS within quotation marks"
 
 }
 
@@ -39,6 +40,8 @@ while [[ -n "$1" ]]; do
             ;;
         -t )        threads="$2"
            shift
+            ;;
+        * )         bbduk_opts="$@"
             ;;
         * )        echo "Option '$1' not recognized"; exit 1
             ;;
@@ -65,12 +68,12 @@ activate_env metabiome-picking16S
 ##------------Match reads against the 16S rDNA SSU from SILVA Database-------##:
 
 for i in "$input_dir"/*1_paired_bt2.fq.gz; do
-    echo $i
     bbduk.sh in=$i in2=$(echo $i | 's/_1_paired_bt2/_2_paired_bt2/') \
-	ref="$database" outm="$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/1_paired_bbdk.fq/') \
+	  ref="$database" outm="$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/1_paired_bbdk.fq/') \
     outm2="$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/2_paired_bbdk.fq/') \
-	outs="$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/singletons_bbdk.fq/') \
-    stats="$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/pe_bbdk_summary.txt/') ordered=T
+	  outs="$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/singletons_bbdk.fq/') \
+    stats="$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/pe_bbdk_summary.txt/') \
+    "${bbduk_opts:=''}"
 done
 
 ##----------------------------For SE reads-----------------------------------##:
@@ -78,8 +81,8 @@ done
 for i in "$input_dir"/*unpaired_bt2.fq.gz; do
     bbduk.sh in=$i ref="$database" \
     outm="$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_bt2.fq.gz/unpaired_bbdk.fq/') \
-	stats="$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_bt2.fq.gz/unpaired_bbdk_summary.txt/') \
-    ordered=T
+	  stats="$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_bt2.fq.gz/unpaired_bbdk_summary.txt/') \
+    "${bbduk_opts:=''}"
 done
 
 ##-------------------------------Compress output-----------------------------##:

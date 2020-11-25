@@ -9,18 +9,19 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: metabiome metawrap -i <input_directory> -a <assembly> [-r <RAM>] [-t <threads>] [-met <metabat2_dir>] [-max <maxbin2_dir>] [-cnc <concoct_dir>] [-check <checkM>]"
+    echo "Usage: metabiome metawrap -i <input_directory> -a <assembly> [-r <RAM>] [-t <threads>] [-met <metabat2_dir>] [-max <maxbin2_dir>] [-cnc <concoct_dir>] [-check <checkM_dir>] [metawrap_OPTIONS]"
     echo ""
     echo "Options:"
     echo "<input_directory>  Input directory containing clean FASTQ files."
     echo "will be created if it doesn't exist."
     echo "<assembly>  Draft metagenome assemblies."
     echo "<RAM>  Memory RAM. (optional)"
-    echo "<threads>  Number of threads. (optional)"
+    echo "<threads>  Number of threads. (default=1)"
     echo "<metabat2>  metabat2 output directory. Set only if metabat2 is one of the chosen binner to use in metawrap binning module. (optional)"
     echo "<maxbin2>  maxbin2 output directory. Set only if maxbin2 is one of the chosen binner to use in metawrap binning module. (optional)"
     echo "<concoct>  concoct2 output directory. Set only if concoct is one of the chosen binner to use in metawrap binning module. (optional)"
     echo "<checkM>  checkM output directory. Set only if checkM is chosen as the quality assessment tool of the metagenomic bins. (optional)"
+    echo "<metawrap_OPTIONS>  metawrap's options (optional). Make sure to enclose metawrap_OPTIONS within quotation marks"
 }
 
 ##--------------------------Exiting if input files are missing---------------##:
@@ -54,6 +55,8 @@ while [[ -n "$1" ]]; do
         -check )    checkM=$(readlink -f "$2")
            shift
             ;;
+        * )         metawrap_opts="$@"
+            ;;
         * )        echo "Option '$1' not recognized"; exit 1
             ;;
     esac
@@ -65,7 +68,7 @@ validate_input_dir
 ##---------------Create output directory if it doesn't exists---------------##:
 validate_output_dir
 ##----------------Activate conda environment--------------------------------##:
-activate_env metabiome-metawrap
+activate_env metabiome-genome-binning
 ##---------------Output info-------------------------------------------------##:
 echo "Conda environment: $CONDA_DEFAULT_ENV"
 echo "Input directory: ${input_dir:?'Input directory not set'}"
@@ -96,9 +99,9 @@ if [ -d "$checkM" ];then
 fi
 
 if [ ${#soft[@]} -eq 0 ];then
-  echo "none of the binners from metawrap module were chosen"; exit 1
+  echo "none of the genome binners from metawrap module were chosen"; exit 1
 else
-  echo "at least one binner was succesfully chosen"
+  echo "at least one genome binner was succesfully chosen"
 fi
 
 ##-----------------suffixes from clean fastq input files---------------------##:
@@ -114,6 +117,6 @@ for binner in "${soft[@]}";do
     metawrap binning "$binner" $forward_file $(echo "$forward_file" | sed "s/$forward_file_suffix/$reverse_file_suffix/") \
      --single-end $(echo "$forward_file" | sed "s/$forward_file_suffix/$forward_unpaired_file_suffix/") \
     $(echo "$forward_file" | sed "s/$forward_file_suffix/$reverse_unpaired_file_suffix/" --interleaved \
-    -a "$assembly" -o $(echo "$binner" | sed 's/--//g') -t "$threads" -m "$ram"
+    -a "$assembly" -o $(echo "$binner" | sed 's/--//g') -t "$threads" -m "$ram" "${metawrap_opts:=''}"
   done
 done

@@ -9,16 +9,19 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: metabiome bowtie2 -i <in dir> -o <out dir> -ho <host> [-ph <PhiX>] [-hu <human>] [-t <threads>] "
+    echo "Usage: metabiome bowtie2 -i <in dir> -o <out dir> -ho <host> [-ph <PhiX>] [-hu <human>] [-t <threads>] [index_OPTIONS] [bowtie2_OPTIONS]"
     echo ""
     echo "Options:"
-    echo "<in dir>  Input directory containing FASTQ files."
-    echo "<out dir> Directory in which results will be saved. This directory"
+    echo "<in_dir>  Input directory containing FASTQ files."
+    echo "<out_dir> Directory in which results will be saved. This directory"
     echo "will be created if it doesn't exist."
     echo "<host>    Host reference genome in FASTA format. (optional)"
-    echo "<threads> Number of threads to use. (optional)"
     echo "<PhiX>    PhiX-174 phage reference genome in FASTA format. (optional)"
     echo "<human>   Human reference genome in FASTA format. (optional)"
+    echo "<threads> Number of threads to use. (default=1)"
+    echo "<index_OPTIONS> bowtie2 index builder's options (optional). Make sure to enclose index_OPTIONS within quotation marks"
+    echo "<bowtie2_OPTIONS> bowtie2's options (optional). Make sure to enclose bowtie2_OPTIONS within quotation marks"
+
 }
 
 # Exit if command is called with no arguments
@@ -46,6 +49,10 @@ while [[ -n "$1" ]]; do
             ;;
         -hu )       Human="$2"
            shift
+            ;;
+        * )         index_opts="$@"
+            ;;
+        * )         bowtie2_opts="$@"
             ;;
         * )        echo "Option '$1' not recognized"; exit 1
             ;;
@@ -114,9 +121,9 @@ else
 fi
 ##--------------------Indexing the mixed fasta-------------------------------##:
 dir=$(pwd) ##current directory
-[ ! -f "$dir"/Mix.3.bt2 ] \ ##Checks if the index is already generated
+[ ! -f "$dir"/Mix.3.bt2 ] \
 && { echo "Index needs to be generated:";
-    bowtie2-build Mixed.fasta Mix --threads "$threads";}
+    bowtie2-build Mixed.fasta Mix --threads "$threads" "${index_opts:=''}";}
 
 ##--------------------------Pair end (PE) alignment--------------------------##:
 for i in "$input_dir"/*1_paired_trim.fq.gz; do
@@ -124,6 +131,7 @@ for i in "$input_dir"/*1_paired_trim.fq.gz; do
     bowtie2 -x Mix -1 $i -2 $(echo $i | sed 's/1_paired_trim/2_paired_trim/') \
     --un-conc-gz "$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_trim/paired_bt2/') \
     -q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_trim.fq.gz/paired_bt2_summary.txt/') \
+    "${bowtie2_opts:=''}"
     > /dev/null # Bowtie2 output to terminal is excesive and we don't need it in this case
 done
 
@@ -133,6 +141,7 @@ for i in "$input_dir"/*unpaired_trim.fq.gz; do
     echo "Performing single reads alignment..."
     bowtie2 -x Mix -U $i --un-gz "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_trim/unpaired_bt2/') \
     -q -p $threads 2> "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_trim.fq.gz/unpaired_bt2_summary.txt/') \
+    "${bowtie2_opts:=''}"
     > /dev/null
 done
 
