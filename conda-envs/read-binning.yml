@@ -1,4 +1,4 @@
-name: metabiome-read-binning
+name: metabiome-taxonomic-binning
 channels:
   - bioconda
   - conda-forge

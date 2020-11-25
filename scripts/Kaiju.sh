@@ -9,7 +9,7 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: metabiome kaiju -i <input directory> -o <output directory> -D <database_directory> -d <name_kaiju_database> [-t <threads>] [-k krona_dir] [-c class] [-x taxa_names] [-m merge ]"
+    echo "Usage: metabiome kaiju -i <input directory> -o <output directory> -D <database_directory> -d <name_kaiju_database> [-t <threads>] [-kr <kraken_input> ] [-k <krona_dir> ] [-c <class_dir> ] [-x <taxa_names_dir> ] [-m <merge_dir> ] ['kaiju_OPTIONS']"
     echo ""
     echo "Options:"
     echo "<input_directory>  Input directory containing clean FASTQ files."
@@ -18,12 +18,13 @@ function usage() {
     echo "<database_directory>    Kaiju Database directory."
     echo "<name_kaiju_database>   Kaiju Database name. Please refer to the Kaiju"
     echo "github repository in order to know the names"
-    echo "<threads> Number of threads to use."
+    echo "<threads> Number of threads to use (default=1)."
     echo "<class>        Directory where to put the classification summary of Kaiju's output. (optional)"
     echo "<taxa_names>   Directory where to put the taxa names from the Kaiju's output file. (optional)"
-    echo "<merge>        Directory where to put the merging outputs from Kaiju and Kraken. Needs classification (class) output in order to run (optional)"
+    echo "<merge>        Directory where to put the merging outputs from Kaiju and Kraken. (optional)"
     echo "<krona_dir>    Directory where to put Krona output. (optional)"
     echo "<kraken_input> Kraken output files's directory. (optional)"
+    echo "<kaiju_OPTIONS> Kaiju's options (optional). Make sure to enclose Kaiju_OPTIONS within quotation marks"
 }
 
 ##--------------------------Exiting if input files are missing---------------##:
@@ -43,23 +44,28 @@ while [[ -n "$1" ]]; do
         -D )        database=$(readlink -f "$2")
             shift
             ;;
-        -d )        name_kaijudb=$(readlink -f "$2")
+        -d )        name_kaijudb="$2"
             shift
             ;;
-        -t )        class=$(readlink -f "$2")
+        -t )        threads="$2"
+            shift
+            ;;
+        -c )        class=$(readlink -f "$2")
            shift
             ;;
-        -t )        taxa_names=$(readlink -f "$2")
+        -x )        taxa_names=$(readlink -f "$2")
            shift
             ;;
-        -t )        merge=$(readlink -f "$2")
+        -m )        merge=$(readlink -f "$2")
            shift
             ;;
-        -t )        krona=$(readlink -f "$2")
+        -k )        krona=$(readlink -f "$2")
            shift
             ;;
-        -k )        kraken=$(readlink -f "$2")
+        -kr )       kraken=$(readlink -f "$2")
            shift
+            ;;
+        * )         kaiju_opts="$@"
             ;;
         * )        echo "Option '$1' not recognized"; exit 1
             ;;
@@ -73,6 +79,9 @@ validate_input_dir
 ##---------------Create output directory if it doesn't exists----------------##:
 validate_output_dir
 
+##---------------------Activate conda environment----------------------------##:
+activate_env metabiome-taxonomic-binning
+
 ##---------------Output info-------------------------------------------------##:
 echo "Conda environment: $CONDA_DEFAULT_ENV"
 echo "Input directory: ${input_dir:?'Input directory not set'}"
@@ -82,44 +91,43 @@ echo "Kaiju reference database: ${database:?'=Kaiju database directory not set'}
 echo "Kaiju database name: ${name_kaijudb:?'=Kaiju database name not set'}"
 echo "Kaiju version: $(kaiju -h)"
 
-##---------------------Activate conda environment----------------------------##:
-activate_env metabiome-read-binning
-
-
 ###----------------------Making Kaiju Database-------------------------------##:
-cd "$database"
-kaiju-makedb -s "$name_kaijudb" -t "$threads"
+[ ! -f "$database"/"$name_kaijudb"/assembly_summary.txt ] \
+&& { echo "Database $name_kaijudb needs to be generated:";
+cd "$database";kaiju-makedb -s "$name_kaijudb" -t "$threads"; }
 
 ##-----------------------Paired-end reads------------------------------------##:
 for i in "$input_dir"/*1_paired_bt2.fq.gz;do
   kaiju -t "$database"/*nodes.dmp -f "$database"/"$name_kaijudb"/*.fmi -i "$i" \
   -j $(echo $i | sed 's/1_paired/2_paired/') \
   -o  "$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/paired_kaiju.txt/') \
-  -z "$threads";done
+  -z "$threads" "${kaiju_opts:=''}"
+done
 
 ##-----------------------Single-end reads------------------------------------##:
 for i in "$input_dir"/*unpaired_bt2.fq.gz;do
   kaiju -t "$database"/*nodes.dmp -f "$database"/"$name_kaijudb"/*.fmi -i "$i" \
   -o "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_bt2.fq.gz/unpaired_kaiju.txt/') \
-  -z "$threads";done
+  -z "$threads" "${kaiju_opts:=''}"
+done
+
+
 
 ##-----------------------Kaiju to Krona--------------------------------------##:
-
 if [ -d "$krona" ]; then
-    mkdir html
+  cd "$krona" && mkdir html && cd ..
     for i in "$out_dir"/*kaiju.txt;do
           kaiju2krona -t "$database"/nodes.dmp  -n "$database"/names.dmp \
-          -i $i -o "$krona"/$(echo $(basename -- $i) | sed 's/kaiju.txt/krona.txt/');done
+          -i $i -o "$krona"/$(echo $(basename -- $i) | sed 's/_kaiju.txt/.krona/');done
     for i in "$krona"/*.txt;do
-      ktImportText $i -o "$krona"/html/$(echo $(basename -- $i) | sed 's/.txt/.html/');done
+          ktImportText $i -o "$krona"/html/$(echo $(basename -- $i) | sed 's/.krona/krona.html/');done
 fi
 ##-------------------Classification summary from Kaiju's output----------------------##:
 if [ -d "$class" ]; then
   for i in "$out_dir"/*kaiju.txt;do
-        kaiju2table -t "$database"/nodes.dmp  -n "$database"/names.dmp \
-        -p -m 1.0 -o "$class"/$(echo $(basename -- $i) | sed 's/kaiju.txt/classif.txt/');done
+        kaiju2table $i -t "$database"/nodes.dmp  -n "$database"/names.dmp \
+        -p -m 1.0 -r genus -o "$class"/$(echo $(basename -- $i) | sed 's/kaiju.txt/classif.txt/');done
 fi
-
 ##------------------Adding taxa names to output file-------------------------##:
 if [ -d "$taxa_names" ]; then
       for i in "$out_dir"/*kaiju.txt;do
@@ -127,13 +135,17 @@ if [ -d "$taxa_names" ]; then
         -n "$database"/names.dmp -i $i \
         -o "$taxa_names"/$(echo $(basename -- $i) | sed 's/kaiju.txt/tax_names.txt/');done
 fi
-
 ##---------------Merging outputs from kraken and Kaiju-----------------------##:
-if [ -d "$merge" ] && [ -d "$class" ] && [ -d "$kraken"]; then
-    for i in "$class"/*classif.txt;do
-          for j in "$kraken"/*.txt;do
-                  kaiju-mergeOutputs  -i <(sort -k2,2 $i) -j <(sort -k2,2 $j) \
+if [[ -d "$merge" ]] && [[ -d "$kraken"]] ; then
+    for i in "$out_dir"/*kaiju.txt;do
+          for j in "$kraken"/*.fq;do
+                  echo "sorting kaiju and kraken output files"
+                  sort -k2,2 $i > $(echo $(basename -- $i) | sed 's/kaiju.txt/kaiju.mrgsrt/')
+                  sort -k2,2 $j > $(echo $(basename -- $j) | sed 's/.fq/kraken.mrgsrt/')
+                  kaiju-mergeOutputs  -i *kaiju.mrgsrt -j *kraken.mrgsrt \
                   -t "$database"/nodes.dmp -c lowest \
-                  -o "$taxa_names"/$(echo $(basename -- $i) | sed 's/kaiju.txt/classif.txt/') -v ;done
+                  -o "$merge"/$(echo $(basename -- $i) | sed 's/kaiju.txt/merged.txt/') -v
+                  rm *.mrgsrt
+          done
     done
 fi

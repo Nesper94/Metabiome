@@ -1,6 +1,7 @@
-name: metabiome-assembly
+name: metabiome-genome-assembly
 channels:
   - bioconda
+  - conda-forge
   - defaults
 dependencies:
   - spades=3.12.*

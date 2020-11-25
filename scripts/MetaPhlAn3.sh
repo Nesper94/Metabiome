@@ -9,14 +9,15 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: metabiome metaphlan3 -i <input_directory> -o <output_directory> -d <database_directory> [-t <threads>] "
+    echo "Usage: metabiome metaphlan3 -i <input_directory> -o <output_directory> -d <database_directory> [-t <threads>] [metaphlan_OPTIONS]"
     echo ""
     echo "Options:"
     echo "<input_directory>  Input directory containing clean FASTQ files."
     echo "<output_directory> Directory in which results will be saved. This directory"
     echo "will be created if it doesn't exist."
     echo "<database_directory>  MetaPhlan3 Database directory."
-    echo "<threads>  Number of threads to use. (optional)"
+    echo "<threads>  Number of threads to use. (default=1)"
+    echo "<metaphlan_OPTIONS> metaphlan's options (optional). Make sure to enclose metaphlan_OPTIONS within quotation marks"
 }
 
 
@@ -40,6 +41,8 @@ while [[ -n "$1" ]]; do
             ;;
         -t )        threads="$2"
            shift
+            ;;
+        * )         metaphlan_opts="$@"
             ;;
         * )        echo "Option '$1' not recognized"; exit 1
             ;;
@@ -72,17 +75,19 @@ echo "MetaPhlAn3 version: $(metaphlan -v)"
 ##----------------------PE reads--------------------------------------------##:
 for i in "$input_dir"/*_1_paired_bt2.fq.gz;do
   metaphlan $i,$(echo $i | sed 's/_1_/_2_/') \
-  --input_type fastq --add_viruses  -t rel_ab_w_read_stats --unknown_estimation \
+  --input_type fastq  -t rel_ab_w_read_stats \
   -o "$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/paired_mphlan.txt/') \
   --nproc "$threads" --bowtie2out "$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/paired_bt2mphlan.sam/') \
-  ;done
+  "${metaphlan_opts:=''}"
+done
 
 ##------------------------------SE reads------------------------------------##:
 for i in "$input_dir"/*unpaired_bt2.fq.gz;do
-  metaphlan $i --input_type fastq --add_viruses --unknown_estimation \
-  -t rel_ab_w_read_stats -o "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_bt2.fq.gz/unpaired_mphlan.txt/') \
-  --nproc "$threads" --bowtie2out "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_bt2.fq.gz/un_bt2mphlan.sam/') ;done
-
+  metaphlan $i --input_type fastq -t rel_ab_w_read_stats \
+  -o "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_bt2.fq.gz/unpaired_mphlan.txt/') \
+  --nproc "$threads" --bowtie2out "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_bt2.fq.gz/un_bt2mphlan.sam/') \
+  "${metaphlan_opts:=''}"
+done
 
 ##-----------------------------Merging tables from utility scripts-----------##:
 

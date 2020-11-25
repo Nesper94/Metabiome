@@ -1,7 +1,7 @@
-name: metabiome-picking16S
+name: metabiome-metawrap
 channels:
   - bioconda
   - conda-forge
   - defaults
 dependencies:
-  - bbmap=38.87
+  - metawrap=1.2
