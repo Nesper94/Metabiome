@@ -1,4 +1,4 @@
-ls#!/bin/bash
+#!/bin/bash
 # Bowtie2 wrapper script for the filtering of contaminating reads from metagenomic samples:
 # Written by: Phagomica Group
 # Last updated on: 2020-13-11
