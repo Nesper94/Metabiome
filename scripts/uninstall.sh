@@ -30,16 +30,18 @@ remove_envs(){
 remove_links(){
   echo "Uninstalling metabiome..."
   unlink "$HOME"/.local/bin/metabiome
-  echo "Unlinking metabiome from $COMPLETION_DIR"
-  unlink "$AT_INSTALL_COMPLETION_DIR"/metabiome
+}
+
+restore_bash_profile(){
+  echo "Removing changes in ~/.bash_profile ..."
+  sed -i.bak '/>>Metabiome>>/,/<<Metabiome<</d' ~/.bash_profile
+  rm ~/.bash_profile.bak
 }
 
 while true; do
   read -p "Are you sure to uninstall Metabiome? [y/n] " answer
   case "$answer" in
-    [Yy]* ) remove_envs; remove_links
-            sed -i.bak '/AT_INSTALL_COMPLETION_DIR/d' "$SCRIPTS_DIR"/config.sh
-            rm "$SCRIPTS_DIR"/config.sh.bak; break;;
+    [Yy]* ) remove_envs; remove_links; restore_bash_profile; break;;
     [Nn]* ) exit;;
     * )     echo "Please answer yes or no.";;
   esac

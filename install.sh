@@ -51,10 +51,15 @@ conda env create --file "$METABIOME_DIR"/conda-envs/metaphlan.yml
 
 #conda env create --file # TODO: poner yml picking16S
 
-# Copy link to bash completion script
-if [[ ! -d "$COMPLETION_DIR" ]]; then
-  mkdir -p "$COMPLETION_DIR"
-fi
+# Source completion script
 echo "Installing completion script..."
-ln -s "$METABIOME_DIR"/scripts/_metabiome "$COMPLETION_DIR"/metabiome
-echo "AT_INSTALL_COMPLETION_DIR=$COMPLETION_DIR" >> "$METABIOME_DIR"/scripts/config.sh
+
+cat << EOF >> ~/.bash_profile
+
+# >>Metabiome>>
+# Contents in this block are managed by Metabiome
+if [[ -f "$METABIOME_DIR"/scripts/_metabiome ]]; then
+    . "$METABIOME_DIR"/scripts/_metabiome
+fi
+# <<Metabiome<<
+EOF
