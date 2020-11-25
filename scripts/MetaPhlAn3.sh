@@ -75,7 +75,7 @@ echo "MetaPhlAn3 version: $(metaphlan -v)"
 ##----------------------PE reads--------------------------------------------##:
 for i in "$input_dir"/*_1_paired_bt2.fq.gz;do
   metaphlan $i,$(echo $i | sed 's/_1_/_2_/') \
-  --input_type fastq  -t rel_ab_w_read_stats --unknown_estimation \
+  --input_type fastq  -t rel_ab_w_read_stats \
   -o "$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/paired_mphlan.txt/') \
   --nproc "$threads" --bowtie2out "$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/paired_bt2mphlan.sam/') \
   "${metaphlan_opts:=''}"
