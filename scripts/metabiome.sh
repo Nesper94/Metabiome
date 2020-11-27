@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # ---------------------
 # Main Metabiome script
 # ---------------------
@@ -8,7 +8,7 @@ set -e
 VERSION=1.0.0
 SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
-
+echo "SCRIPTS_DIR"
 function usage() {
     echo "Usage: metabiome [Commands|Options]"
     echo ""
