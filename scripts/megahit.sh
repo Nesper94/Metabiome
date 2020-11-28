@@ -25,22 +25,12 @@ activate_env metabiome-genome-assembly
 
 while [[ -n "$1" ]]; do
     case "$1" in
-        -h|--help ) usage; exit 0
-            ;;
-        -i )        input_dir=$(readlink -f "$2")
-            shift
-            ;;
-        -o )        out_dir=$(readlink -f "$2")
-            shift
-            ;;
-        -t )        threads="$2"
-            shift
-            ;;
-        --k-list)   kmer_list="$2"
-		shift
-            ;;
-        * )         MEGAHIT_opts="$@"
-            ;;
+        -h|--help ) usage; exit 0 ;;
+        -i )        input_dir=$(readlink -f "$2"); shift ;;
+        -o )        out_dir=$(readlink -f "$2"); shift ;;
+        -t )        threads="$2"; shift ;;
+        --k-list)   kmer_list="$2"; shift ;;
+        * )         MEGAHIT_opts="$@" ;;
     esac
     shift
 done
