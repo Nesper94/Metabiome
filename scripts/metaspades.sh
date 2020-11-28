@@ -40,18 +40,19 @@ activate_env metabiome-genome-assembly
 
 # Run metaSPAdes #
 
-forward_file_suffix=1_paired_bt2.fq.gz
-reverse_file_suffix=2_paired_bt2.fq.gz
+for file in "$input_dir"/*; do
 
-for forward_file in "$input_dir"/*$forward_file_suffix; do
+    # Make sure to process only fastq, fq.gz or fastq.gz files
+    if [[ "$file" == @(*_R1_*|*_1).@(fastq|fq.gz|fastq.gz) ]]; then
 
-	echo "Performing PE assembly with files $(basename $forward_file) and $(basename $forward_file | sed "s/$forward_file_suffix/$reverse_file_suffix/")"
-	file_dir="$out_dir"/$(basename "$forward_file")
-	mkdir "$file_dir"
-	spades.py --meta \
-    -o "$file_dir" \
-    -1 "$forward_file" \
-    -2 $(echo "$forward_file" | sed "s/$forward_file_suffix/$reverse_file_suffix/") `# Reverse sequences` \
+        echo "Performing PE assembly with files $(basename $file) and $(basename $file | forward_to_reverse)"
+        file_dir="$out_dir"/$(basename "$file" | remove_forward_suffix)
+        mkdir "$file_dir"
+        spades.py --meta \
+            -o "$file_dir" \
+            -1 "$file" \
+            -2 $(echo "$file" | forward_to_reverse) \
             -t "$threads" $MetaSPADES_opts # Obtain other options for metaSPAdes
+    fi
 
 done

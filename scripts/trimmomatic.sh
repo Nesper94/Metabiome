@@ -57,21 +57,20 @@ echo
 for file in "$input_dir"/*; do
 
     # Make sure to process only fastq, fq.gz or fastq.gz files
-    if [[ $file == *R1*.fastq ]] || [[ $file == *R1*.fq.gz ]] || [[ $file == *R1*.fastq.gz ]]; then
-        trimmomatic PE -threads ${threads:=4} "$file" $(echo "$file" | sed 's/R1/R2/') \
-        "$out_dir"/$(basename "$file" | sed 's/R1.*/1_paired_trim.fq.gz/')   \
-        "$out_dir"/$(basename "$file" | sed 's/R1.*/1_unpaired_trim.fq.gz/') \
-        "$out_dir"/$(basename "$file" | sed 's/R1.*/2_paired_trim.fq.gz/')   \
-        "$out_dir"/$(basename "$file" | sed 's/R1.*/2_unpaired_trim.fq.gz/') \
+    if [[ "$file" == @(*_R1_*|*_1).@(fastq|fq.gz|fastq.gz) ]]; then
+        trimmomatic PE -threads ${threads:=4} "$file" $(echo "$file" | forward_to_reverse) \
+        "$out_dir"/$(basename "$file" | sed 's/\(_R1_\|_1\).*/_paired_trim_1.fq.gz/')   \
+        "$out_dir"/$(basename "$file" | sed 's/\(_R1_\|_1\).*/_unpaired_trim_1.fq.gz/') \
+        "$out_dir"/$(basename "$file" | sed 's/\(_R1_\|_1\).*/_paired_trim_2.fq.gz/')   \
+        "$out_dir"/$(basename "$file" | sed 's/\(_R1_\|_1\).*/_unpaired_trim_2.fq.gz/') \
         $trimopt 2>&1 | tee -a "$out_dir"/trimmomatic.log
 
         echo # Add new line in order to make output easier to read
 
-    elif [[ $file == *.fastq ]] || [[ $file == *.fq.gz ]]; then
-        :
-    else
-        echo -e "$(basename $file) will not be processed as is not a .fastq or .fq.gz file.\n"
+    elif [[ ! "$file" == *.@(fastq|fq.gz|fastq.gz) ]]; then
+        echo -e "$(basename $file) will not be processed as is not a .fastq or .fq.gz file."
     fi
 done
 
+echo
 echo "Done. You should now execute Bowtie2 in order to clean contaminant reads."
