@@ -9,12 +9,8 @@ source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
     echo "Usage: metabiome megahit -i <input directory> -o <output directory> [-t <threads>] [OPTIONS]"
-    echo "  Output directory will be created if it doesn't exists."
-    echo ""
-    echo "This is a wrapper script that passes OPTIONS to MEGAHIT, so this is the"
-    echo "documentation for MEGAHIT:"
-    echo ""
-    echo "$(megahit --help)"
+    echo
+    echo "Output directory will be created if it doesn't exists."
 }
 
 # Exit if command is called with no arguments
