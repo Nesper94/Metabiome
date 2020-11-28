@@ -8,9 +8,8 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: metabiome metaspades -i <input directory> -o <output directory> [-t <threads>] ['MetaSPADES_OPTIONS']"
+    echo "Usage: metabiome metaspades -i <input directory> -o <output directory> [-t <threads>] [MetaSPADES_OPTIONS]"
     echo ""
-    echo "WARNING: Make sure to enclose MetaSPADES_OPTIONS within quotation marks."
     echo "Output directory will be created if it doesn't exists."
 }
 
@@ -53,6 +52,6 @@ for forward_file in "$input_dir"/*$forward_file_suffix; do
     -o "$file_dir" \
     -1 "$forward_file" \
     -2 $(echo "$forward_file" | sed "s/$forward_file_suffix/$reverse_file_suffix/") `# Reverse sequences` \
-    -t "$threads" #"${MetaSPADES_opts:=''}" # Obtain other options for metaSPAdes
+            -t "$threads" $MetaSPADES_opts # Obtain other options for metaSPAdes
 
 done
