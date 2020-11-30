@@ -6,3 +6,4 @@ channels:
 dependencies:
   - kraken2=2.1
   - kaiju=1.7
+  - krona=2.7
