@@ -9,17 +9,18 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: metabiome metaphlan3 -i <input_directory> -o <output_directory> -d <database_directory> [-t <threads>] [metaphlan_OPTIONS]"
+    echo "Usage: metabiome metaphlan3 -i <in_dir> -o <out_dir> -d <db_dir>"
     echo ""
+    echo "Mandatory: "
+    echo "-i,  <in_dir>                 Input directory containing clean FASTQ files."
+    echo "-o,  <out_dir>                Directory in which results will be saved. This directory"
+    echo "                              will be created if it doesn't exist."
+    echo "-d,  <db_dir>                 MetaPhlan3 Database directory."
     echo "Options:"
-    echo "<input_directory>  Input directory containing clean FASTQ files."
-    echo "<output_directory> Directory in which results will be saved. This directory"
-    echo "will be created if it doesn't exist."
-    echo "<database_directory>  MetaPhlan3 Database directory."
-    echo "<threads>  Number of threads to use. (default=1)"
-    echo "<metaphlan_OPTIONS> metaphlan's options (optional). Make sure to enclose metaphlan_OPTIONS within quotation marks"
+    echo "-t,  <threads>                Number of threads to use. (default=1)"
+    echo "-opts, <metaphlan_OPTIONS>    metaphlan's options (optional)."
+    echo "Please execute '(metaphlan -h)' in order to see bowtie2's documentation "
 }
-
 
 ##--------------------------Exiting if input files are missing---------------##:
 validate_arguments "$#"
@@ -28,26 +29,14 @@ validate_arguments "$#"
 ##----------------------Saving input orders into variables------------------##:
 while [[ -n "$1" ]]; do
     case "$1" in
-        -h|--help ) usage; exit 0
-            ;;
-        -i )        input_dir=$(readlink -f "$2")
-            shift
-            ;;
-        -o )        out_dir=$(readlink -f "$2")
-            shift
-            ;;
-        -d )        met_database=$(readlink -f "$2")
-            shift
-            ;;
-        -t )        threads="$2"
-           shift
-            ;;
-        * )         metaphlan_opts="$@"
-            ;;
-        * )        echo "Option '$1' not recognized"; exit 1
-            ;;
+        -h|--help ) usage; exit 0;;
+        -i )        input_dir=$(readlink -f "$2"); shift 2;;
+        -o )        out_dir=$(readlink -f "$2");shift 2;;
+        -d )        met_database=$(readlink -f "$2"); shift 2;;
+        -t )        threads="$2"; shift 2;;
+        -opts )     shift; metaphlan_opts="$@"; break ;;
+        * )         echo "Option '$1' not recognized"; exit 1;;
     esac
-    shift
 done
 
 ##----------------Verify that input directory exists------------------------##:
@@ -55,7 +44,7 @@ validate_input_dir
 ##---------------Create output directory if it doesn't exists---------------##:
 validate_output_dir
 ##----------------Activate conda environment--------------------------------##:
-activate_env metabiome-taxonomic-profiling
+activate_env metabiome-metaphlan
 
 ##----------------Installing MetaPhlAn database-----------------------------##:
 ##First checks if MetaPhlAn3 database already generated, otherwise it will be generated.
@@ -73,25 +62,24 @@ echo "MetaPhlAn3 version: $(metaphlan -v)"
 
 ##---------------------------MetaPhlAn profiling----------------------------##:
 ##----------------------PE reads--------------------------------------------##:
-for i in "$input_dir"/*_1_paired_bt2.fq.gz;do
-  metaphlan $i,$(echo $i | sed 's/_1_/_2_/') \
-  --input_type fastq  -t rel_ab_w_read_stats --unknown_estimation \
-  -o "$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/paired_mphlan.txt/') \
-  --nproc "$threads" --bowtie2out "$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/paired_bt2mphlan.sam/') \
-  "${metaphlan_opts:=''}"
+for foward_file in "$input_dir"/*_1_paired_;do
+  metaphlan "$forward_file",$(echo "$forward_file" | sed 's/_1_/_2_/') \
+  --input_type fastq  -t rel_ab_w_read_stats \
+  -o "$out_dir"/$(echo $(basename -- "$forward_file") | sed 's/1_paired_bt2.fq.gz/paired_mphlan.txt/') \
+  --nproc "$threads" --bowtie2out "$out_dir"/$(echo $(basename -- "$forward_file") | sed 's/1_paired_bt2.fq.gz/paired_bt2_mphlan.sam/') \
+  "$metaphlan_opts"
 done
 
 ##------------------------------SE reads------------------------------------##:
-for i in "$input_dir"/*unpaired_bt2.fq.gz;do
-  metaphlan $i --input_type fastq -t rel_ab_w_read_stats \
-  -o "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_bt2.fq.gz/unpaired_mphlan.txt/') \
-  --nproc "$threads" --bowtie2out "$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_bt2.fq.gz/un_bt2mphlan.sam/') \
-  "${metaphlan_opts:=''}"
+for unpaired_file in "$input_dir"/*_unpaired_;do
+  metaphlan "$unpaired_file" --input_type fastq -t rel_ab_w_read_stats \
+  -o "$out_dir"/$(echo $(basename -- "$unpaired_file") | sed 's/unpaired_bt2.fq.gz/unpaired_mphlan.txt/') \
+  --nproc "$threads" --bowtie2out "$out_dir"/$(echo $(basename -- "$unpaired_file") | sed 's/unpaired_bt2.fq.gz/un_bt2_mphlan.sam/') \
+  "$metaphlan_opts"
 done
 
 ##-----------------------------Merging tables from utility scripts-----------##:
-
-cd $out_dir
+cd "$out_dir"
 merge_metaphlan_tables.py *.txt > merged_mphlan.txt
 
 

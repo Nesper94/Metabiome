@@ -9,38 +9,24 @@ source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
     echo "Usage: metabiome megahit -i <input directory> -o <output directory> [-t <threads>] [OPTIONS]"
-    echo "  Output directory will be created if it doesn't exists."
-    echo ""
-    echo "This is a wrapper script that passes OPTIONS to MEGAHIT, so this is the"
-    echo "documentation for MEGAHIT:"
-    echo ""
-    echo "$(megahit --help)"
+    echo
+    echo "Output directory will be created if it doesn't exists."
 }
 
 # Exit if command is called with no arguments
 validate_arguments "$#"
 
 # Activate conda environment
-activate_env metabiome-assembly
+activate_env metabiome-genome-assembly
 
 while [[ -n "$1" ]]; do
     case "$1" in
-        -h|--help ) usage; exit 0
-            ;;
-        -i )        input_dir=$(readlink -f "$2")
-            shift
-            ;;
-        -o )        out_dir=$(readlink -f "$2")
-            shift
-            ;;
-        -t )        threads="$2"
-            shift
-            ;;
-        --k-list)   kmer_list="$2"
-		shift
-            ;;
-        * )         MEGAHIT_opts="$@"
-            ;;
+        -h|--help ) usage; exit 0 ;;
+        -i )        input_dir=$(readlink -f "$2"); shift ;;
+        -o )        out_dir=$(readlink -f "$2"); shift ;;
+        -t )        threads="$2"; shift ;;
+        --k-list)   kmer_list="$2"; shift ;;
+        * )         MEGAHIT_opts="$@" ;;
     esac
     shift
 done
@@ -59,18 +45,18 @@ echo "MEGAHIT version: $(megahit --version)"
 
 # Run MEGAHIT on paired-end files
 
-forward_file_suffix=1_paired_bt2.fq.gz
-reverse_file_suffix=2_paired_bt2.fq.gz
+for file in "$input_dir"/*; do
 
-for forward_file in "$input_dir"/*$forward_file_suffix; do
+    # Make sure to process only fastq, fq.gz or fastq.gz files
+    if [[ "$file" == @(*_R1_*|*_1).@(fastq|fq.gz|fastq.gz) ]]; then
 
-	echo "Performing PE assembly with $(basename $forward_file) and $(basename "$forward_file" | sed "s/$forward_file_suffix/$reverse_file_suffix/")"
-    out_name=$(basename "$forward_file" | sed 's/$forward_file_suffix/.fq.gz/')
-	megahit \
-    -o "$out_dir"/"$out_name" \
-    -1 "$forward_file" `#Forward files(1 files, paired with files in "$pe2")` \
-    -2 $(echo "$forward_file" | sed "s/$forward_file_suffix/$reverse_file_suffix/") `# Reverse files (2 files, paired with files in "$pe1"` \
-    -t "$threads" "${MEGAHIT_opts:=}" \
-    --presets meta-large # Optimization for large & complex metagenomes, like soil
+        echo "Performing PE assembly with $(basename $file) and $(basename "$file" | forward_to_reverse)"
+        out_name=$(basename "$file" | remove_forward_suffix)
+        megahit -o "$out_dir"/"$out_name" \
+            -1 "$file" \
+            -2 $(echo "$file" | forward_to_reverse) \
+            -t "$threads" $MEGAHIT_opts \
+            --presets meta-large # Optimization for large & complex metagenomes, like soil
+    fi
 
 done

@@ -9,15 +9,17 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: metabiome bbduk -i <input_directory> -o <output_directory> -D <16S_DATABASE> [-t <threads>] [BBduk_OPTIONS]"
+    echo "Usage: metabiome bbduk -i <in_dir> -o <out_dir> -D <16S_db>"
     echo ""
-    echo "Options:"
-    echo "<input_directory>  Input directory containing clean FASTQ files."
-    echo "<output_directory> Directory in which results will be saved. This directory"
-    echo "will be created if it doesn't exist."
-    echo "<16S_DATABASE> 16S Database directory."
-    echo "<threads>  Number of threads to use. (default=1)"
-    echo "<BBduk_OPTIONS BBduk's options (optional). Make sure to enclose BBduk_OPTIONS within quotation marks"
+    echo "Mandatory: "
+    echo "-i, <in_dir>              Input directory containing clean FASTQ files."
+    echo "-o, <out_dir>             Directory in which results will be saved. This directory"
+    echo "                          will be created if it doesn't exist."
+    echo "-D, <16S_db>              16S Database directory. "
+    echo "Options: "
+    echo "-t, <threads>             Number of threads to use. (default=1)"
+    echo "-opts, <BBduk_OPTIONS>    BBduk's options.(optional)"
+    echo "Please execute '(bbduk -h)' in order to see bowtie2's documentation "
 
 }
 
@@ -25,28 +27,17 @@ function usage() {
 validate_arguments "$#"
 
 ##---------------------Save input parameters into variables------------------##:
+
 while [[ -n "$1" ]]; do
     case "$1" in
-        -h|--help ) usage; exit 0
-            ;;
-        -i )        input_dir=$(readlink -f "$2")
-            shift
-            ;;
-        -o )        out_dir=$(readlink -f "$2")
-            shift
-            ;;
-        -D )        database=$(readlink -f "$2")
-            shift
-            ;;
-        -t )        threads="$2"
-           shift
-            ;;
-        * )         bbduk_opts="$@"
-            ;;
-        * )        echo "Option '$1' not recognized"; exit 1
-            ;;
+        -h|--help ) usage; exit 0 ;;
+        -i )        input_dir=$(readlink -f "$2"); shift 2 ;;
+        -o )        out_dir=$(readlink -f "$2"); shift 2 ;;
+        -D )        database=$(readlink -f "$2"); shift 2 ;;
+        -t )        threads="$2"; shift 2 ;;
+        -opts )     shift;bbduk_opts="$@"; break ;;
+        * )         echo "Option '$1' not recognized"; exit 1 ;;
     esac
-    shift
 done
 
 # Verify that input directory is set and exists
@@ -61,28 +52,27 @@ echo "Input directory: ${input_dir:?'Input directory not set'}"
 echo "Output directory: ${out_dir:?'Output directory not set'}"
 echo "Number of threads: ${threads:=1}"
 echo "Reference database: ${database:?'=reference database not set'}"
+echo "BBduk called with options: $bbduk_opts"
 
 ##-----------------------Activate conda environment--------------------------##:
-activate_env metabiome-picking16S
+#activate_env metabiome-picking16S
 
 ##------------Match reads against the 16S rDNA SSU from SILVA Database-------##:
-
-for i in "$input_dir"/*1_paired_bt2.fq.gz; do
-    bbduk.sh in=$i in2=$(echo $i | 's/_1_paired_bt2/_2_paired_bt2/') \
-	  ref="$database" outm="$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/1_paired_bbdk.fq/') \
-    outm2="$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/2_paired_bbdk.fq/') \
-	  outs="$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/singletons_bbdk.fq/') \
-    stats="$out_dir"/$(echo $(basename -- $i) | sed 's/1_paired_bt2.fq.gz/pe_bbdk_summary.txt/') \
-    "${bbduk_opts:=''}"
+for forward_file in "$input_dir"/*1_paired*; do
+    bbduk.sh in="$forward_file" in2= $(echo "$forward_file" | sed 's/_1_/_2_/') \
+	  ref="$database" outm="$out_dir"/$(echo $(basename -- "$forward_file") | sed 's/_bt2/_bbdk/') \
+    outm2="$out_dir"/$(echo $(basename -- "$forward_file") | sed 's/1_paired_bt2.fq.gz/2_paired_bbdk.fq/') \
+	  outs="$out_dir"/$(echo $(basename -- "$forward_file") | sed 's/1_paired_bt2.fq.gz/singletons_bbdk.fq/') \
+    stats="$out_dir"/$(echo $(basename -- "$forward_file") | sed 's/1_paired_bt2.fq.gz/pe_bbdk_summary.txt/') \
+    "$bbduk_opts"
 done
 
 ##----------------------------For SE reads-----------------------------------##:
-
-for i in "$input_dir"/*unpaired_bt2.fq.gz; do
-    bbduk.sh in=$i ref="$database" \
-    outm="$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_bt2.fq.gz/unpaired_bbdk.fq/') \
-	  stats="$out_dir"/$(echo $(basename -- $i) | sed 's/unpaired_bt2.fq.gz/unpaired_bbdk_summary.txt/') \
-    "${bbduk_opts:=''}"
+for unpaired_file in "$input_dir"/*_unpaired_*; do
+         bbduk.sh in="$unpaired_file" ref="$database" \
+         outm="$out_dir"/$(echo $(basename -- "$unpaired_file") | sed 's/bt2.fq.gz/bbdk.fq/') \
+         stats="$out_dir"/$(echo $(basename -- "$unpaired_file") | sed 's/bt2.fq.gz/bbdk.summary.txt/') \
+         "$bbduk_opts"
 done
 
 ##-------------------------------Compress output-----------------------------##:

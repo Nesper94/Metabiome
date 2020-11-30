@@ -51,3 +51,4 @@ fastqc -o "$out_dir" "$input_dir"/*@(.fastq|.fastq.gz|.fq.gz)
 
 multiqc -o "$out_dir" "$out_dir"
 
+
