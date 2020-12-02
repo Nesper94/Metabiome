@@ -39,7 +39,8 @@ create_envs(){
     echo "Creating MetaPhlAn3 environment..."
     conda env create --file "$METABIOME_DIR"/conda-envs/metaphlan.yml
     
-    #conda env create --file # TODO: poner yml picking16S
+    echo "Creating picking16S environment..."
+    conda env create --file "$METABIOME_DIR"/conda-envs/picking16S.yml
 }
 
 # Copy link to bash completion script
