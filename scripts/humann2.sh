@@ -29,7 +29,7 @@ while [[ -n "$1" ]]; do
     case "$1" in
         -h|--help ) usage; exit 0 ;;
         -i )        input_dir=$(readlink -f "$2"); shift ;;
-        -o )        out_dir=$(readlink -f "$2"); shift ;;
+        -o )        out_dir=$(readlink -m "$2"); shift ;;
         -t )        threads="$2"; shift ;;
         * )         echo "Option '$1' not recognized"; exit 1 ;;
     esac
