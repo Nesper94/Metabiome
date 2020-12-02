@@ -29,7 +29,7 @@ validate_output_dir(){
     fi
     
     if [[ ! -d "$out_dir" ]]; then
-        mkdir "$out_dir"
+        mkdir -p "$out_dir"
     fi
 }
 
