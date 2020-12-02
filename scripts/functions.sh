@@ -47,7 +47,7 @@ forward_to_reverse(){
     if (( $# == 0 )); then
         sed 's/_R1_/_R2_/ ; s/_1\./_2\./' < /dev/stdin
     else
-        sed 's/_R1_/_R2_/ ; s/_1\./_2\./' "$1"
+        echo "$1" | sed 's/_R1_/_R2_/ ; s/_1\./_2\./'
     fi
 }
 
@@ -55,6 +55,6 @@ remove_forward_suffix(){
     if (( $# == 0 )); then
         sed 's/_R1_/_/ ; s/_1\./\./' < /dev/stdin
     else
-        sed 's/_R1_/_/ ; s/_1\./\./' "$1"
+        echo "$1" | sed 's/_R1_/_/ ; s/_1\./\./'
     fi
 }
