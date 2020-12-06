@@ -7,14 +7,15 @@ script should install anything unless necessary.
  **YAML** file using `conda env export --from-history --name env-name > env-name.yml` so that
 they can be recreated on installation. It would also be useful to have a
 file with platform-dependent information specifying the version of each
-package. For example with an environment named `humann2`:  
+package. For example with an environment named `humann2`:
+
 ```
 conda env export --from-history --name humann2 > version-humann2.yml && echo "# Platform $(lsb_release -d)" >> version-humann2.yml
 ```
 
 - Remember the [KISS principle](https://en.wikipedia.org/wiki/KISS_principle)
 and make things as simple as possible. As Nobel Prize for physics Paul Dirac
- once stated:  
+ once stated:
 > The aim of science is to make difficult things understandable in a simpler
  way.
 

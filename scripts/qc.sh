@@ -1,6 +1,6 @@
 #!/bin/bash
 #FastQC and MultiQC script to make a screening of FASTQ files quality
-#Made by: PhagePipe 
+#Made by: PhagePipe
 
 set -e
 shopt -s extglob
@@ -23,7 +23,7 @@ while [[ -n "$1" ]]; do
         -i )        input_dir=$(readlink -f "$2"); shift ;;
         -o )        out_dir=$(readlink -m "$2"); shift ;;
         -t )        threads="$2"; shift ;;
-        * )         echo "unknow option" >&2; exit 1 ;; 
+        * )         echo "unknow option" >&2; exit 1 ;;
     esac
     shift
 done
@@ -50,5 +50,3 @@ echo "Number of threads: ${threads:=2}"
 fastqc -o "$out_dir" "$input_dir"/*@(.fastq|.fastq.gz|.fq.gz)
 
 multiqc -o "$out_dir" "$out_dir"
-
-

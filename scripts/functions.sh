@@ -1,4 +1,3 @@
-
 # Exit if command is called with no arguments
 validate_arguments(){
     if [[ "$1" == 0 ]]; then
@@ -14,7 +13,7 @@ validate_input_dir(){
         echo "$0: Error: Input directory is not set." >&2
         exit 1
     fi
-    
+
     if [[ ! -d "$input_dir" ]]; then
         echo "$0: Error: $input_dir is not a valid directory." >&2
         exit 1
@@ -27,7 +26,7 @@ validate_output_dir(){
         echo "$0: Error: Output directory is not set." >&2
         exit 1
     fi
-    
+
     if [[ ! -d "$out_dir" ]]; then
         mkdir -p "$out_dir"
     fi
