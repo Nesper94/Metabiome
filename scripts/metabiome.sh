@@ -63,4 +63,8 @@ elif [[ "$1" = "-h" ]] || [[ "$1" = "--help" ]]; then
 
 elif [[ "$1" = "-v" ]] || [[ "$1" = "--version" ]]; then
   echo "Metabiome $VERSION"
+
+else
+  echo "Error: Option $1 not recognized."
+  exit 1
 fi

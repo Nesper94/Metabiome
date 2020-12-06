@@ -1,4 +1,3 @@
-
 # Exit if command is called with no arguments
 validate_arguments(){
     if [[ "$1" == 0 ]]; then
@@ -14,7 +13,7 @@ validate_input_dir(){
         echo "$0: Error: Input directory is not set." >&2
         exit 1
     fi
-    
+
     if [[ ! -d "$input_dir" ]]; then
         echo "$0: Error: $input_dir is not a valid directory." >&2
         exit 1
@@ -27,9 +26,9 @@ validate_output_dir(){
         echo "$0: Error: Output directory is not set." >&2
         exit 1
     fi
-    
+
     if [[ ! -d "$out_dir" ]]; then
-        mkdir "$out_dir"
+        mkdir -p "$out_dir"
     fi
 }
 
@@ -47,7 +46,7 @@ forward_to_reverse(){
     if (( $# == 0 )); then
         sed 's/_R1_/_R2_/ ; s/_1\./_2\./' < /dev/stdin
     else
-        sed 's/_R1_/_R2_/ ; s/_1\./_2\./' "$1"
+        echo "$1" | sed 's/_R1_/_R2_/ ; s/_1\./_2\./'
     fi
 }
 
@@ -55,6 +54,6 @@ remove_forward_suffix(){
     if (( $# == 0 )); then
         sed 's/_R1_/_/ ; s/_1\./\./' < /dev/stdin
     else
-        sed 's/_R1_/_/ ; s/_1\./\./' "$1"
+        echo "$1" | sed 's/_R1_/_/ ; s/_1\./\./'
     fi
 }
