@@ -11,21 +11,23 @@ source "$SCRIPTS_DIR"/functions.sh
 function usage() {
     echo "Usage: metabiome kaiju [options] -i <in_dir> -o <out_dir> -D <db_dir> -d <kaiju_db>"
     echo ""
-    echo "Mandatory: "
-    echo "-i, <in_dir>              Input directory containing FASTQ files."
-    echo "-o, <out_dir>             Directory in which results will be saved. This directory"
-    echo "                          will be created if it doesn't exist."
-    echo "-D, <db_dir>              Kaiju Database directory."
-    echo "-d, <kaiju_db>            Kaiju Database name. Please refer to the Kaiju github repository"
+    echo "Mandatory:"
+    echo "  -i in_dir       Input directory containing FASTQ files."
+    echo "  -o out_dir      Directory in which results will be saved. This directory"
+    echo "                  will be created if it doesn't exist."
+    echo "  -D db_dir       Kaiju Database directory."
+    echo "  -d kaiju_db     Kaiju Database name. Please refer to the Kaiju github repository"
+    echo
     echo "Options:"
-    echo "-t, <threads>             Number of threads to use (default=1)."
-    echo "-c, <class_dir>           Directory of the classification summary of Kaiju's output. (optional)"
-    echo "-x, <taxa_dir>            Directory of the taxa names from the Kaiju's output file. (optional)"
-    echo "-m, <merge_dir>           Directory of the merging outputs from Kaiju and Kraken. (optional)"
-    echo "-k, <krona_dir>           Directory of the Krona output. (optional)"
-    echo "-kr, <kraken_in>          Kraken output files's directory. (optional)"
-    echo "-opts, <kaiju_OPTIONS>    Kaiju's options. (optional)"
-    echo "Please execute '(kaiju -h)' in order to see bowtie2's documentation "
+    echo "  -t NUM          Number of threads to use (default=1)."
+    echo "  -c class_dir    Directory of the classification summary of Kaiju's output."
+    echo "  -x taxa_dir     Directory of the taxa names from the Kaiju's output file."
+    echo "  -m merge_dir    Directory of the merging outputs from Kaiju and Kraken."
+    echo "  -k krona_dir    Directory of the Krona output."
+    echo "  -kr kraken_in   Kraken output files's directory."
+    echo "  -opts OPTIONS   Kaiju's options."
+    echo
+    echo "Please execute '(kaiju -h)' in order to see Kaiju's documentation"
 }
 
 ##--------------------------Exiting if input files are missing---------------##:
