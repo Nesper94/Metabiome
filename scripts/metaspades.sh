@@ -8,9 +8,17 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: metabiome metaspades -i <input directory> -o <output directory> [-t <threads>] [MetaSPADES_OPTIONS]"
-    echo ""
-    echo "Output directory will be created if it doesn't exists."
+    echo "Usage: metabiome metaspades [Options] -i <input directory> -o <output directory> [-opts MetaSPADES_OPTIONS]"
+    echo
+    echo "Required:"
+    echo "  -i in_dir       Input directory containing FASTQ files."
+    echo "  -o out_dir      Directory in which results will be saved. This directory"
+    echo "                  will be created if it doesn't exist."
+    echo
+    echo "Options:"
+    echo "  -t NUM          Number of threads to use (default: 4)."
+    echo "  -h, --help      Show this help"
+    echo "  -opts OPTIONS   MetaSPADES's options."
 }
 
 # Exit if command is called with no arguments
@@ -20,9 +28,10 @@ while [[ -n "$1" ]]; do
     case "$1" in
         -h|--help ) usage; exit 0 ;;
         -i )        input_dir=$(readlink -f "$2"); shift ;;
-        -o )        out_dir=$(readlink -f "$2"); shift ;;
+        -o )        out_dir=$(readlink -m "$2"); shift ;;
         -t )        threads="$2"; shift ;;
-        * )         MetaSPADES_opts="$@" ;;
+        -opts )     shift; MetaSPADES_opts="$@"; break ;;
+        * )         echo "Unknown option: $1"; exit 1 ;;
     esac
     shift
 done

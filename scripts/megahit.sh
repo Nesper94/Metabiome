@@ -8,25 +8,31 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: metabiome megahit -i <input directory> -o <output directory> [-t <threads>] [OPTIONS]"
+    echo "Usage: metabiome megahit [Options] -i <input directory> -o <output directory> [-opts Megahit_OPTIONS]"
     echo
-    echo "Output directory will be created if it doesn't exists."
+    echo "Required:"
+    echo "  -i in_dir       Input directory containing FASTQ files."
+    echo "  -o out_dir      Directory in which results will be saved. This directory"
+    echo "                  will be created if it doesn't exist."
+    echo
+    echo "Options:"
+    echo "  -t NUM          Number of threads to use (default: 4)."
+    echo "  -h, --help      Show this help"
+    echo "  -opts OPTIONS   Megahit's options."
 }
 
 # Exit if command is called with no arguments
 validate_arguments "$#"
 
-# Activate conda environment
-activate_env metabiome-genome-assembly
-
 while [[ -n "$1" ]]; do
     case "$1" in
         -h|--help ) usage; exit 0 ;;
         -i )        input_dir=$(readlink -f "$2"); shift ;;
-        -o )        out_dir=$(readlink -f "$2"); shift ;;
+        -o )        out_dir=$(readlink -m "$2"); shift ;;
         -t )        threads="$2"; shift ;;
         --k-list)   kmer_list="$2"; shift ;;
-        * )         MEGAHIT_opts="$@" ;;
+        -opts )     shift; MEGAHIT_opts="$@"; break ;;
+        * )         echo "Unknown option: $1"; exit 1 ;;
     esac
     shift
 done
@@ -37,10 +43,13 @@ validate_input_dir
 # Create output directory if it doesn't exists.
 validate_output_dir
 
+# Activate conda environment
+activate_env metabiome-genome-assembly
+
 #Output info
 echo "Input directory: ${input_dir:?'Input directory not set'}"
 echo "Output directory: ${out_dir:?'Output directory not set'}"
-echo "Number of threads: ${threads:=1}"
+echo "Number of threads: ${threads:=4}"
 echo "MEGAHIT version: $(megahit --version)"
 
 # Run MEGAHIT on paired-end files

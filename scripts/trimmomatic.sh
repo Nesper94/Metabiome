@@ -24,7 +24,7 @@ while (("$#")); do
     case "$1" in
         -h|--help ) usage; exit 0 ;;
         -i )        input_dir=$(readlink -f "$2"); shift 2 ;;
-        -o )        out_dir=$(readlink -f "$2"); shift 2 ;;
+        -o )        out_dir=$(readlink -m "$2"); shift 2 ;;
         -t )        threads="$2"; shift 2 ;;
         -opts )     shift; trimopt="$@"; break ;;
         * )         echo "Unknown option: $1"; exit 1 ;;

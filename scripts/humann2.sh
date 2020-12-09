@@ -10,13 +10,16 @@ source "$SCRIPTS_DIR"/functions.sh
 
 usage() {
     echo "Usage: metabiome humann2 [Options] -i <input directory> -o <output directory>"
-    echo ""
-    echo "  <input directory>   directory containing .fq.gz files"
-    echo "  <output directory>  directory to write results. This directory will be created if it doesn't exists."
+    echo
+    echo "Required:"
+    echo "  -i in_dir   Directory containing .fq.gz files"
+    echo "  -o out_dir  Directory to write results. This directory"
+    echo "              will be created if it doesn't exists."
     echo ""
     echo "Options:"
-    echo "  -t  NUM         Number of threads to use"
-    echo "  -h, --help      Show this help"
+    echo "  -t  NUM     Number of threads to use"
+    echo "  -h, --help  Show this help"
+    echo
     echo "Note: Before running this script you should have downloaded the nucleotide and protein databases with
     humann2_databases. Run 'humann2_databases --help' for more info about this."
 }
@@ -29,7 +32,7 @@ while [[ -n "$1" ]]; do
     case "$1" in
         -h|--help ) usage; exit 0 ;;
         -i )        input_dir=$(readlink -f "$2"); shift ;;
-        -o )        out_dir=$(readlink -f "$2"); shift ;;
+        -o )        out_dir=$(readlink -m "$2"); shift ;;
         -t )        threads="$2"; shift ;;
         * )         echo "Option '$1' not recognized"; exit 1 ;;
     esac

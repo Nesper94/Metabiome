@@ -26,20 +26,21 @@ create_link(){
 create_envs(){
     echo "Creating hummann2 environment..."
     conda env create --file "$METABIOME_DIR"/conda-envs/humann2-env.yml
-    
+
     echo "Creating preprocessing environment..."
     conda env create --file "$METABIOME_DIR"/conda-envs/preprocessing.yml
-    
+
     echo "Creating read-based binning environment..."
     conda env create --file "$METABIOME_DIR"/conda-envs/read-binning.yml
-    
+
     echo "Creating assembly environment..."
     conda env create --file "$METABIOME_DIR"/conda-envs/assembly.yml
-    
+
     echo "Creating MetaPhlAn3 environment..."
     conda env create --file "$METABIOME_DIR"/conda-envs/metaphlan.yml
-    
-    #conda env create --file # TODO: poner yml picking16S
+
+    echo "Creating picking16S environment..."
+    conda env create --file "$METABIOME_DIR"/conda-envs/picking16S.yml
 }
 
 # Copy link to bash completion script
