@@ -34,4 +34,4 @@ can use with Metabiome.
 ![Flowchart](figs/flowchart.png)
 
 ## Pipeline
-![Pipeline](figs/pipeline.svg)
+![Pipeline](https://i.imgur.com/nnm7qi3.png)
