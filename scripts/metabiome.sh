@@ -13,7 +13,7 @@ function usage() {
     echo "Usage: metabiome [Commands|Options]"
     echo ""
     echo "  Commands:"
-    echo "    fastqc        Check read quality with FastQC"
+    echo "    qc            Check read quality with FastQC and MultiQC"
     echo "    trimmomatic"
     echo "    bowtie2       Remove contaminant sequences"
     echo "    krona         Create Krona charts using Kraken2 output"
@@ -54,6 +54,9 @@ elif [[ "$1" = "metaphlan3" ]]; then
 
 elif [[ "$1" = "metaspades" ]]; then
   bash "$SCRIPTS_DIR"/metaspades.sh ${@:2}
+
+elif [[ "$1" = "qc" ]]; then
+  bash "$SCRIPTS_DIR"/qc.sh ${@:2}
 
 elif [[ "$1" = "trimmomatic" ]]; then
   bash "$SCRIPTS_DIR"/trimmomatic.sh ${@:2}
