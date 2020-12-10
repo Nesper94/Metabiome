@@ -16,6 +16,7 @@ function usage() {
     echo "    fastqc        Check read quality with FastQC"
     echo "    trimmomatic"
     echo "    bowtie2       Remove contaminant sequences"
+    echo "    krona         Create Krona charts using Kraken2 output"
     echo "    metaspades    Assemble reads into contigs"
     echo "    megahit       Assemble reads into contigs"
     echo ""
@@ -41,6 +42,9 @@ elif [[ "$1" = "kaiju" ]]; then
 
 elif [[ "$1" = "kraken2" ]]; then
   bash "$SCRIPTS_DIR"/kraken2.sh ${@:2}
+
+elif [[ "$1" = "krona" ]]; then
+  "$SCRIPTS_DIR"/krona.sh ${@:2}
 
 elif [[ "$1" = "megahit" ]]; then
   bash "$SCRIPTS_DIR"/megahit.sh ${@:2}
