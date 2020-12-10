@@ -11,12 +11,12 @@ source "$SCRIPTS_DIR"/functions.sh
 function usage() {
     echo "Usage: metabiome krona [Options] -i <input directory> -o <output directory>"
     echo
-    echo "Mandatory:"
-    echo "-i <in_dir>     Input directory containing Kraken2 output files."
-    echo "-o <out_dir>    Directory in which results will be saved. This directory"
-    echo "                will be created if it doesn't exist."
+    echo "Required:"
+    echo "-i in_dir     Input directory containing Kraken2 output files."
+    echo "-o out_dir    Directory in which results will be saved. This directory"
+    echo "              will be created if it doesn't exist."
     echo "Options:"
-    echo "  -h, --help    Show this help"
+    echo "  -h, --help  Show this help"
 }
 
 # Exit if command is called with no arguments

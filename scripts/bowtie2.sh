@@ -10,20 +10,20 @@ source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
     echo "Usage: metabiome bowtie2 [options] -i <in_dir> -o <out_dir>"
-    echo ""
-    echo "Mandatory: "
-    echo "-i, <in_dir>               Input directory containing FASTQ files."
-    echo "-o, <out_dir>              Directory in which results will be saved. This directory"
-    echo "                           will be created if it doesn't exist."
+    echo
+    echo "Required:"
+    echo "  -i in_dir               Input directory containing FASTQ files."
+    echo "  -o out_dir              Directory in which results will be saved. This directory"
+    echo "                          will be created if it doesn't exist."
+    echo
     echo "Options:"
-    echo "-ho, <host>                Host reference genome in FASTA format. (optional)"
-    echo "-ph, <PhiX>                PhiX-174 phage reference genome in FASTA format. (optional)"
-    echo "-hu, <human>               Human reference genome in FASTA format. (optional)"
-    echo "-t,  <threads>             Number of threads to use. (default=1)"
-    echo "-idx, <index_OPTIONS>      bowtie2 index builder's options (optional)."
-    echo "-opts, <bowtie2_OPTIONS>   bowtie2's options (optional)."
-    echo "Please execute '(bowtie2 --help)' in order to see bowtie2's documentation "
-
+    echo "  -ho host                Host reference genome in FASTA format."
+    echo "  -ph PhiX                PhiX-174 phage reference genome in FASTA format."
+    echo "  -hu human               Human reference genome in FASTA format."
+    echo "  -t  NUM                 Number of threads to use. (default=1)"
+    echo "  -idx index_OPTIONS      bowtie2 index builder's options."
+    echo "  -opts bowtie2_OPTIONS   bowtie2's options."
+    echo "  -h, --help              Show this help"
 }
 
 # Exit if command is called with no arguments

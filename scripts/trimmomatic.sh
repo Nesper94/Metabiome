@@ -10,11 +10,14 @@ source "$SCRIPTS_DIR"/functions.sh
 function usage() {
     echo "Usage: metabiome trimmomatic [Options] -i <input directory> -o <output directory> -opts TRIMMOMATIC_OPTIONS"
     echo ""
-    echo "Options:"
-    echo "  -t NUM        Number of threads to use (default: 4)"
-    echo "  -h, --help    Show this help"
+    echo "Required:"
+    echo "  -i in_dir   Input directory containing clean FASTQ files."
+    echo "  -o out_dir  Directory in which results will be saved. This directory"
+    echo "              will be created if it doesn't exist."
     echo
-    echo "Output directory will be created if it doesn't exists."
+    echo "Options:"
+    echo "  -t NUM      Number of threads to use (default: 4)"
+    echo "  -h, --help  Show this help"
 }
 
 # Exit if command is called with no arguments

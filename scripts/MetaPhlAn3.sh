@@ -11,15 +11,16 @@ source "$SCRIPTS_DIR"/functions.sh
 function usage() {
     echo "Usage: metabiome metaphlan3 -i <in_dir> -o <out_dir> -d <db_dir>"
     echo ""
-    echo "Mandatory: "
-    echo "-i,  <in_dir>                 Input directory containing clean FASTQ files."
-    echo "-o,  <out_dir>                Directory in which results will be saved. This directory"
-    echo "                              will be created if it doesn't exist."
-    echo "-d,  <db_dir>                 MetaPhlan3 Database directory."
+    echo "Mandatory:"
+    echo "  -i in_dir                 Input directory containing clean FASTQ files."
+    echo "  -o out_dir                Directory in which results will be saved. This directory"
+    echo "                            will be created if it doesn't exist."
+    echo "  -d db_dir                 MetaPhlan3 Database directory."
+    echo ""
     echo "Options:"
-    echo "-t,  <threads>                Number of threads to use. (default=1)"
-    echo "-opts, <metaphlan_OPTIONS>    metaphlan's options (optional)."
-    echo "Please execute '(metaphlan -h)' in order to see bowtie2's documentation "
+    echo "  -t NUM                    Number of threads to use. (default=1)"
+    echo "  -opts metaphlan_OPTIONS   metaphlan's options."
+    echo "  -h, --help                Show this help"
 }
 
 ##--------------------------Exiting if input files are missing---------------##:

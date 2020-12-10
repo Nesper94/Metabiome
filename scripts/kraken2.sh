@@ -10,13 +10,16 @@ source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
     echo "Usage: metabiome kraken2 [Options] -i <input directory> -o <output directory>"
-    echo ""
+    echo
+    echo "Required:"
+    echo "  -i in_dir       Input directory containing FASTQ files."
+    echo "  -o out_dir      Directory in which results will be saved. This directory"
+    echo "                  will be created if it doesn't exist."
+    echo
     echo "Options:"
     echo "  -db database    Path to database used to assign the taxonomic labels to sequences (default: standard-kraken2-db)"
     echo "  -t  NUM         Number of threads to use (default: 1)"
     echo "  -h, --help      Show this help"
-    echo ""
-    echo "Output directory will be created if it doesn't exists."
 }
 
 # Exit if command is called with no arguments

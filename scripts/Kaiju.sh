@@ -10,7 +10,7 @@ source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
     echo "Usage: metabiome kaiju [options] -i <in_dir> -o <out_dir> -D <db_dir> -d <kaiju_db>"
-    echo ""
+    echo
     echo "Mandatory:"
     echo "  -i in_dir       Input directory containing FASTQ files."
     echo "  -o out_dir      Directory in which results will be saved. This directory"
@@ -26,8 +26,7 @@ function usage() {
     echo "  -k krona_dir    Directory of the Krona output."
     echo "  -kr kraken_in   Kraken output files's directory."
     echo "  -opts OPTIONS   Kaiju's options."
-    echo
-    echo "Please execute '(kaiju -h)' in order to see Kaiju's documentation"
+    echo "  -h, --help      Show this help"
 }
 
 ##--------------------------Exiting if input files are missing---------------##:
