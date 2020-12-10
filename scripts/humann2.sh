@@ -59,15 +59,25 @@ mkdir "$out_dir"/tmp
 
 # Cat paired-end reads and save to tmp/.
 # HUMAnN2 doesn't use paired-end information: https://forum.biobakery.org/t/paired-end-files-humann2/396/4
-for forward in "$input_dir"/*_1_paired*.fq.gz; do
-    reverse=$(echo "$forward" | sed 's/_1_paired/_2_paired/')
-    TARGET="$out_dir"/tmp/$(basename "$forward" | sed 's/_1_paired/_paired-reads/')
-    cat "$forward" "$reverse" > "$TARGET"
+for file in "$input_dir"/*; do
+
+    # Make sure to process only fastq, fq.gz or fastq.gz files
+    if [[ "$file" == @(*_R1*|*_1).@(fastq|fq.gz|fastq.gz) ]]; then
+        forward_file="$file"
+        reverse=$(echo "$forward_file" | forward_to_reverse)
+        TARGET="$out_dir"/tmp/$(basename "$forward_file" | remove_forward_suffix)
+        cat "$forward_file" "$reverse" > "$TARGET"
+
+    elif [[ ! "$file" == *.@(fastq|fq.gz|fastq.gz) ]]; then
+        echo -e "$(basename $file) will not be processed as is not a .fastq or .fq.gz file."
+    fi
 done
 
 # For loop to run HUMAnN 2.0 on each sample
-for file in "$out_dir"/tmp/*.fq.gz; do
-    humann2 -i "$file" -o "$out_dir" --threads "$threads"
+for file in "$out_dir"/tmp/*; do
+    if [[ "$file" == *.@(fastq|fq.gz|fastq.gz) ]]; then
+        humann2 -i "$file" -o "$out_dir" --threads "$threads"
+    fi
 done
 
 # Delete temporary directory
