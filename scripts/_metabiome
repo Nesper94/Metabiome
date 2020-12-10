@@ -1,15 +1,14 @@
 #!/bin/bash
 # Completion script for basic Metabiome commands
 
-_metabiome()
-{
-    word=${COMP_WORDS[COMP_CWORD]}
+_metabiome(){
+word=${COMP_WORDS[COMP_CWORD]}
 
-	if [ "$COMP_CWORD" -eq 1 ]; then
-		COMPREPLY=($(compgen -W "bbduk bowtie2 humann2 kaiju kraken2 krona megahit metaphlan3 metaspades trimmomatic" "${word}"))
+if [ "$COMP_CWORD" -eq 1 ]; then
+		COMPREPLY=($(compgen -W "bbduk bowtie2 humann2 kaiju kraken2 krona megahit metaphlan3 metaspades qc trimmomatic" "${word}"))
     elif [ "$3" == "-i" ] || [ "$3" == "-o" ]; then
         COMPREPLY=($(compgen -d "${word}"))
-	fi
+fi
 }
 
 complete -F _metabiome -o bashdefault -o filenames metabiome
