@@ -15,13 +15,14 @@ usage() {
     echo "  -i in_dir   Directory containing .fq.gz files"
     echo "  -o out_dir  Directory to write results. This directory"
     echo "              will be created if it doesn't exists."
-    echo ""
+    echo
     echo "Options:"
     echo "  -t  NUM     Number of threads to use"
     echo "  -h, --help  Show this help"
     echo
-    echo "Note: Before running this script you should have downloaded the nucleotide and protein databases with
-    humann2_databases. Run 'humann2_databases --help' for more info about this."
+    echo "Note: Before running this script you should have downloaded the nucleotide and"
+    echo "protein databases with humann2_databases. Run 'humann2_databases --help' for"
+    echo "more info about this."
 }
 
 # Exit if command is called with no arguments

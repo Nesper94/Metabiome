@@ -17,8 +17,8 @@ function usage() {
     echo
     echo "Options:"
     echo "  -t NUM          Number of threads to use (default: 4)."
-    echo "  -h, --help      Show this help"
     echo "  -opts OPTIONS   Megahit's options."
+    echo "  -h, --help      Show this help"
 }
 
 # Exit if command is called with no arguments

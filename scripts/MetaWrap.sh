@@ -11,17 +11,20 @@ source "$SCRIPTS_DIR"/functions.sh
 function usage() {
     echo "Usage: metabiome metawrap -i <input_directory> -a <assembly> [-r <RAM>] [-t <threads>] [-met <metabat2_dir>] [-max <maxbin2_dir>] [-cnc <concoct_dir>] [-check <checkM_dir>] [metawrap_OPTIONS]"
     echo ""
+    echo "Required:"
+    echo "  -i in_dir       Input directory containing clean FASTQ files."
+    echo "  -o out_dir      Directory in which results will be saved. This directory"
+    echo "                  will be created if it doesn't exist."
+    echo
     echo "Options:"
-    echo "<input_directory>  Input directory containing clean FASTQ files."
-    echo "will be created if it doesn't exist."
-    echo "<assembly>  Draft metagenome assemblies."
-    echo "<RAM>  Memory RAM. (optional)"
-    echo "<threads>  Number of threads. (default=1)"
-    echo "<metabat2>  metabat2 output directory. Set only if metabat2 is one of the chosen binner to use in metawrap binning module. (optional)"
-    echo "<maxbin2>  maxbin2 output directory. Set only if maxbin2 is one of the chosen binner to use in metawrap binning module. (optional)"
-    echo "<concoct>  concoct2 output directory. Set only if concoct is one of the chosen binner to use in metawrap binning module. (optional)"
-    echo "<checkM>  checkM output directory. Set only if checkM is chosen as the quality assessment tool of the metagenomic bins. (optional)"
-    echo "<metawrap_OPTIONS>  metawrap's options (optional). Make sure to enclose metawrap_OPTIONS within quotation marks"
+    echo "  -a assembly             Draft metagenome assemblies."
+    echo "  -r RAM                  Memory RAM."
+    echo "  -t NUM                  Number of threads. (default=1)"
+    echo "  -met metabat2_dir       metabat2 output directory. Set only if metabat2 is one of the chosen binner to use in metawrap binning module. (optional)"
+    echo "  -max maxbin2_dir        maxbin2 output directory. Set only if maxbin2 is one of the chosen binner to use in metawrap binning module. (optional)"
+    echo "  -cnc concoct_dir        concoct2 output directory. Set only if concoct is one of the chosen binner to use in metawrap binning module. (optional)"
+    echo "  -check checkM_dir       checkM output directory. Set only if checkM is chosen as the quality assessment tool of the metagenomic bins. (optional)"
+    echo "  -opts metawrap_OPTIONS  metawrap's options (optional). Make sure to enclose metawrap_OPTIONS within quotation marks"
 }
 
 ##--------------------------Exiting if input files are missing---------------##:

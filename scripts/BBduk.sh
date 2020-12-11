@@ -9,18 +9,18 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: metabiome bbduk -i <in_dir> -o <out_dir> -D <16S_db>"
-    echo ""
+    echo "Usage: metabiome bbduk -i <in_dir> -o <out_dir> -D <16S_db> [BBduk_OPTIONS]"
+    echo
     echo "Mandatory: "
-    echo "-i, <in_dir>              Input directory containing clean FASTQ files."
-    echo "-o, <out_dir>             Directory in which results will be saved. This directory"
-    echo "                          will be created if it doesn't exist."
-    echo "-D, <16S_db>              16S Database directory. "
+    echo "  -i in_dir             Input directory containing clean FASTQ files."
+    echo "  -o out_dir            Directory in which results will be saved. This directory"
+    echo "                        will be created if it doesn't exist."
+    echo "  -D 16S_db             16S Database directory. "
+    echo
     echo "Options: "
-    echo "-t, <threads>             Number of threads to use. (default=1)"
-    echo "-opts, <BBduk_OPTIONS>    BBduk's options.(optional)"
-    echo "Please execute '(bbduk -h)' in order to see bowtie2's documentation "
-
+    echo "  -t NUM                Number of threads to use. (default=1)"
+    echo "  -opts BBduk_OPTIONS   BBduk's options."
+    echo "  -h, --help            Show this help"
 }
 
 # Exit if command is called with no arguments
