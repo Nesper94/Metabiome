@@ -1,7 +1,7 @@
 #!/bin/bash
 # BBduk wrapper script for the DNAr 16S picking strategy from metagenomic samples:
 # Written by: Phagomica Group
-# Last updated on: 2020-27-10
+# Last updated on: 2020-12-11
 
 set -e
 
@@ -11,13 +11,13 @@ source "$SCRIPTS_DIR"/functions.sh
 function usage() {
     echo "Usage: metabiome bbduk -i <in_dir> -o <out_dir> -D <16S_db> [BBduk_OPTIONS]"
     echo
-    echo "Mandatory: "
+    echo "Required:"
     echo "  -i in_dir             Input directory containing clean FASTQ files."
     echo "  -o out_dir            Directory in which results will be saved. This directory"
     echo "                        will be created if it doesn't exist."
-    echo "  -D 16S_db             16S Database directory. "
+    echo "  -D 16S_db             16S Database directory."
     echo
-    echo "Options: "
+    echo "Options:"
     echo "  -t NUM                Number of threads to use. (default=1)"
     echo "  -opts BBduk_OPTIONS   BBduk's options."
     echo "  -h, --help            Show this help"
@@ -25,8 +25,6 @@ function usage() {
 
 # Exit if command is called with no arguments
 validate_arguments "$#"
-
-##---------------------Save input parameters into variables------------------##:
 
 while [[ -n "$1" ]]; do
     case "$1" in
@@ -55,24 +53,28 @@ echo "Reference database: ${database:?'=reference database not set'}"
 echo "BBduk called with options: $bbduk_opts"
 
 ##-----------------------Activate conda environment--------------------------##:
-#activate_env metabiome-picking16S
+activate_env metabiome-picking16S
 
 ##------------Match reads against the 16S rDNA SSU from SILVA Database-------##:
-for forward_file in "$input_dir"/*1_paired*; do
-    bbduk.sh in="$forward_file" in2= $(echo "$forward_file" | sed 's/_1_/_2_/') \
-	  ref="$database" outm="$out_dir"/$(echo $(basename -- "$forward_file") | sed 's/_bt2/_bbdk/') \
-    outm2="$out_dir"/$(echo $(basename -- "$forward_file") | sed 's/1_paired_bt2.fq.gz/2_paired_bbdk.fq/') \
-	  outs="$out_dir"/$(echo $(basename -- "$forward_file") | sed 's/1_paired_bt2.fq.gz/singletons_bbdk.fq/') \
-    stats="$out_dir"/$(echo $(basename -- "$forward_file") | sed 's/1_paired_bt2.fq.gz/pe_bbdk_summary.txt/') \
-    "$bbduk_opts"
-done
-
-##----------------------------For SE reads-----------------------------------##:
-for unpaired_file in "$input_dir"/*_unpaired_*; do
-         bbduk.sh in="$unpaired_file" ref="$database" \
-         outm="$out_dir"/$(echo $(basename -- "$unpaired_file") | sed 's/bt2.fq.gz/bbdk.fq/') \
-         stats="$out_dir"/$(echo $(basename -- "$unpaired_file") | sed 's/bt2.fq.gz/bbdk.summary.txt/') \
-         "$bbduk_opts"
+for file in "$input_dir"/*1_paired*; do
+    # Paired end reads
+    if [[ "$file" == @(*_R1_*|*_1).@(fastq|fq.gz|fastq.gz) ]]; then
+        forward_file="$file"
+        bbduk.sh in="$forward_file" in2= $(echo "$forward_file" | forward_to_reverse) \
+            ref="$database" \
+            outm="$out_dir"/$(basename -- "$forward_file" | sed 's/_bt2/_bbdk/') \
+            outm2="$out_dir"/$(get_core_name "$forward_file" | sed 's/_bt2//')_bbdk_2.fq \
+            outs="$out_dir"/$(get_core_name "$forward_file" | sed 's/_bt2// ; s/_paired//')_singletons_bbdk.fq \
+            stats="$out_dir"/$(get_core_name "$forward_file" | sed 's/_bt2//')_paired_bbdk_summary.txt \
+            "$bbduk_opts"
+    # Single end reads
+    elif [[ "$file" == *_unpaired_* ]]; then
+        unpaired_file="$file"
+        bbduk.sh in="$unpaired_file" ref="$database" \
+            outm="$out_dir"/$(get_core_name "$unpaired_file" | sed 's/_bt2//')_bbdk.fq \
+            stats="$out_dir"/$(get_core_name "$unpaired_file" | sed 's/_bt2//')_bbdk_summary.txt \
+            "$bbduk_opts"
+    fi
 done
 
 ##-------------------------------Compress output-----------------------------##:
@@ -81,4 +83,4 @@ gzip *.fq
 
 echo "Done."
 echo "You can now use these 16S clean reads to:"
-echo "- Amplicon-based analysis in QIIME2 or Mothur"
+echo "- Perform amplicon-based analysis in Qiime2 or Mothur"
