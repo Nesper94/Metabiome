@@ -15,11 +15,11 @@ function usage() {
     echo "  -i in_dir                 Input directory containing clean FASTQ files."
     echo "  -o out_dir                Directory in which results will be saved. This directory"
     echo "                            will be created if it doesn't exist."
-    echo "  -d db_dir                 MetaPhlan3 Database directory."
+    echo "  -d db_dir                 MetaPhlAn3 Database directory."
     echo ""
     echo "Options:"
     echo "  -t NUM                    Number of threads to use. (default=1)"
-    echo "  -opts metaphlan_OPTIONS   metaphlan's options."
+    echo "  -opts metaphlan_OPTIONS   MetaPhlAn3's options."
     echo "  -h, --help                Show this help"
 }
 
