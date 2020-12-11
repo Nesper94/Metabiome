@@ -57,3 +57,13 @@ remove_forward_suffix(){
         echo "$1" | sed 's/_R1_/_/ ; s/_1\./\./'
     fi
 }
+
+get_core_name(){
+    if (( $# == 0 )); then
+        local filename=$(cat /dev/stdin | xargs basename -- | remove_forward_suffix)
+        echo "${filename%%.*}"
+    else
+        local filename=$(basename "$1" | remove_forward_suffix)
+        echo "${filename%%.*}"
+    fi
+}
