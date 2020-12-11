@@ -50,8 +50,8 @@ validate_output_dir
 activate_env metabiome-humann2
 
 # Useful output info
-echo "Input directory: ${input_dir}"
-echo "Output directory: ${out_dir}"
+echo "Input directory: $input_dir"
+echo "Output directory: $out_dir"
 echo "Number of threads: ${threads:=1}"
 echo "HUMAnN 2.0 version: $(humann2 --version)"
 

@@ -42,8 +42,8 @@ activate_env metabiome-taxonomic-binning
 
 # Output info
 echo "Conda environment: $CONDA_DEFAULT_ENV"
-echo "Input directory: ${input_dir}"
-echo "Output directory: ${out_dir}"
+echo "Input directory: $input_dir"
+echo "Output directory: $out_dir"
 echo
 
 if [[ ! -f "$CONDA_PREFIX"/opt/krona/taxonomy/taxonomy.tab ]]; then

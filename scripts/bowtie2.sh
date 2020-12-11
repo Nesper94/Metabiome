@@ -99,8 +99,8 @@ validate_output_dir
 
 # Output info
 echo "Conda environment: $CONDA_DEFAULT_ENV"
-echo "Input directory: ${input_dir}"
-echo "Output directory: ${out_dir}"
+echo "Input directory: $input_dir"
+echo "Output directory: $out_dir"
 echo "Number of threads: ${threads:=1}"
 echo "Phix Genome: ${PhiX:?'=PhiX genome not set'}"
 echo "Human Genome: ${Human:?'=Human genome not set'}"

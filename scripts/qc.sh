@@ -46,8 +46,8 @@ activate_env metabiome-preprocessing
 
 # Output info
 echo "Conda environment: $CONDA_DEFAULT_ENV"
-echo "Input directory: ${input_dir}"
-echo "Output directory: ${out_dir}"
+echo "Input directory: $input_dir"
+echo "Output directory: $out_dir"
 echo "Number of threads: ${threads:=4}"
 
 # Make sure to process only fastq, fq.gz or fastq.gz files

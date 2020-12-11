@@ -47,8 +47,8 @@ validate_output_dir
 activate_env metabiome-genome-assembly
 
 #Output info
-echo "Input directory: ${input_dir:?'Input directory not set'}"
-echo "Output directory: ${out_dir:?'Output directory not set'}"
+echo "Input directory: $input_dir"
+echo "Output directory: $out_dir"
 echo "Number of threads: ${threads:=4}"
 echo "MEGAHIT version: $(megahit --version)"
 

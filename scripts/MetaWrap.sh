@@ -74,7 +74,7 @@ validate_output_dir
 activate_env metabiome-genome-binning
 ##---------------Output info-------------------------------------------------##:
 echo "Conda environment: $CONDA_DEFAULT_ENV"
-echo "Input directory: ${input_dir:?'Input directory not set'}"
+echo "Input directory: $input_dir"
 echo "Assemblies directory: ${assembly:?'Assemblies directory not set'}"
 echo "Number of threads: ${threads:=1}"
 echo "Kaiju reference database: ${database:?'=Kaiju database directory not set'}"

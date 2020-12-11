@@ -48,8 +48,8 @@ validate_output_dir
 
 ##----------------------------Output info------------------------------------##:
 echo "Conda environment: $CONDA_DEFAULT_ENV"
-echo "Input directory: ${input_dir:?'Input directory not set'}"
-echo "Output directory: ${out_dir:?'Output directory not set'}"
+echo "Input directory: $input_dir"
+echo "Output directory: $out_dir"
 echo "Number of threads: ${threads:=1}"
 echo "Reference database: ${database:?'=reference database not set'}"
 echo "BBduk called with options: $bbduk_opts"

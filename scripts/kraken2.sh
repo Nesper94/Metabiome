@@ -48,8 +48,8 @@ validate_output_dir
 activate_env metabiome-taxonomic-binning
 
 # Output info
-echo "Input directory: ${input_dir}"
-echo "Output directory: ${out_dir}"
+echo "Input directory: $input_dir"
+echo "Output directory: $out_dir"
 echo "Number of threads: ${threads:=1}"
 echo "Database name: ${DBNAME:=standard-kraken2-db}"
 echo "Kraken2 version: $(kraken2 -v)"
