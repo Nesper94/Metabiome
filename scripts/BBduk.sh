@@ -60,19 +60,21 @@ for file in "$input_dir"/*1_paired*; do
     # Paired end reads
     if [[ "$file" == @(*_R1_*|*_1).@(fastq|fq.gz|fastq.gz) ]]; then
         forward_file="$file"
+        core_name=$(get_core_name "$forward_file")
         bbduk.sh in="$forward_file" in2= $(echo "$forward_file" | forward_to_reverse) \
             ref="$database" \
             outm="$out_dir"/$(basename -- "$forward_file" | sed 's/_bt2/_bbdk/') \
-            outm2="$out_dir"/$(get_core_name "$forward_file" | sed 's/_bt2//')_bbdk_2.fq \
-            outs="$out_dir"/$(get_core_name "$forward_file" | sed 's/_bt2// ; s/_paired//')_singletons_bbdk.fq \
-            stats="$out_dir"/$(get_core_name "$forward_file" | sed 's/_bt2//')_paired_bbdk_summary.txt \
+            outm2="$out_dir"/$(echo "$core_name" | sed 's/_bt2//')_bbdk_2.fq \
+            outs="$out_dir"/$(echo "$core_name" | sed 's/_bt2// ; s/_paired//')_singletons_bbdk.fq \
+            stats="$out_dir"/$(echo "$core_name" | sed 's/_bt2//')_paired_bbdk_summary.txt \
             "$bbduk_opts"
     # Single end reads
     elif [[ "$file" == *_unpaired_* ]]; then
         unpaired_file="$file"
+        core_name=$(get_core_name "$unpaired_file")
         bbduk.sh in="$unpaired_file" ref="$database" \
-            outm="$out_dir"/$(get_core_name "$unpaired_file" | sed 's/_bt2//')_bbdk.fq \
-            stats="$out_dir"/$(get_core_name "$unpaired_file" | sed 's/_bt2//')_bbdk_summary.txt \
+            outm="$out_dir"/$(echo "$core_name" | sed 's/_bt2//')_bbdk.fq \
+            stats="$out_dir"/$(echo "$core_name" | sed 's/_bt2//')_bbdk_summary.txt \
             "$bbduk_opts"
     fi
 done

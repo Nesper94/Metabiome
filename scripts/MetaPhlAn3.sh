@@ -67,19 +67,19 @@ for file in "$input_dir"/*; do
     if [[ "$file" == @(*_R1_*|*_1).@(fastq|fq.gz|fastq.gz) ]]; then
         forward_file="$file"
         metaphlan "$forward_file",$(echo "$forward_file" | forward_to_reverse) \
-        --input_type fastq -t rel_ab_w_read_stats \
-        -o "$out_dir"/$(get_core_name "$forward_file" | sed 's/_bt2//')_mphlan.txt \
-        --nproc "$threads" \
-        --bowtie2out "$out_dir"/$(get_core_name "$forward_file" | sed 's/_bt2//')_mphlan.sam \
-        "$metaphlan_opts"
+            --input_type fastq -t rel_ab_w_read_stats \
+            -o "$out_dir"/$(get_core_name "$forward_file" | sed 's/_bt2//')_mphlan.txt \
+            --nproc "$threads" \
+            --bowtie2out "$out_dir"/$(get_core_name "$forward_file" | sed 's/_bt2//')_mphlan.sam \
+            "$metaphlan_opts"
 ##------------------------------Single End reads-----------------------------##:
     elif [[ "$file" == *_unpaired_* ]]; then
         unpaired_file="$file"
         metaphlan "$unpaired_file" --input_type fastq -t rel_ab_w_read_stats \
-        -o "$out_dir"/$(get_core_name "$unpaired_file" | sed 's/_bt2//')_mphlan.txt \
-        --nproc "$threads" \
-        --bowtie2out "$out_dir"/$(get_core_name "$unpaired_file" | sed 's/_bt2//')_mphlan.sam \
-        "$metaphlan_opts"
+            -o "$out_dir"/$(get_core_name "$unpaired_file" | sed 's/_bt2//')_mphlan.txt \
+            --nproc "$threads" \
+            --bowtie2out "$out_dir"/$(get_core_name "$unpaired_file" | sed 's/_bt2//')_mphlan.sam \
+            "$metaphlan_opts"
     fi
 done
 
@@ -88,5 +88,5 @@ cd "$out_dir"
 merge_metaphlan_tables.py *.txt > merged_mphlan.txt
 
 echo "Done."
-echo "You can now use this metagenomic profiling to :"
+echo "You can now use this metagenomic profiling to:"
 echo "- Play around in R or Python"

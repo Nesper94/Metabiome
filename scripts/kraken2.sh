@@ -78,8 +78,7 @@ for file in "$input_dir"/*; do
     if [[ "$file" == @(*_R1*|*_1).@(fastq|fq.gz|fastq.gz) ]]; then
         forward_file="$file"
         reverse_file=$(echo "$forward_file" | forward_to_reverse)
-        filename=$(basename -- "$forward_file" | remove_forward_suffix)
-        core_name="${filename%%.*}"
+        core_name=$(get_core_name "$forward_file")
 
         kraken2 --paired \
             --db "$DBNAME" \
@@ -92,8 +91,7 @@ for file in "$input_dir"/*; do
 
     # Unpaired reads
     elif [[ "$file" == *unpaired*fq.gz ]]; then
-        filename=$(basename -- "$file")
-        core_name="${filename%%.*}"
+        core_name=$(get_core_name "$file")
 
         kraken2 --db "$DBNAME" \
             --threads "$threads" \

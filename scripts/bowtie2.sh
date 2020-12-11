@@ -123,10 +123,10 @@ echo "Performing paired reads alignment..."
 
 for forward_file in "$input_dir"/*; do
     if [[ "$forward_file" == @(*_R1_*|*_1).@(fastq|fq.gz|fastq.gz) ]]; then
-
+        core_name=$(get_core_name "$forward_file")
         bowtie2 -x Mix -1 "$forward_file" -2 $(forward_to_reverse "$forward_file") \
-        --un-conc-gz "$out_dir"/$(basename -- "$forward_file" | sed 's/_trim_/_bt2_/' | remove_forward_suffix) \
-        -q -p "$threads" 2> "$out_dir"/$(basename -- "$forward_file" | remove_forward_suffix | sed 's/_trim/_bt2/ ; s/.fq.gz/_summary.txt/ ; s/.fastq.gz/_summary.txt/ ; s/.fastq/_summary.txt/') \
+        --un-conc-gz "$out_dir"/$(echo "$core_name" | sed 's/_trim/_bt2/').fq.gz \
+        -q -p "$threads" 2> "$out_dir"/$(echo "$core_name" | sed 's/_trim/_bt2/')_summary.txt \
         $bowtie2_opts \
         > /dev/null # Bowtie2 output to terminal is excesive and we do not need it in this case
     fi
@@ -137,8 +137,9 @@ echo "Performing single reads alignment..."
 
 for unpaired_file in "$input_dir"/* ; do
     if [[ "$unpaired_file" == *_unpaired_* ]]; then
-        bowtie2 -x Mix -U "$unpaired_file" --un-gz "$out_dir"/$(basename -- "$unpaired_file" | sed 's/unpaired_trim/unpaired_bt2/') \
-        -q -p "$threads" 2> "$out_dir"/$(basename -- "$unpaired_file" | sed 's/_trim/_bt2/ ; s/.fq.gz/_summary.txt/ ; s/.fastq.gz/_summary.txt/ ; s/.fastq/_summary.txt/') \
+        bowtie2 -x Mix -U "$unpaired_file" \
+        --un-gz "$out_dir"/$(basename -- "$unpaired_file" | sed 's/_trim/_bt2/') \
+        -q -p "$threads" 2> "$out_dir"/$(get_core_name "$unpaired_file" | sed 's/_trim/_bt2/')_summary.txt \
         $bowtie2_opts \
         > /dev/null
     fi
