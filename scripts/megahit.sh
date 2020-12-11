@@ -47,25 +47,22 @@ validate_output_dir
 activate_env metabiome-genome-assembly
 
 #Output info
-echo "Input directory: ${input_dir:?'Input directory not set'}"
-echo "Output directory: ${out_dir:?'Output directory not set'}"
+echo "Input directory: $input_dir"
+echo "Output directory: $out_dir"
 echo "Number of threads: ${threads:=4}"
 echo "MEGAHIT version: $(megahit --version)"
 
 # Run MEGAHIT on paired-end files
-
 for file in "$input_dir"/*; do
-
     # Make sure to process only fastq, fq.gz or fastq.gz files
     if [[ "$file" == @(*_R1_*|*_1).@(fastq|fq.gz|fastq.gz) ]]; then
 
         echo "Performing PE assembly with $(basename $file) and $(basename "$file" | forward_to_reverse)"
-        out_name=$(basename "$file" | remove_forward_suffix)
+        out_name=$(get_core_name "$file")
         megahit -o "$out_dir"/"$out_name" \
             -1 "$file" \
             -2 $(echo "$file" | forward_to_reverse) \
             -t "$threads" $MEGAHIT_opts \
             --presets meta-large # Optimization for large & complex metagenomes, like soil
     fi
-
 done
