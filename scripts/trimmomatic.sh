@@ -63,9 +63,9 @@ for file in "$input_dir"/*; do
     if [[ "$file" == @(*_R1_*|*_1).@(fastq|fq.gz|fastq.gz) ]]; then
         trimmomatic PE -threads ${threads:=4} "$file" $(echo "$file" | forward_to_reverse) \
         "$out_dir"/$(basename "$file" | sed 's/\(_R1_\|_1\).*/_paired_trim_1.fq.gz/')   \
-        "$out_dir"/$(basename "$file" | sed 's/\(_R1_\|_1\).*/_unpaired_trim_1.fq.gz/') \
+        "$out_dir"/$(basename "$file" | sed 's/\(_R1_\|_1\).*/_unpaired_trim_f.fq.gz/') \
         "$out_dir"/$(basename "$file" | sed 's/\(_R1_\|_1\).*/_paired_trim_2.fq.gz/')   \
-        "$out_dir"/$(basename "$file" | sed 's/\(_R1_\|_1\).*/_unpaired_trim_2.fq.gz/') \
+        "$out_dir"/$(basename "$file" | sed 's/\(_R1_\|_1\).*/_unpaired_trim_r.fq.gz/') \
         $trimopt 2>&1 | tee -a "$out_dir"/trimmomatic.log
 
         echo # Add new line in order to make output easier to read

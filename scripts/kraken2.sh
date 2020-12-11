@@ -72,39 +72,33 @@ if [[ ! -d "$DBNAME" ]]; then
 fi
 
 # Classification
+echo "Classifying reads..."
+for file in "$input_dir"/*; do
+    # Make sure to process only fastq, fq.gz or fastq.gz files
+    if [[ "$file" == @(*_R1*|*_1).@(fastq|fq.gz|fastq.gz) ]]; then
+        forward_file="$file"
+        reverse_file=$(echo "$forward_file" | forward_to_reverse)
+        core_name=$(get_core_name "$forward_file")
 
-FORWARD_FILE_SUFFIX=_1_paired_bt2.fq.gz
-REVERSE_FILE_SUFFIX=_2_paired_bt2.fq.gz
+        kraken2 --paired \
+            --db "$DBNAME" \
+            --threads "$threads" \
+            --classified-out "$out_dir"/${core_name}_paired_classified_seqs#.fq \
+            --unclassified-out "$out_dir"/${core_name}_paired_unclassified_seqs#.fq \
+            --report "$out_dir"/${core_name}_paired_report.txt \
+            --output "$out_dir"/${core_name}_paired_kraken2_out.tsv \
+            "$forward_file" "$reverse_file"
 
-# Paired reads
-echo "Classifying paired reads..."
-for forward_file in "$input_dir"/*"$FORWARD_FILE_SUFFIX"; do
+    # Unpaired reads
+    elif [[ "$file" == *unpaired*fq.gz ]]; then
+        core_name=$(get_core_name "$file")
 
-    reverse_file=$(echo "$forward_file" | sed "s/$FORWARD_FILE_SUFFIX/$REVERSE_FILE_SUFFIX/")
-    core_name=$(basename -- "$forward_file" | sed "s/$FORWARD_FILE_SUFFIX//")
-
-    kraken2 --paired \
-        --db "$DBNAME" \
-        --threads "$threads" \
-        --classified-out "$out_dir"/${core_name}_paired_classified_seqs#.fq \
-        --unclassified-out "$out_dir"/${core_name}_paired_unclassified_seqs#.fq \
-        --report "$out_dir"/${core_name}_paired_report.txt \
-        --output "$out_dir"/${core_name}_paired_kraken2_out.tsv \
-        "$forward_file" "$reverse_file"
-done
-
-# Unpaired reads
-echo "Classifying unpaired reads..."
-for file in "$input_dir"/*unpaired*fq.gz; do
-
-    filename=$(basename -- "$file")
-    core_name="${filename%%.*}"
-
-    kraken2 --db "$DBNAME" \
-        --threads "$threads" \
-        --classified-out "$out_dir"/${core_name}_classified_seqs.fq \
-        --unclassified-out "$out_dir"/${core_name}_unclassified_seqs.fq \
-        --report "$out_dir"/${core_name}_report.txt \
-        --output "$out_dir"/${core_name}_kraken2_out.tsv \
-        "$file"
+        kraken2 --db "$DBNAME" \
+            --threads "$threads" \
+            --classified-out "$out_dir"/${core_name}_classified_seqs.fq \
+            --unclassified-out "$out_dir"/${core_name}_unclassified_seqs.fq \
+            --report "$out_dir"/${core_name}_report.txt \
+            --output "$out_dir"/${core_name}_kraken2_out.tsv \
+            "$file"
+    fi
 done

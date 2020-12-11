@@ -42,7 +42,7 @@ while [[ -n "$1" ]]; do
         -hu )       Human="$2"; shift 2 ;;
         -idx )      shift; index_opts="$@";;
         -opts )     shift; bowtie2_opts="$@"; break ;;
-        * )        echo "Option '$1' not recognized"; exit 1 ;;
+        * )         echo "Option '$1' not recognized"; exit 1 ;;
     esac
 done
 
@@ -55,46 +55,44 @@ activate_env metabiome-preprocessing
 
 for i in {1..10}; do
     if [ -e "$Human" ]; then
-      echo "Human Reference Genome already downloaded"
-      break
+        echo "Human Reference Genome already downloaded"
+        break
     else
-      echo "Downloading Human Reference Genome"
-      esearch -db nucleotide -query "NC_001422.1" | \
-      efetch -format fasta > Human_GCA_000001405.28.fasta
-      if  [[ -e Human_GCA_000001405.28.fasta ]] && [[ -s Human_GCA_000001405.28.fasta ]]; then
-          echo "Human genome was downloaded"
-          Human=$(readlink -f Human_GCA_000001405.28.fasta)
-          break
-      else
-        echo "Try again downloading the human genome"
-      fi
+        echo "Downloading Human Reference Genome"
+        esearch -db nucleotide -query "NC_001422.1" | \
+        efetch -format fasta > Human_GCA_000001405.28.fasta
+        if [[ -e Human_GCA_000001405.28.fasta ]] && [[ -s Human_GCA_000001405.28.fasta ]]; then
+            echo "Human genome was downloaded"
+            Human=$(readlink -f Human_GCA_000001405.28.fasta)
+            break
+        else
+            echo "Try again downloading the human genome"
+        fi
     fi
 done
 
 for i in {1..10}; do
-  if [ -e "$PhiX" ]; then
-    echo "PhiX Genome already downloaded"
-    break
-  else
-    echo "Downloading PhiX Reference Genome"
-    esearch -db nucleotide -query "NC_001422.1" | \
-    efetch -format fasta > NC_001422.1.fasta
-    if  [[ -e NC_001422.1.fasta ]] && [[ -s NC_001422.1.fasta ]]; then
-      echo "PhiX genome was downloaded"
-      PhiX=$(readlink -f NC_001422.1.fasta)
-      break
+    if [ -e "$PhiX" ]; then
+        echo "PhiX Genome already downloaded"
+        break
     else
-      echo "Try again downloading the PhiX genome"
+        echo "Downloading PhiX Reference Genome"
+        esearch -db nucleotide -query "NC_001422.1" | \
+        efetch -format fasta > NC_001422.1.fasta
+        if [[ -e NC_001422.1.fasta ]] && [[ -s NC_001422.1.fasta ]]; then
+            echo "PhiX genome was downloaded"
+            PhiX=$(readlink -f NC_001422.1.fasta)
+            break
+        else
+            echo "Try again downloading the PhiX genome"
+        fi
     fi
-  fi
 done
-
-
 
 # Verify that input directory is set and exists
 validate_input_dir
 
-# Create output directory if it doesn't exists.
+# Create output directory if it doesn't exists
 validate_output_dir
 
 # Output info
@@ -108,8 +106,8 @@ echo "Bowtie2 called with options: $bowtie2_opts"
 
 
 ##------------Concatenate genomes to be aligned and build genome index-------##:
-##First checks if the index is already generated, otherwise it will be generated.
-if [ -f "$host" ];then ##checks if the host sequence file is provided.
+# First checks if the index is already generated, otherwise it will be generated.
+if [ -f "$host" ]; then # checks if the host sequence file is provided.
     cat "$host" "$PhiX" "$Human" > Mixed.fasta
 else
     cat "$PhiX" "$Human" > Mixed.fasta
@@ -121,32 +119,42 @@ dir=$(pwd) ##current directory
     bowtie2-build Mixed.fasta Mix --threads "$threads" "$index_opts";}
 
 ##--------------------------Pair end (PE) alignment--------------------------##:
+echo "Performing paired reads alignment..."
 
-for forward_file in "$input_dir"/*1_paired_* ; do
-    echo "Performing paired reads alignment..."
-    bowtie2 -x Mix -1 "$forward_file" -2 $(echo "$forward_file" | sed 's/_1_paired_/_2_paired_/') \
-    --un-conc-gz "$out_dir"/$(echo $(basename -- "$forward_file" ) | sed 's/1_paired_trim/paired_bt2/') \
-    -q -p "$threads" 2> "$out_dir"/$(echo $(basename -- "$forward_file" ) | sed 's/1_paired_trim.fq.gz/paired_bt2_summary.txt/') \
-    "$bowtie2_opts" \
-    > /dev/null # Bowtie2 output to terminal is excesive and we do not need it in this case
+for forward_file in "$input_dir"/*; do
+    if [[ "$forward_file" == @(*_R1_*|*_1).@(fastq|fq.gz|fastq.gz) ]]; then
+        core_name=$(get_core_name "$forward_file")
+        bowtie2 -x Mix -1 "$forward_file" -2 $(forward_to_reverse "$forward_file") \
+        --un-conc-gz "$out_dir"/$(echo "$core_name" | sed 's/_trim/_bt2/').fq.gz \
+        -q -p "$threads" 2> "$out_dir"/$(echo "$core_name" | sed 's/_trim/_bt2/')_summary.txt \
+        $bowtie2_opts \
+        > /dev/null # Bowtie2 output to terminal is excesive and we do not need it in this case
+    fi
 done
 
 ##-------------------------Single end (SE) alignment------------------------##:
-for unpaired_file in "$input_dir"/*_unpaired_* ; do
-    echo "Performing single reads alignment..."
-    bowtie2 -x Mix -U "$unpaired_file" --un-gz "$out_dir"/$(echo $(basename -- "$unpaired_file" ) | sed 's/unpaired_trim/unpaired_bt2/') \
-    -q -p "$threads" 2> "$out_dir"/$(echo $(basename -- "$unpaired_file" ) | sed 's/unpaired_trim.fq.gz/unpaired_bt2_summary.txt/') \
-    "$bowtie2_opts" \
-    > /dev/null
+echo "Performing single reads alignment..."
+
+for unpaired_file in "$input_dir"/* ; do
+    if [[ "$unpaired_file" == *_unpaired_* ]]; then
+        bowtie2 -x Mix -U "$unpaired_file" \
+        --un-gz "$out_dir"/$(basename -- "$unpaired_file" | sed 's/_trim/_bt2/') \
+        -q -p "$threads" 2> "$out_dir"/$(get_core_name "$unpaired_file" | sed 's/_trim/_bt2/')_summary.txt \
+        $bowtie2_opts \
+        > /dev/null
+    fi
 done
 
-##---------------- Rename files according to the naming convention-----------##:
+# Rename Bowtie2 output files
 cd "$out_dir"
-##renaming paired-end reads:
-for i in {1..2}; do
-  rename 's/paired_bt2.fq.'"$i"'.gz/'"$i"'_paired_bt2.fq.gz/' *paired_bt2.fq."$i".gz
-done
+rename "s/.fq.1.gz/_1.fq.gz/" *.fq.1.gz 2> /dev/null
+rename "s/.fq.2.gz/_2.fq.gz/" *.fq.2.gz 2> /dev/null
 
+rename "s/.fastq.1.gz/_1.fastq.gz/" *.fastq.1.gz 2> /dev/null
+rename "s/.fastq.2.gz/_2.fastq.gz/" *.fastq.2.gz 2> /dev/null
+
+rename "s/.1.fastq/_1.fastq.gz/" *.1.fastq 2> /dev/null
+rename "s/.2.fastq/_2.fastq.gz/" *.2.fastq 2> /dev/null
 
 echo "Done."
 echo "You can now use clean reads to:"

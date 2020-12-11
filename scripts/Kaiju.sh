@@ -29,7 +29,7 @@ function usage() {
     echo "  -h, --help      Show this help"
 }
 
-##--------------------------Exiting if input files are missing---------------##:
+##-----------------------Exit if called with no arguments--------------------##:
 validate_arguments "$#"
 
 ##------------------Saving input orders into variables-----------------------##:
@@ -57,10 +57,10 @@ validate_input_dir
 ##---------------Create output directory if it doesn't exists----------------##:
 validate_output_dir
 
-##---------------------Activate conda environment----------------------------##:
+##------------------------Activate conda environment-------------------------##:
 activate_env metabiome-taxonomic-binning
 
-##---------------Output info-------------------------------------------------##:
+##------------------------------Output info----------------------------------##:
 echo "Conda environment: $CONDA_DEFAULT_ENV"
 echo "Input directory: $input_dir"
 echo "Output directory: $out_dir"
@@ -69,65 +69,63 @@ echo "Kaiju reference database: ${database:?'=Kaiju database directory not set'}
 echo "Kaiju database name: ${name_kaijudb:?'=Kaiju database name not set'}"
 echo "Kaiju version: $(kaiju -h)"
 
-###----------------------Making Kaiju Database-------------------------------##:
+##---------------------------Make Kaiju Database-----------------------------##:
 [ ! -f "$database"/"$name_kaijudb"/assembly_summary.txt ] \
 && { echo "Database $name_kaijudb needs to be generated:";
 cd "$database";kaiju-makedb -s "$name_kaijudb" -t "$threads"; }
 
 ##-----------------------Paired-end reads------------------------------------##:
 for forward_file in "$input_dir"/*1_paired*;do
-  kaiju -t "$database"/*nodes.dmp -f "$database"/"$name_kaijudb"/*.fmi -i "$forward_file" \
-  -j $(echo "$forward_file" | sed 's/1_paired/2_paired/') \
-  -o  "$out_dir"/$(echo $(basename -- "$forward_file") | sed 's/1_paired_bt2.fq.gz/paired_kaiju.txt/') \
-  -z "$threads" "$kaiju_opts"
+    kaiju -t "$database"/*nodes.dmp -f "$database"/"$name_kaijudb"/*.fmi -i "$forward_file" \
+        -j $(echo "$forward_file" | sed 's/1_paired/2_paired/') \
+        -o  "$out_dir"/$(basename -- "$forward_file" | sed 's/1_paired_bt2.fq.gz/paired_kaiju.txt/') \
+        -z "$threads" "$kaiju_opts"
 done
 
 ##-----------------------Single-end reads------------------------------------##:
 for forward_file in "$input_dir"/*_unpaired_*;do
-  kaiju -t "$database"/*nodes.dmp -f "$database"/"$name_kaijudb"/*.fmi -i "$forward_file" \
-  -o "$out_dir"/$(echo $(basename -- "$forward_file" ) | sed 's/unpaired_bt2.fq.gz/unpaired_kaiju.txt/') \
-  -z "$threads" "$kaiju_opts"
+    kaiju -t "$database"/*nodes.dmp -f "$database"/"$name_kaijudb"/*.fmi -i "$forward_file" \
+        -o "$out_dir"/$(basename -- "$forward_file" | sed 's/unpaired_bt2.fq.gz/unpaired_kaiju.txt/') \
+        -z "$threads" "$kaiju_opts"
 done
 
-
-
-##-----------------------Kaiju to Krona--------------------------------------##:
+##-----------------------------Kaiju to Krona--------------------------------##:
 if [ -d "$krona" ]; then
-  cd "$krona" && mkdir html && cd ..
+    cd "$krona" && mkdir html && cd ..
     for kaiju_out in "$out_dir"/*kaiju.txt;do
-          kaiju2krona -t "$database"/nodes.dmp  -n "$database"/names.dmp \
-          -i "$kaiju_out" -o "$krona"/$(echo $(basename -- "$kaiju_out") | sed 's/_kaiju.txt/.krona/')
+        kaiju2krona -t "$database"/nodes.dmp  -n "$database"/names.dmp \
+            -i "$kaiju_out" -o "$krona"/$(basename -- "$kaiju_out" | sed 's/_kaiju.txt/.krona/')
     done
     for krona_out in "$krona"/*.txt;do
-          ktImportText "$krona_out" -o "$krona"/html/$(echo $(basename -- "$krona_out") | sed 's/.krona/krona.html/')
+        ktImportText "$krona_out" -o "$krona"/html/$(basename -- "$krona_out" | sed 's/.krona/krona.html/')
     done
 fi
-##-------------------Classification summary from Kaiju's output----------------------##:
+##---------------Classification summary from Kaiju's output------------------##:
 if [ -d "$class" ]; then
-  for kaiju_out in "$out_dir"/*kaiju.txt;do
+    for kaiju_out in "$out_dir"/*kaiju.txt;do
         kaiju2table "$kaiju_out" -t "$database"/nodes.dmp  -n "$database"/names.dmp \
-        -p -m 1.0 -r genus -o "$class"/$(echo $(basename -- "$kaiju_out") | sed 's/kaiju.txt/classif.txt/')
-  done
+            -p -m 1.0 -r genus -o "$class"/$(basename -- "$kaiju_out" | sed 's/kaiju.txt/classif.txt/')
+    done
 fi
-##------------------Adding taxa names to output file-------------------------##:
+##-----------------------Add taxa names to output file-----------------------##:
 if [ -d "$taxa_names" ]; then
-  for kaiju_out in "$out_dir"/*kaiju.txt;do
+    for kaiju_out in "$out_dir"/*kaiju.txt;do
         kaiju-addTaxonNames -t "$database"/nodes.dmp -p \
-        -n "$database"/names.dmp -i "$kaiju_out" \
-        -o "$taxa_names"/$(echo $(basename -- "$kaiju_out") | sed 's/kaiju.txt/tax_names.txt/')
-  done
+            -n "$database"/names.dmp -i "$kaiju_out" \
+            -o "$taxa_names"/$(basename -- "$kaiju_out" | sed 's/kaiju.txt/tax_names.txt/')
+    done
 fi
-##---------------Merging outputs from kraken and Kaiju-----------------------##:
+##-------------------Merge outputs from Kraken and Kaiju---------------------##:
 if [[ -d "$merge" ]] && [[ -d "$kraken"]] ; then
     for kaiju_out in "$out_dir"/*kaiju.txt;do
-          for kraken_out in "$kraken"/*.fq;do
-                  echo "sorting kaiju and kraken output files"
-                  sort -k2,2 "$kaiju_out" > $(echo $(basename -- "$kaiju_out" ) | sed 's/kaiju.txt/kaiju.mrgsrt/')
-                  sort -k2,2 "$kraken_out" > $(echo $(basename -- "$kraken_out" ) | sed 's/.fq/kraken.mrgsrt/')
-                  kaiju-mergeOutputs  -i *kaiju.mrgsrt -j *kraken.mrgsrt \
-                  -t "$database"/nodes.dmp -c lowest \
-                  -o "$merge"/$(echo $(basename -- "$kaiju_out") | sed 's/kaiju.txt/merged.txt/') -v
-                  rm *.mrgsrt
-          done
+        for kraken_out in "$kraken"/*.fq;do
+            echo "sorting kaiju and kraken output files"
+            sort -k2,2 "$kaiju_out" > $(basename -- "$kaiju_out" | sed 's/kaiju.txt/kaiju.mrgsrt/')
+            sort -k2,2 "$kraken_out" > $(basename -- "$kraken_out" | sed 's/.fq/kraken.mrgsrt/')
+            kaiju-mergeOutputs  -i *kaiju.mrgsrt -j *kraken.mrgsrt \
+            -t "$database"/nodes.dmp -c lowest \
+            -o "$merge"/$(basename -- "$kaiju_out" | sed 's/kaiju.txt/merged.txt/') -v
+            rm *.mrgsrt
+        done
     done
 fi
