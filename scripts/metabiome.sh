@@ -19,6 +19,7 @@ function usage() {
     echo "    krona         Create Krona charts using Kraken2 output"
     echo "    metaspades    Assemble reads into contigs"
     echo "    megahit       Assemble reads into contigs"
+    echo "    metaquast     Evaluate assembly"
     echo ""
     echo "  Options:"
     echo "    -h, --help  Show this help"
@@ -51,6 +52,9 @@ elif [[ "$1" = "megahit" ]]; then
 
 elif [[ "$1" = "metaphlan3" ]]; then
   bash "$SCRIPTS_DIR"/MetaPhlAn3.sh ${@:2}
+
+elif [[ "$1" = "metaquast" ]]; then
+  bash "$SCRIPTS_DIR"/metaquast.sh ${@:2}
 
 elif [[ "$1" = "metaspades" ]]; then
   bash "$SCRIPTS_DIR"/metaspades.sh ${@:2}
