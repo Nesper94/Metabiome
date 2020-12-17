@@ -9,7 +9,7 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: metabiome bbduk -i <in_dir> -o <out_dir> -D <16S_db> [BBduk_OPTIONS]"
+    echo "Usage: metabiome BBduk [options] -i <in_dir> -o <out_dir> -D <16S_db> "
     echo
     echo "Required:"
     echo "  -i in_dir             Input directory containing clean FASTQ files."
@@ -56,9 +56,9 @@ echo "BBduk called with options: $bbduk_opts"
 activate_env metabiome-picking16S
 
 ##------------Match reads against the 16S rDNA SSU from SILVA Database-------##:
-for file in "$input_dir"/*1_paired*; do
+for file in "$input_dir"/*; do
     # Paired end reads
-    if [[ "$file" == @(*_R1_*|*_1).@(fastq|fq.gz|fastq.gz) ]]; then
+    if [[ "$file" == @(*_R1_*|*_1).@(fq|fastq|fq.gz|fastq.gz) ]]; then
         forward_file="$file"
         core_name=$(get_core_name "$forward_file")
         bbduk.sh in="$forward_file" in2= $(echo "$forward_file" | forward_to_reverse) \
@@ -67,16 +67,22 @@ for file in "$input_dir"/*1_paired*; do
             outm2="$out_dir"/$(echo "$core_name" | sed 's/_bt2//')_bbdk_2.fq \
             outs="$out_dir"/$(echo "$core_name" | sed 's/_bt2// ; s/_paired//')_singletons_bbdk.fq \
             stats="$out_dir"/$(echo "$core_name" | sed 's/_bt2//')_paired_bbdk_summary.txt \
-            "$bbduk_opts"
+            $bbduk_opts
+
     # Single end reads
-    elif [[ "$file" == *_unpaired_* ]]; then
+    elif [[ ! "$file" ==  *_@(*R1_*|*1.|*R2_*|*2.)* ]] && [[ "$file" == *.@(fq|fastq|fq.gz|fastq.gz) ]]; then
         unpaired_file="$file"
         core_name=$(get_core_name "$unpaired_file")
         bbduk.sh in="$unpaired_file" ref="$database" \
             outm="$out_dir"/$(echo "$core_name" | sed 's/_bt2//')_bbdk.fq \
             stats="$out_dir"/$(echo "$core_name" | sed 's/_bt2//')_bbdk_summary.txt \
-            "$bbduk_opts"
+            $bbduk_opts
+
+    #Files that do not match the required extension:
+    elif [[ ! "$file" == *.@(fq|fastq|fq.gz|fastq.gz) ]]; then
+        echo -e "$(basename -- "$file") will not be processed as is not a .fastq or .fq.gz file."
     fi
+
 done
 
 ##-------------------------------Compress output-----------------------------##:
