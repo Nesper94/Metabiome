@@ -150,12 +150,6 @@ cd "$out_dir"
 rename "s/.fq.1.gz/_1.fq.gz/" *.fq.1.gz 2> /dev/null
 rename "s/.fq.2.gz/_2.fq.gz/" *.fq.2.gz 2> /dev/null
 
-rename "s/.fastq.1.gz/_1.fastq.gz/" *.fastq.1.gz 2> /dev/null
-rename "s/.fastq.2.gz/_2.fastq.gz/" *.fastq.2.gz 2> /dev/null
-
-rename "s/.1.fastq/_1.fastq.gz/" *.1.fastq 2> /dev/null
-rename "s/.2.fastq/_2.fastq.gz/" *.2.fastq 2> /dev/null
-
 echo "Done."
 echo "You can now use clean reads to:"
 echo "- Assemble genomes using metaspades.sh or megahit.sh."
