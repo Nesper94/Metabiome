@@ -130,7 +130,7 @@ for file in "$input_dir"/*; do
         > /dev/null # Bowtie2 output to terminal is excesive and we do not need it in this case
 
     # Single end reads
-    elif [[ ! "$file" ==  *_@(R1_*|1.|R2_*|2.)* ]] && [[ "$file" == *.@(fq|fastq|fq.gz|fastq.gz) ]]; then
+    elif [[ ! "$file" ==  *_@(R1_|1.|R2_|2.)* ]] && [[ "$file" == *.@(fq|fastq|fq.gz|fastq.gz) ]]; then
         unpaired_file="$file"
         core_name=$(get_core_name "$unpaired_file")
         bowtie2 -x Mix -U "$unpaired_file" \
