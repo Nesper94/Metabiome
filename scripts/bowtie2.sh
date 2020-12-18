@@ -49,12 +49,11 @@ done
 ##----------------------Activate Conda environment-----------------------------##:
 activate_env metabiome-preprocessing
 
-##------------Download Human and PhiX reference genomes-----------------##:
-##Highlight: Next code downloads PhiX and Human genome and checks if the downloads
-##were successfull.
+##-------------Download Human and PhiX reference genomes-----------------##:
+# Highlight: Next code downloads PhiX and Human genome and checks if the
+# downloads were successfull.
 
 for i in {1..10}; do
-
     if [ -e "$Human" ]; then
         echo "Human Reference Genome already downloaded"
         break
@@ -73,7 +72,6 @@ for i in {1..10}; do
 done
 
 for i in {1..10}; do
-
     if [ -e "$PhiX" ]; then
         echo "PhiX Genome already downloaded"
         break
@@ -106,7 +104,6 @@ echo "Phix Genome: ${PhiX:?'=PhiX genome not set'}"
 echo "Human Genome: ${Human:?'=Human genome not set'}"
 echo "Bowtie2 called with options: $bowtie2_opts"
 
-
 ##------------Concatenate genomes to be aligned and build genome index-------##:
 # First checks if the index is already generated, otherwise it will be generated.
 if [ -f "$host" ]; then # checks if the host sequence file is provided.
@@ -114,54 +111,48 @@ if [ -f "$host" ]; then # checks if the host sequence file is provided.
 else
     cat "$PhiX" "$Human" > Mixed.fasta
 fi
-##--------------------Indexing the mixed fasta-------------------------------##:
+##-----------------------Index the mixed fasta-------------------------------##:
 dir=$(pwd) ##current directory
 [ ! -f "$dir"/Mix.3.bt2 ] \
 && { echo "Index needs to be generated:";
     bowtie2-build Mixed.fasta Mix --threads "$threads" "$index_opts";}
 
-
 ##-----------------------Alignment------------------------------------##:
 for file in "$input_dir"/*; do
-        # Paired end reads
-        if [[ "$file" == @(*_R1_*|*_1).@(fq|fastq|fq.gz|fastq.gz) ]]; then
-            forward_file="$file"
-            core_name=$(get_core_name "$forward_file")
-            bowtie2 -x Mix -1 "$forward_file" -2 $(forward_to_reverse "$forward_file") \
-            --un-conc-gz "$out_dir"/$(echo "$core_name" | sed 's/_trim/_bt2/').fq.gz \
-            -q -p "$threads" 2> "$out_dir"/$(echo "$core_name" | sed 's/_trim/_bt2/')_summary.txt \
-            $bowtie2_opts \
-            > /dev/null # Bowtie2 output to terminal is excesive and we do not need it in this case
+    # Paired end reads
+    if [[ "$file" == @(*_R1_*|*_1).@(fq|fastq|fq.gz|fastq.gz) ]]; then
+        forward_file="$file"
+        core_name=$(get_core_name "$forward_file")
+        bowtie2 -x Mix -1 "$forward_file" -2 $(forward_to_reverse "$forward_file") \
+        --un-conc-gz "$out_dir"/$(echo "$core_name" | sed 's/_trim/_bt2/').fq.gz \
+        -q -p "$threads" 2> "$out_dir"/$(echo "$core_name" | sed 's/_trim/_bt2/')_summary.txt \
+        $bowtie2_opts \
+        > /dev/null # Bowtie2 output to terminal is excesive and we do not need it in this case
 
-        # Single end reads
-        elif [[ ! "$file" ==  *_@(*R1_*|*1.|*R2_*|*2.)* ]] && [[ "$file" == *.@(fq|fastq|fq.gz|fastq.gz) ]]; then
-            unpaired_file="$file"
-            core_name=$(get_core_name "$unpaired_file")
-            bowtie2 -x Mix -U "$unpaired_file" \
-            --un-gz "$out_dir"/$(basename -- "$unpaired_file" | sed 's/_trim/_bt2/') \
-            -q -p "$threads" 2> "$out_dir"/$(get_core_name "$unpaired_file" | sed 's/_trim/_bt2/')_summary.txt \
-            $bowtie2_opts \
-            > /dev/null
+    # Single end reads
+    elif [[ ! "$file" ==  *_@(R1_*|1.|R2_*|2.)* ]] && [[ "$file" == *.@(fq|fastq|fq.gz|fastq.gz) ]]; then
+        unpaired_file="$file"
+        core_name=$(get_core_name "$unpaired_file")
+        bowtie2 -x Mix -U "$unpaired_file" \
+        --un-gz "$out_dir"/$(basename -- "$unpaired_file" | sed 's/_trim/_bt2/') \
+        -q -p "$threads" 2> "$out_dir"/$(get_core_name "$unpaired_file" | sed 's/_trim/_bt2/')_summary.txt \
+        $bowtie2_opts \
+        > /dev/null
 
+    # Files that do not match the required extension
+    elif [[ ! "$file" == *.@(fq|fastq|fq.gz|fastq.gz) ]]; then
+        echo -e "$(basename -- "$file") will not be processed as is not a .fastq or .fq.gz file."
+    fi
+done
 
-        #Files that do not match the required extension:
-        elif [[ ! "$file" == *.@(fq|fastq|fq.gz|fastq.gz) ]]; then
-            echo -e "$(basename -- "$file") will not be processed as is not a .fastq or .fq.gz file."
-        fi
-
-    done
-
-
-#Rename bowtie2 output files:
+# Rename bowtie2 output files
 cd "$out_dir"
 rename "s/.fq.1.gz/_1.fq.gz/" *.fq.1.gz 2> /dev/null
 rename "s/.fq.2.gz/_2.fq.gz/" *.fq.2.gz 2> /dev/null
 
-#Set the correct file extension (.gz) for unpaired output files:
+# Set the correct file extension (.gz) for unpaired output files
 rename -f "s/fq/fq.gz/" *.fq 2> /dev/null
 rename -f "s/fastq/fastq.gz/"  *.fastq 2> /dev/null
-
-
 
 echo "Done."
 echo "You can now use clean reads to:"
