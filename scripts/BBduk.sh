@@ -9,7 +9,7 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: metabiome BBduk [options] -i <in_dir> -o <out_dir> -D <16S_db> "
+    echo "Usage: metabiome bbduk [options] -i <in_dir> -o <out_dir> -D <16S_db> "
     echo
     echo "Required:"
     echo "  -i in_dir             Input directory containing clean FASTQ files."
