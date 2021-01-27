@@ -11,7 +11,7 @@ source "$SCRIPTS_DIR"/functions.sh
 function usage() {
     echo "Usage: metabiome bowtie2 [options] -i <in_dir> -o <out_dir>"
     echo
-    echo "Required: "
+    echo "Required:"
     echo "  -i in_dir               Input directory containing FASTQ files."
     echo "  -o out_dir              Directory in which results will be saved. This directory"
     echo "                          will be created if it doesn't exist."
