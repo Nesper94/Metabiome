@@ -29,7 +29,7 @@ while [[ -n "$1" ]]; do
     case "$1" in
         -h|--help ) usage; exit 0;;
         -i )        input_dir=$(readlink -f "$2"); shift 2;;
-        -o )        out_dir=$(readlink -f "$2");shift 2;;
+        -o )        out_dir=$(readlink -m "$2"); shift 2;;
         -d )        met_database=$(readlink -f "$2"); shift 2;;
         -t )        threads="$2"; shift 2;;
         -opts )     shift; metaphlan_opts="$@"; break ;;
