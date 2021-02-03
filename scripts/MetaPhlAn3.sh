@@ -80,9 +80,6 @@ for file in "$input_dir"/*; do
             --nproc "$threads" --bowtie2out "$out_dir"/$(echo "$core_name" | sed 's/_bt2/unpaired_mphlan/').sam \
             $metaphlan_opts
 
-    # Files that do not match the required extension:
-    elif [[ ! "$file" == *.@(fq|fastq|fq.gz|fastq.gz) ]]; then
-        echo -e "$(basename -- "$file") will not be processed as is not a .fastq or .fq.gz file."
     fi
 
 done
