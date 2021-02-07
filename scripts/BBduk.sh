@@ -9,24 +9,29 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: metabiome bbduk [options] -i <in_dir> -o <out_dir> -D <16S_db> "
-    echo
-    echo "Required:"
-    echo "  -i in_dir             Input directory containing clean FASTQ files."
-    echo "  -o out_dir            Directory in which results will be saved. This directory"
-    echo "                        will be created if it doesn't exist."
-    echo "  -D 16S_db             16S Database directory."
-    echo
-    echo "Options:"
-    echo "  -t NUM                Number of threads to use. (default=1)"
-    echo "  -opts BBduk_OPTIONS   BBduk's options."
-    echo "  -h, --help            Show this help"
+    cat <<HELP_USAGE
+
+    Extract 16S DNAr sequences from metagenomic samples with BBDuk.
+    Usage: metabiome bbduk [options] -i <in_dir> -o <out_dir> -D <16S_db> -opts bbduk_opts
+
+    Required:
+    -i in_dir             Input directory containing clean FASTQ files.
+    -o out_dir            Directory in which results will be saved. This directory
+                          will be created if it doesn't exist.
+    -D 16S_db             Directory containing 16S DNAr sequences in fasta format.
+
+    Options:
+    -t NUM                Number of threads to use. (default=1)
+    -opts bbduk_options   BBDuk's options.
+    -h, --help            Show this help.
+
+HELP_USAGE
 }
 
 # Exit if command is called with no arguments
 validate_arguments "$#"
-
-while [[ -n "$1" ]]; do
+##---------------------Save input parameters into variables------------------##:
+while (("$#")); do
     case "$1" in
         -h|--help ) usage; exit 0 ;;
         -i )        input_dir=$(readlink -f "$2"); shift 2 ;;
@@ -37,24 +42,19 @@ while [[ -n "$1" ]]; do
         * )         echo "Option '$1' not recognized"; exit 1 ;;
     esac
 done
-
 # Verify that input directory is set and exists
 validate_input_dir
-
 # Create output directory if it doesn't exists.
 validate_output_dir
-
 ##----------------------------Output info------------------------------------##:
 echo "Conda environment: $CONDA_DEFAULT_ENV"
 echo "Input directory: ${input_dir:?'Input directory not set'}"
 echo "Output directory: ${out_dir:?'Output directory not set'}"
 echo "Number of threads: ${threads:=1}"
 echo "Reference database: ${database:?'=reference database not set'}"
-echo "BBduk called with options: $bbduk_opts"
-
+echo "BBDuk called with options: $bbduk_opts"
 ##-----------------------Activate conda environment--------------------------##:
 activate_env metabiome-picking16S
-
 ##------------Match reads against the 16S rDNA SSU from SILVA Database-------##:
 for file in "$input_dir"/*; do
     # Paired end reads
@@ -82,9 +82,7 @@ for file in "$input_dir"/*; do
     elif [[ ! "$file" == *.@(fq|fastq|fq.gz|fastq.gz) ]]; then
         echo -e "$(basename -- "$file") will not be processed as is not a .fastq or .fq.gz file."
     fi
-
 done
-
 ##-------------------------------Compress output-----------------------------##:
 cd "$out_dir"
 gzip *.fq
