@@ -31,13 +31,13 @@ create_envs(){
     conda env create --file "$METABIOME_DIR"/conda-envs/preprocessing.yml
 
     echo "Creating read-based binning environment..."
-    conda env create --file "$METABIOME_DIR"/conda-envs/read-binning.yml
+    conda env create --file "$METABIOME_DIR"/conda-envs/taxonomic-binning.yml
 
     echo "Creating assembly environment..."
-    conda env create --file "$METABIOME_DIR"/conda-envs/assembly.yml
+    conda env create --file "$METABIOME_DIR"/conda-envs/genome-assembly.yml
 
     echo "Creating MetaPhlAn3 environment..."
-    conda env create --file "$METABIOME_DIR"/conda-envs/metaphlan.yml
+    conda env create --file "$METABIOME_DIR"/conda-envs/taxonomic-profiling.yml
 
     echo "Creating picking16S environment..."
     conda env create --file "$METABIOME_DIR"/conda-envs/picking16S.yml
