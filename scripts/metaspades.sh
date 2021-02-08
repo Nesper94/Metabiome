@@ -11,7 +11,7 @@ function usage() {
     cat <<HELP_USAGE
     
     Alignment of sequences derived from metagenomic samples with metaSPAdes.
-    Usage: metabiome metaspades [Options] -i <input directory> -o <output directory> [-opts MetaSPADES_OPTIONS]"
+    Usage: metabiome metaspades [Options] -i <input directory> -o <output directory> [-opts MetaSPADES_OPTIONS]
     
     Required:
     -i in_dir       Input directory containing FASTQ files.
