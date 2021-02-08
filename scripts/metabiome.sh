@@ -16,7 +16,7 @@ function usage() {
 
     Commands:
     qc            Check read quality with FastQC and MultiQC.
-    trimmomatic
+    trimmomatic   Perform quality trimming on Illumina sequence data.
     bowtie2       Remove contaminant sequences.
     krona         Create Krona charts using Kraken2 output.
     metaspades    Assemble reads into contigs.
