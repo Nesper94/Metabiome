@@ -14,11 +14,11 @@ Create Krona charts using Kraken2 output.
 Usage: metabiome krona [Options] -i <input directory> -o <output directory>
 
 Required:
-  -i in_dir   Input directory containing Kraken2 output files.
-  -o out_dir  Directory in which results will be saved. This directory
-              will be created if it doesn't exist.
+  -i in_dir    Input directory containing Kraken2 output files.
+  -o out_dir   Directory in which results will be saved. This directory
+               will be created if it doesn't exist.
 Options:
-  -h, --help  Show this help
+  -h, --help   Show this help
 HELP_USAGE
 }
 

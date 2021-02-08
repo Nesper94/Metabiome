@@ -8,22 +8,20 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    cat <<HELP_USAGE
-    
-    Alignment of sequences derived from metagenomic samples with metaSPAdes.
-    Usage: metabiome metaspades [Options] -i <input directory> -o <output directory> [-opts MetaSPADES_OPTIONS]
-    
-    Required:
-    -i in_dir       Input directory containing FASTQ files.
-    -o out_dir      Directory in which results will be saved. This directory
-                    will be created if it doesn't exist.
-    
-    Options:
-    -t NUM          Number of threads to use (default: 4).
-    -opts OPTIONS   MetaSPADES's options.
-    -h, --help      Show this help.
-    
-HELP_USAGE    
+cat <<HELP_USAGE
+Alignment of sequences derived from metagenomic samples with metaSPAdes.
+Usage: metabiome metaspades [Options] -i <input directory> -o <output directory> [-opts MetaSPADES_OPTIONS]
+
+Required:
+  -i in_dir       Input directory containing FASTQ files.
+  -o out_dir      Directory in which results will be saved. This directory
+                  will be created if it doesn't exist.
+
+Options:
+  -t NUM          Number of threads to use (default: 4).
+  -opts OPTIONS   MetaSPADES's options.
+  -h, --help      Show this help.
+HELP_USAGE
 }
 
 # Exit if command is called with no arguments

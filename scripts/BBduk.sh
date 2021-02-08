@@ -9,22 +9,20 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    cat <<HELP_USAGE
+cat <<HELP_USAGE
+Extract 16S DNAr sequences from metagenomic samples with BBDuk.
+Usage: metabiome bbduk [options] -i <in_dir> -o <out_dir> -D <16S_db> -opts bbduk_opts
 
-    Extract 16S DNAr sequences from metagenomic samples with BBDuk.
-    Usage: metabiome bbduk [options] -i <in_dir> -o <out_dir> -D <16S_db> -opts bbduk_opts
+Required:
+  -i in_dir             Input directory containing clean FASTQ files.
+  -o out_dir            Directory in which results will be saved. This directory
+                        will be created if it doesn't exist.
+  -D 16S_db             Directory containing 16S DNAr sequences in fasta format.
 
-    Required:
-    -i in_dir             Input directory containing clean FASTQ files.
-    -o out_dir            Directory in which results will be saved. This directory
-                          will be created if it doesn't exist.
-    -D 16S_db             Directory containing 16S DNAr sequences in fasta format.
-
-    Options:
-    -t NUM                Number of threads to use. (default=1)
-    -opts bbduk_options   BBDuk's options.
-    -h, --help            Show this help.
-
+Options:
+  -t NUM                Number of threads to use. (default=1)
+  -opts bbduk_options   BBDuk's options.
+  -h, --help            Show this help.
 HELP_USAGE
 }
 

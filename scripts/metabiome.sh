@@ -10,25 +10,23 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    cat<<HELP_USAGE
+cat<<HELP_USAGE
+Usage: metabiome [Commands|Options]
 
-    Usage: metabiome [Commands|Options]
+Commands:
+  qc            Check read quality with FastQC and MultiQC.
+  trimmomatic   Perform quality trimming on Illumina sequence data.
+  bowtie2       Remove contaminant sequences.
+  krona         Create Krona charts using Kraken2 output.
+  metaspades    Assemble reads into contigs.
+  megahit       Assemble reads into contigs.
+  kaiju         Generate taxonomc bins.
+  metaphlan3    Generate taxonomic profiling bins.
+  bbduk         Extract 16S DNAr sequences.
 
-    Commands:
-    qc            Check read quality with FastQC and MultiQC.
-    trimmomatic   Perform quality trimming on Illumina sequence data.
-    bowtie2       Remove contaminant sequences.
-    krona         Create Krona charts using Kraken2 output.
-    metaspades    Assemble reads into contigs.
-    megahit       Assemble reads into contigs.
-    kaiju         Generate taxonomc bins.
-    metaphlan3    Generate taxonomic profiling bins.
-    bbduk         Extract 16S DNAr sequences.
-
-    Options:
-    -h, --help    Show this help.
-    -v, --version Show Metabiome's version.
-
+Options:
+  -h, --help    Show this help.
+  -v, --version Show Metabiome's version.
 HELP_USAGE
 }
 

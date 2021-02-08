@@ -9,24 +9,22 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    cat <<HELP_USAGE
+cat <<HELP_USAGE
+Remove contaminant sequences with bowtie2.
+Usage: metabiome bowtie2 [options] -i <in_dir> -o <out_dir> -opts bowtie2_options
 
-    Remove contaminant sequences with bowtie2.
-    Usage: metabiome bowtie2 [options] -i <in_dir> -o <out_dir> -opts bowtie2_options
+Required:
+  -i in_dir               Input directory containing FASTQ files.
+  -o out_dir              Directory in which results will be saved. This directory
+                          will be created if it doesn't exist.
 
-    Required:
-    -i in_dir               Input directory containing FASTQ files.
-    -o out_dir              Directory in which results will be saved. This directory
-                            will be created if it doesn't exist.
-
-    Options:
-    -ho host                Host reference genome in FASTA format.
-    -ph PhiX                PhiX-174 phage reference genome in FASTA format.
-    -hu human               Human reference genome in FASTA format.
-    -t  NUM                 Number of threads to use. (default=1)
-    -opts bowtie2_options   bowtie2's options.
-    -h, --help              Show this help.
-
+Options:
+  -ho host                Host reference genome in FASTA format.
+  -ph PhiX                PhiX-174 phage reference genome in FASTA format.
+  -hu human               Human reference genome in FASTA format.
+  -t  NUM                 Number of threads to use. (default=1)
+  -opts bowtie2_options   bowtie2's options.
+  -h, --help              Show this help.
 HELP_USAGE
 }
 
