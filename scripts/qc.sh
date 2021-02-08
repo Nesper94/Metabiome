@@ -11,6 +11,7 @@ source "$SCRIPTS_DIR"/functions.sh
 function usage() {
     cat <<HELP_USAGE
 
+    Quality control and visualization of sequence statistics from metagenomic samples with FASTQC and MultiQC.
     Usage: metabiome qc -i <input directory> -o <output directory> [-t <threads>]
     
     Required:
