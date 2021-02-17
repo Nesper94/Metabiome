@@ -17,6 +17,7 @@ Commands:
   qc            Check read quality with FastQC and MultiQC.
   trimmomatic   Perform quality trimming on Illumina sequence data.
   bowtie2       Remove contaminant sequences.
+  humann        Profile the abundance of microbial metabolic pathways and molecular functions.
   krona         Create Krona charts using Kraken2 output.
   metaspades    Assemble reads into contigs.
   megahit       Assemble reads into contigs.
@@ -40,8 +41,8 @@ if [[ "$1" = "bbduk" ]]; then
 elif [[ "$1" = "bowtie2" ]]; then
   bash "$SCRIPTS_DIR"/bowtie2.sh ${@:2}
 
-elif [[ "$1" = "humann2" ]]; then
-  bash "$SCRIPTS_DIR"/humann2.sh ${@:2}
+elif [[ "$1" = "humann" ]]; then
+  bash "$SCRIPTS_DIR"/humann3.sh ${@:2}
 
 elif [[ "$1" = "kaiju" ]]; then
   bash "$SCRIPTS_DIR"/Kaiju.sh ${@:2}
