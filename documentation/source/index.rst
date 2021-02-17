@@ -54,7 +54,9 @@ Con el objetivo de superar estos desafíos, se propone el flujo de trabajo Metab
    :maxdepth: 2
    :caption: Contents:
 
-
+	 get-started.rst
+   user-manual.rst
+   tutorial.rst
 
 Indices and tables
 ==================
