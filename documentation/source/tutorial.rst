@@ -16,9 +16,16 @@ Downloading sample data
 Quality Check
 -------------
 
+Now that we have the data, we are going to check the quality of the reads by
+using the command `qc` from Metabiome:
+
 .. code-block:: bash
 
     metabiome qc -i sample-data -o quality-check
+
+After running this command you will get a FastQC report with quality info for
+each input file. You can also view this info summarized in the file from
+MultiQC.
 
 Decontamination
 ---------------
