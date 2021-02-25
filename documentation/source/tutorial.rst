@@ -5,30 +5,77 @@ Tutorial
 
 .. contents::
 
+Getting help
+------------
+
+One of the most useful things you should learn is how to get help from
+Metabiome. Fortunately, this is quite easy; if you want to get help about
+Metabiome itself and its modules just execute:
+
+.. code-block:: bash
+
+    metabiome -h
+    # Or
+    metabiome --help
+
+If you want to get help about a particular module, for example the :code:`qc`
+module, execute:
+
+.. code-block:: bash
+
+    metabiome qc -h
+    # Or
+    metabiome qc --help
+
+These commands will show you how to use Metabiome and its modules and which
+parameters it needs or accepts.
+
 Downloading sample data
 -----------------------
 
 .. code-block:: bash
 
-    mkdir sample-data
-    wget -P sample-data
+    mkdir sample_data
+    wget -P sample_data
 
-Quality Check
+Quality check
 -------------
 
 Now that we have the data, we are going to check the quality of the reads by
-using the command `qc` from Metabiome:
+using the command :code:`qc` from Metabiome:
 
 .. code-block:: bash
 
-    metabiome qc -i sample-data -o quality-check
+    metabiome qc -i sample_data -o quality_check
 
-After running this command you will get a FastQC report with quality info for
-each input file. You can also view this info summarized in the file from
-MultiQC.
+After running this command the folder :file:`quality-check/` will be created
+and inside it you will find a FastQC report with quality info for each input
+file. You can also view this info summarized in the file from MultiQC.
+
+Quality filtering
+-----------------
+
+The info from the quality check can now be used to trim and remove bad quality
+positions and reads by using the :code:`trimmomatic` command. In this case we
+will keep only reads whose minimum length is 150 base pairs (bp) and then we
+will remove the last 20 bp because these have lower quality:
+
+.. code-block:: bash
+
+    metabiome trimmomatic -i sample_data -o filtered_reads -opts MINLEN:150 TRAILING:20
 
 Decontamination
 ---------------
+
+The next step is to remove contaminant reads from our data. Two common
+contaminants are sequences coming from researchers or people manipulating the
+samples and sequences from the Phi-X174 phage used as control in the
+sequencing machines, so we will remove reads coming from these sources using
+:code:`bowtie2`.
+
+.. code-block:: bash
+
+    metabiome -i filtered_reads -o decontaminated_reads -hu -ph
 
 Taxonomic profiling
 -------------------
@@ -39,8 +86,8 @@ Functional profiling
 The first time you use HUMAnN, you must download two databases, ChocoPhlAn and
 a translated search database (UniRef), see `HUMAnN documentation
 <https://github.com/biobakery/humann#5-download-the-databases>`_ for more info
-about this. Here we will download the full ChocoPhlAn database and the full
-UniRef90 database by running the following commands:
+about this. Here we will download the demo version of ChocoPhlAn database and
+the demo version of UniRef90 database by running the following commands:
 
 .. code-block:: bash
 
@@ -51,8 +98,8 @@ UniRef90 database by running the following commands:
     mkdir humann-db
 
     # Download databases
-    humann_databases --download chocophlan full humann-db/
-    humann_databases --download uniref uniref90_diamond humann-db/
+    humann_databases --download chocophlan DEMO humann-db/
+    humann_databases --download uniref DEMO_diamond humann-db/
 
 After downloading databases we are ready to profile our samples with HUMAnN:
 
