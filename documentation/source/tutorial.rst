@@ -75,7 +75,7 @@ sequencing machines, so we will remove reads coming from these sources using
 
 .. code-block:: bash
 
-    metabiome -i filtered_reads -o decontaminated_reads -hu -ph
+    metabiome bowtie2 -i filtered_reads -o decontaminated_reads -hu -ph
 
 Taxonomic profiling
 -------------------
@@ -112,3 +112,22 @@ Taxonomic binning
 
 Assembly
 --------
+
+In this step you can use two different assemblers that receive the output from :code:`bowtie2`:
+metaSPAdes and MEGAHIT, in order to obtain longer sequences. For this, run the following commands:
+
+
+.. code-block:: bash
+
+    # metaSPAdes
+    metabiome metaspades -i decontaminated-reads -o metaspades-assembled-reads
+
+.. code-block:: bash
+
+    # MEGAHIT
+    metabiome megahit -i decontaminated-reads -o megahit-assembled-reads
+
+This resulted sequences are frequently used to know the taxonomic profiling.
+
+Quality assembly
+----------------
