@@ -129,5 +129,8 @@ metaSPAdes and MEGAHIT, in order to obtain longer sequences. For this, run the f
 
 This resulted sequences are frequently used to know the taxonomic profiling.
 
+Conting binning
+---------------
+
 Quality assembly
 ----------------
