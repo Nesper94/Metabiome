@@ -64,7 +64,7 @@ for file in "$input_dir"/*; do
             outm="$out_dir"/$(basename -- "$forward_file" | sed 's/_bt2/_bbdk/') \
             outm2="$out_dir"/$(echo "$core_name" | sed 's/_bt2//')_bbdk_2.fq \
             outs="$out_dir"/$(echo "$core_name" | sed 's/_bt2// ; s/_paired//')_singletons_bbdk.fq \
-            stats="$out_dir"/$(echo "$core_name" | sed 's/_bt2//')_paired_bbdk_summary.txt \
+            stats="$out_dir"/$(echo "$core_name" | sed 's/_bt2//')_bbdk_summary.txt \
             $bbduk_opts
 
     # Single end reads

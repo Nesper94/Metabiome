@@ -86,7 +86,7 @@ for file in "$input_dir"/*; do
         core_name=$(get_core_name "$unpaired_file")
         metaphlan "$unpaired_file" --input_type fastq -t rel_ab_w_read_stats --bowtie2db "$met_database" \
             -o "$out_dir"/$(echo "$core_name" | sed 's/_bt2/_mphlan/').txt \
-            --nproc "$threads" --bowtie2out "$out_dir"/$(echo "$core_name" | sed 's/_bt2/unpaired_mphlan/').sam \
+            --nproc "$threads" --bowtie2out "$out_dir"/$(echo "$core_name" | sed 's/_bt2/_mphlan/').sam \
             $metaphlan_opts
 
     # Files that do not match the required extension:
