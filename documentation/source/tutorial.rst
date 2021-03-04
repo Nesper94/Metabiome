@@ -20,7 +20,7 @@ By the end of the tutorial, you will be able to:
 .. contents::
 
 Getting help
-------------
+************
 
 One of the most useful things you should learn is how to get help from
 Metabiome. Fortunately, this is quite easy; if you want to get help about
@@ -45,12 +45,15 @@ These commands will show you how to use Metabiome and its modules and which
 parameters it needs or accepts.
 
 Tutorial Data Set
------------------
+*****************
 
 .. code-block:: bash
 
     mkdir sample_data
     wget -P sample_data
+
+Preprocessing
+*************
 
 Quality check
 -------------
@@ -108,6 +111,9 @@ The most important output files from this step are located in :file:`decontamina
 +-------------------------------------+--------------------------------------------------------------+
 | (output)_unpaired_bt2_r_summary.txt | summary stats for reverse single-end alignment.              |
 +-------------------------------------+--------------------------------------------------------------+
+
+Read-based analysis
+*******************
 
 Taxonomic profiling
 -------------------
@@ -171,6 +177,9 @@ Now, lets suppose you want to perform additional analyses based on the 16S DNAr.
 
 The output of :code:`BBDuk` is located in :file:`bbduk_out/`. This output is very similar to the `Decontamination section <Decontamination_>`_ output. However, in this context, these files represent the metagenomic reads that did aligned to the 16S DNAr sequences. Also, an additional file  :file:`(output)_singletons_bbdk.fq.gz` is generated, which contains the reads without a pair (singletons) that aligned to the 16S DNAr sequences, from the paired-end alignment.
 
+*De-novo* Assembly
+******************
+
 Genome assembly
 ---------------
 
@@ -192,6 +201,9 @@ This resulted sequences are frequently used to know the taxonomic profiling.
 
 Quality assembly
 ----------------
+
+Genome binning
+**************
 
 Contig binning
 ---------------
