@@ -24,8 +24,8 @@ create_link(){
 
 # Create Conda environments
 create_envs(){
-    echo "Creating hummann2 environment..."
-    conda env create --file "$METABIOME_DIR"/conda-envs/humann2-env.yml
+    echo "Creating hummann environment..."
+    conda env create --file "$METABIOME_DIR"/conda-envs/humann.yml
 
     echo "Creating preprocessing environment..."
     conda env create --file "$METABIOME_DIR"/conda-envs/preprocessing.yml

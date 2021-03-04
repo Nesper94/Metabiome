@@ -1,8 +1,0 @@
-name: metabiome-humann2
-channels:
-  - bioconda
-  - conda-forge
-  - defaults
-dependencies:
-  - humann2
-  - metaphlan2=2.8

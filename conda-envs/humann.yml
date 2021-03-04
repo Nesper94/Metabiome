@@ -1,0 +1,8 @@
+name: metabiome-humann
+channels:
+  - biobakery
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - humann=3.0.*
