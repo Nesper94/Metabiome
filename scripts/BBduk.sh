@@ -10,7 +10,7 @@ source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
 cat <<HELP_USAGE
-Extract 16S DNAr sequences from metagenomic samples with BBDuk.
+Extract 16S rDNA sequences from metagenomic samples with BBDuk.
 Usage: metabiome bbduk [options] -i <in_dir> -o <out_dir> -D <16S_db> -opts bbduk_opts
 
 Required:
