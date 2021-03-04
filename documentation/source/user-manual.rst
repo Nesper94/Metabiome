@@ -12,7 +12,7 @@ Metabiome was built under different bioinformatics considerations to simplify it
 
 
 1.  Linux terminal. If you are a windows user, you can use a virtual machine. For more information, please check `VirtualBox <https://www.virtualbox.org/>`_.
-2. CONDA as a package manager. We recommend installing MINICONDA as it contains all necessary packages, and can be downloaded from `this page <https://docs.conda.io/en/latest/miniconda.html#linux-installers>`_. To install it, run the following commands:
+2. CONDA as a package manager. We recommend installing MINICONDA as it contains all necessary packages, and the latest version can be downloaded from `this page <https://docs.conda.io/en/latest/miniconda.html#linux-installers>`_. To install it, run the following commands:
 
 .. code-block:: bash
 
@@ -83,3 +83,13 @@ File extensions accepted are:
 - :file:`.fastq`
 - :file:`.fq.gz`
 - :file:`.fastq.gz`
+
+Modularity
+-----------
+
+This pipeline contains 6 modules that comprise the necessary tools for the analysis 
+of the main points within metagenomics. They are separated by conda environments, 
+created from a ``.yaml`` file, which describes the software that each one implements 
+and the required version. These files are stored in the ``conda_envs`` directory. A module 
+can have one or more than on tool or software, and each one has a separate script 
+to execute, and they are stored in the ``"scripts"`` directory.
