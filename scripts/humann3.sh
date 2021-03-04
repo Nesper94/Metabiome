@@ -50,7 +50,7 @@ validate_input_dir
 validate_output_dir
 
 # Activate conda environment
-activate_env metabiome-taxonomic-profiling
+activate_env metabiome-humann
 
 # Useful output info
 echo "Input directory: ${input_dir}"
