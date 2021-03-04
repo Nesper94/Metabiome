@@ -59,6 +59,16 @@ the Metabiome's folder and execute the :file:`uninstall.sh` script:
 Use
 ---
 
+Some Metabiome commands accept the flag ``-opts``, if this flag is used
+then it must be the last flag used in the command. After this flag you can
+write options from the native program executed by Metabiome. For example, if
+you want to assemble a large and complex metagenome like soil and need to use
+the flag ``--presets`` from MEGAHIT, then you would do the following:
+
+.. code-block:: bash
+
+    metabiome megahit -i in_dir -o out_dir -opts --preset meta-large
+
 Naming convention
 -----------------
 
