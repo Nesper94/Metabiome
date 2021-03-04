@@ -45,7 +45,41 @@ The installation script will do the following:
 - Install the :file:`_metabiome` bash completion script to make Metabiome's
   commands easier to use.
 
+Uninstalling
+------------
+
+If for some reason you need to uninstall Metabiome, all you have to do is go to
+the Metabiome's folder and execute the :file:`uninstall.sh` script:
+
+.. code-block:: bash
+
+    cd scripts/
+    bash uninstall.sh
+
 Use
 ---
 
+Some Metabiome commands accept the flag ``-opts``, if this flag is used
+then it must be the last flag used in the command. After this flag you can
+write options from the native program executed by Metabiome. For example, if
+you want to assemble a large and complex metagenome like soil and need to use
+the flag ``--presets`` from MEGAHIT, then you would do the following:
 
+.. code-block:: bash
+
+    metabiome megahit -i in_dir -o out_dir -opts --preset meta-large
+
+Naming convention
+-----------------
+
+Metabiome's working needs that the input files agree with one of the two most
+widespread naming conventions for paired end sequences:
+Illumina :file:`_R1_`/:file:`_R2_` naming convention and :file:`_1`/:file:`_2`
+naming convention.
+
+File extensions accepted are:
+
+- :file:`.fq`
+- :file:`.fastq`
+- :file:`.fq.gz`
+- :file:`.fastq.gz`

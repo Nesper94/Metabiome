@@ -64,3 +64,5 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+If you use Metabiome, please cite:
