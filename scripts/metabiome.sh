@@ -18,12 +18,13 @@ Commands:
   trimmomatic   Perform quality trimming on Illumina sequence data.
   bowtie2       Remove contaminant sequences.
   humann        Profile the abundance of microbial metabolic pathways and molecular functions.
+  kraken2       Perform taxonomic classification of sequences.
   krona         Create Krona charts using Kraken2 output.
   metaspades    Assemble reads into contigs.
   megahit       Assemble reads into contigs.
   kaiju         Generate taxonomc bins.
   metaphlan3    Generate taxonomic profiling bins.
-  bbduk         Extract 16S DNAr sequences.
+  bbduk         Extract 16S rDNA sequences.
 
 Options:
   -h, --help    Show this help.

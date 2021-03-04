@@ -10,6 +10,7 @@ source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
 cat <<HELP_USAGE
+Perform taxonomic classification of sequences.
 Usage: metabiome kraken2 [Options] -i <input directory> -o <output directory>
 Required:
   -i in_dir       Input directory containing FASTQ files."
