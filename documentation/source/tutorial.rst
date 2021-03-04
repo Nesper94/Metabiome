@@ -138,7 +138,7 @@ Functional profiling
 
 The first time you use HUMAnN, you must download two databases, ChocoPhlAn and
 a translated search database (UniRef), see `HUMAnN documentation
-<https://github.com/biobakery/humann#5-download-the-databasutpues>`_ for more info
+<https://github.com/biobakery/humann#5-download-the-databases>`_ for more info
 about this. Here we will download the demo version of ChocoPhlAn database and
 the demo version of UniRef90 database by running the following commands:
 
