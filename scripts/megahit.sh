@@ -9,7 +9,7 @@ source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
 cat <<HELP_USAGE
-Alignment of sequences derived from metagenomic samples with MEGAHIT.
+Assembly of sequences derived from metagenomic samples with MEGAHIT.
 Usage: metabiome megahit [Options] -i <input directory> -o <output directory> [-opts Megahit_OPTIONS]
 Required:
   -i in_dir       Input directory containing FASTQ files.

@@ -9,7 +9,7 @@ source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
 cat <<HELP_USAGE
-Alignment of sequences derived from metagenomic samples with metaSPAdes.
+Assembly of sequences derived from metagenomic samples with metaSPAdes.
 Usage: metabiome metaspades [Options] -i <input directory> -o <output directory> [-opts MetaSPADES_OPTIONS]
 
 Required:
