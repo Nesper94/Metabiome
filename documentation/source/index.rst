@@ -57,6 +57,7 @@ Con el objetivo de superar estos desafíos, se propone el flujo de trabajo Metab
    get-started.rst
    user-manual.rst
    tutorial.rst
+   how-to.rst
 
 Indices and tables
 ==================
