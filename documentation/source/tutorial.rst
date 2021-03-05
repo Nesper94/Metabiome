@@ -97,6 +97,8 @@ sequencing machines, so we will remove reads coming from these sources using
 The most important output files from this step are located in :file:`decontaminated_reads/`. These files are each of the paired-end and single-end reads in gzip format, and the summary stats from the alignments. For example, assume your output file prefix is output:
 
 +-------------------------------------+--------------------------------------------------------------+
+| File                                | Description                                                  |
++=====================================+==============================================================+
 | (output)_paired_bt2_1.fq.gz         | decontaminated forward paired-end reads in gzipped format.   |
 +-------------------------------------+--------------------------------------------------------------+
 | (output)_paired_bt2_2.fq.gz         | decontaminated reverse paired-end reads in gzipped format.   |
