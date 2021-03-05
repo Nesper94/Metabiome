@@ -185,19 +185,25 @@ The output of :code:`BBDuk` is located in :file:`bbduk_out/`. This output is ver
 Genome assembly
 ---------------
 
-In this step you can use two different assemblers that receive the output from :code:`bowtie2`:
-metaSPAdes and MEGAHIT, in order to obtain longer sequences. For this, run the following commands:
-
+In this step you can use two different assemblers that receive the output from
+:code:`bowtie2`: metaSPAdes and MEGAHIT, in order to obtain longer sequences.
+You can use just the assembler you like the most, or use both as we will do in
+this tutorial. To perform the assembly, just run the following commands:
 
 .. code-block:: bash
 
     # metaSPAdes
     metabiome metaspades -i decontaminated_reads -o metaspades-assembled-reads
 
-.. code-block:: bash
-
     # MEGAHIT
     metabiome megahit -i decontaminated_reads -o megahit-assembled-reads
+
+.. note::
+
+    By default, Metabiome doesn't perform co-assembly of multiple samples but
+    instead it runs individual assemblies for each sample. If you want to
+    perform co-assembly of many samples, see :ref:`How to perform co-assembly of
+    samples <co-assembly>`.
 
 This resulted sequences are frequently used to know the taxonomic profiling.
 
