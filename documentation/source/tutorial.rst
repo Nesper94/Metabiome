@@ -156,17 +156,17 @@ the demo version of UniRef90 database by running the following commands:
     conda activate metabiome-taxonomic-profiling
 
     # Create folder in which databases will be saved
-    mkdir humann-db
+    mkdir humann_db
 
     # Download databases
-    humann_databases --download chocophlan DEMO humann-db/
-    humann_databases --download uniref DEMO_diamond humann-db/
+    humann_databases --download chocophlan DEMO humann_db/
+    humann_databases --download uniref DEMO_diamond humann_db/
 
 After downloading databases we are ready to profile our samples with HUMAnN:
 
 .. code-block:: bash
 
-    metabiome humann -i decontaminated_reads -o humann-results
+    metabiome humann -i decontaminated_reads -o humann_results
 
 
 16S DNAr picking
@@ -193,10 +193,10 @@ this tutorial. To perform the assembly, just run the following commands:
 .. code-block:: bash
 
     # metaSPAdes
-    metabiome metaspades -i decontaminated_reads -o metaspades-assembled-reads
+    metabiome metaspades -i decontaminated_reads -o metaspades_assembled_reads
 
     # MEGAHIT
-    metabiome megahit -i decontaminated_reads -o megahit-assembled-reads
+    metabiome megahit -i decontaminated_reads -o megahit_assembled_reads
 
 .. note::
 
