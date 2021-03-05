@@ -1,4 +1,4 @@
-name: metabiome-metaphlan
+name: metabiome-taxonomic-profiling
 channels:
   - bioconda
   - conda-forge
