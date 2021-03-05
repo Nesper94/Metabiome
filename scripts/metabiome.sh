@@ -24,7 +24,7 @@ Commands:
   megahit       Assemble reads into contigs.
   kaiju         Generate taxonomc bins.
   metaphlan3    Generate taxonomic profiling bins.
-  metaquast     Evaluate assembly
+  metaquast     Evaluate genome assembly.
   bbduk         Extract 16S rDNA sequences.
 
 Options:

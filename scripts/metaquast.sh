@@ -7,18 +7,21 @@ set -e
 SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
-usage() {
-    echo "Usage: metabiome metaquast [Options] -i <in_dir> -o <out_dir> [-opts metaQUAST_OPTS]"
-    echo
-    echo "Required:"
-    echo "  -i in_dir       Directory containing contigs in FASTA format"
-    echo "  -o out_dir      Directory to write results. This directory"
-    echo "                  will be created if it doesn't exists."
-    echo
-    echo "Options:"
-    echo "  -t NUM          Number of threads to use"
-    echo "  -opts OPTIONS   Additional options to use with metaQUAST"
-    echo "  -h, --help      Show this help"
+function usage() {
+cat <<HELP_USAGE
+Evaluate genome assembly.
+Usage: metabiome metaquast [Options] -i <in_dir> -o <out_dir> [-opts metaQUAST_OPTS]
+
+Required:
+  -i in_dir       Directory containing contigs in FASTA format
+  -o out_dir      Directory to write results. This directory
+                  will be created if it doesn't exists.
+
+Options:
+  -t NUM          Number of threads to use
+  -opts OPTIONS   Additional options to use with metaQUAST
+  -h, --help      Show this help
+HELP_USAGE
 }
 
 # Exit if command is called with no arguments
