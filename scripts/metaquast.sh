@@ -51,7 +51,7 @@ activate_env metabiome-genome-assembly
 # Useful output info
 echo "Input directory: $input_dir"
 echo "Output directory: $out_dir"
-echo "Number of threads: ${threads:=4}"
+echo "Number of threads: ${threads:=1}"
 
 contigs=""
 for file in "$input_dir"/*; do
