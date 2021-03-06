@@ -55,7 +55,9 @@ echo "Number of threads: ${threads:=1}"
 
 contigs=""
 for file in "$input_dir"/*; do
-    contigs="$contigs $file"
+    if [[ "$file" == *contigs*.@(fa|fasta|fna|ffn) ]]; then
+        contigs="$contigs $file"
+    fi
 done
 
-metaquast.py -o "$out_dir" $metaQUAST_OPTS "$contigs"
+metaquast.py $contigs -o "$out_dir" --threads "$threads" $metaQUAST_OPTS
