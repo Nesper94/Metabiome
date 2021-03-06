@@ -88,10 +88,10 @@ The next step is to remove contaminant reads from our data. Two common
 contaminants are sequences coming from researchers or people manipulating the
 samples and sequences from the Phi-X174 phage used as control in the
 sequencing machines, so we will remove reads coming from these sources using
-:code:`bowtie2` command. To obtain these sequences, you must download the Human 
-Reference Genome (`GRCh38.p13 <https://www.ncbi.nlm.nih.gov/assembly/GCF_000001405.39>`_) 
-and the PhiX (`phi-X174 <https://www.ncbi.nlm.nih.gov/nuccore/9626372>`_) Genome 
-from the provided links. 
+:code:`bowtie2` command. To obtain these sequences, you must download the Human
+Reference Genome (`GRCh38.p13 <https://www.ncbi.nlm.nih.gov/assembly/GCF_000001405.39>`_)
+and the PhiX (`phi-X174 <https://www.ncbi.nlm.nih.gov/nuccore/9626372>`_) Genome
+from the provided links.
 
 Now that we have downloaded the human and phage reference genomes,
 let's perform the decontamination with :code:`bowtie2` command likeso:
@@ -103,6 +103,8 @@ let's perform the decontamination with :code:`bowtie2` command likeso:
 The most important output files from this step are located in :file:`decontaminated_reads/`. These files are each of the paired-end and single-end reads in gzip format, and the summary stats from the alignments. For example, assume your output file prefix is output:
 
 +-------------------------------------+--------------------------------------------------------------+
+| File                                | Description                                                  |
++=====================================+==============================================================+
 | (output)_paired_bt2_1.fq.gz         | decontaminated forward paired-end reads in gzipped format.   |
 +-------------------------------------+--------------------------------------------------------------+
 | (output)_paired_bt2_2.fq.gz         | decontaminated reverse paired-end reads in gzipped format.   |
@@ -142,7 +144,7 @@ First, let's do it through :code:`kaiju` command. This command will perform the 
 
 .. code-block:: bash
 
-    metabiome kaiju -i decontaminated_reads/ -o kaiju_out/ -x taxa_names/ -k krona/ -D kaiju_db/ -d viruses 
+    metabiome kaiju -i decontaminated_reads/ -o kaiju_out/ -x taxa_names/ -k krona/ -D kaiju_db/ -d viruses
 
 From this running, you will find two main output directories:  :file:`taxa_names/` and :file:`krona/`, which contain the taxa classification of the assigned reads and their visualization through krona figures, respectively.
 
@@ -162,11 +164,11 @@ the demo version of UniRef90 database by running the following commands:
     conda activate metabiome-taxonomic-profiling
 
     # Create folder in which databases will be saved
-    mkdir humann-db
+    mkdir humann_db
 
     # Download databases
-    humann_databases --download chocophlan DEMO humann-db/
-    humann_databases --download uniref DEMO_diamond humann-db/
+    humann_databases --download chocophlan DEMO humann_db/
+    humann_databases --download uniref DEMO_diamond humann_db/
 
 After downloading databases we are ready to profile our samples with HUMAnN:
 
@@ -191,9 +193,10 @@ The output of :code:`BBDuk` is located in :file:`bbduk_out/`. This output is ver
 Genome assembly
 ---------------
 
-In this step you can use two different assemblers that receive the output from :code:`bowtie2`:
-metaSPAdes and MEGAHIT, in order to obtain longer sequences. For this, run the following commands:
-
+In this step you can use two different assemblers that receive the output from
+:code:`bowtie2`: metaSPAdes and MEGAHIT, in order to obtain longer sequences.
+You can use just the assembler you like the most, or use both as we will do in
+this tutorial. To perform the assembly, just run the following commands:
 
 .. code-block:: bash
 
@@ -212,6 +215,3 @@ Quality assembly
 
 Genome binning
 **************
-
-
-
