@@ -94,7 +94,7 @@ and the PhiX (`phi-X174 <https://www.ncbi.nlm.nih.gov/nuccore/9626372>`_) Genome
 from the provided links.
 
 Now that we have downloaded the human and phage reference genomes,
-let's perform the decontamination with :code:`bowtie2` command likeso:
+let's perform the decontamination with :code:`bowtie2` command like so:
 
 .. code-block:: bash
 
@@ -126,7 +126,7 @@ Read-based analysis
 Taxonomic profiling
 -------------------
 
-Now, consider that you want to predict the taxonomic identity and relative abundance of your metagenomic samples. To do so, run the :code:`metaphlan3` command likeso:
+Now, consider that you want to predict the taxonomic identity and relative abundance of your metagenomic samples. To do so, run the :code:`metaphlan3` command like so:
 
 .. code-block:: bash
 
@@ -223,23 +223,23 @@ The following step is to generate bins from the previous draft genomes or contig
     ##Generate read coverage table for Metabat2 running:
     metabiome coverage_table  -i contigs_reads/ -o read_coverage/
 
-Now, let's run :code:`Metabat2` command likeso:
+Now, let's run :code:`Metabat2` through the next command:
 
 .. code-block:: bash
 
     ##Metabat2
     metabiome metabat2 -i contigs/ -co read_coverage/ -o metabat2/ 
 
-The next binner will be :code:`Maxbin2`. Let's run the command likeso: 
+The next binner will be :code:`Maxbin2`. Let's run the command like so: 
 
 .. code-block:: bash
 
-    # Maxbin2
+    ##Maxbin2
     metabiome maxbin2 -i contigs_reads/ -o maxbin2_out/
 
-Last but not least, let's run :code:`CONCOCT` command likeso:
+Last but not least, let's run :code:`CONCOCT` command:
 
 .. code-block:: bash
 
-    # CONCOCT
+    ##CONCOCT
     metabiome concoct -i contigs_reads/ -o concoct_out/
