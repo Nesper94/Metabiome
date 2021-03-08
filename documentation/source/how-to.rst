@@ -12,6 +12,7 @@ use this software to create an index for the Lambda phage reference genome, and
 not for decontamination of reads as implemented in Metabiome:
 
 .. code-block:: bash
+
     # Activate environment
     conda activate metabiome-preprocessing
     # Run Bowtie 2 natively
