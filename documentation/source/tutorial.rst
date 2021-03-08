@@ -215,3 +215,31 @@ Quality assembly
 
 Genome binning
 **************
+
+The following step is to generate bins from the previous draft genomes or contigs. To do so, we will use three different binners::code:`Metabat2`, :code:`Maxbin2` and :code:`CONCOCT`. Let's begin with :code:`Metabat2`, but before that let's generate a read coverage table with the next command: 
+
+.. code-block:: bash
+    
+    ##Generate read coverage table for Metabat2 running:
+    metabiome coverage_table  -i contigs_reads/ -o read_coverage/
+
+Now, let's run :code:`Metabat2` command likeso:
+
+.. code-block:: bash
+
+    ##Metabat2
+    metabiome metabat2 -i contigs/ -co read_coverage/ -o metabat2/ 
+
+The next binner will be :code:`Maxbin2`. Let's run the command likeso: 
+
+.. code-block:: bash
+
+    # Maxbin2
+    metabiome maxbin2 -i contigs_reads/ -o maxbin2_out/
+
+Last but not least, let's run :code:`CONCOCT` command likeso:
+
+.. code-block:: bash
+
+    # CONCOCT
+    metabiome concoct -i contigs_reads/ -o concoct_out/
