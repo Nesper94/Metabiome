@@ -18,6 +18,8 @@ not for decontamination of reads as implemented in Metabiome:
     # Run Bowtie 2 natively
     bowtie2-build $BT2_HOME/example/reference/lambda_virus.fa lambda_virus
 
+You can find a complete list of Metabiome modules and software in :ref:`modules`.
+
 .. _co-assembly:
 
 ...Perform co-assembly of samples
