@@ -84,6 +84,8 @@ File extensions accepted are:
 - :file:`.fq.gz`
 - :file:`.fastq.gz`
 
+.. _modules:
+
 Metabiome modules
 -----------------
 
@@ -93,3 +95,43 @@ created from a ``.yaml`` file, which describes the software that each one implem
 and the required version. These files are stored in the ``conda_envs`` directory. A module
 can have one or more than one tool or software, and each one has a separate script
 to execute it. They are stored in the :file:`scripts/` directory.
+
+The following is the list of software contained in each one of the Metabiome
+modules:
+
+metabiome-preprocessing
+***********************
+
+- Bowtie 2 (v2.3)
+- FastQC (v0.11)
+- MultiQC (v1.6)
+- Trimmomatic (v0.39)
+
+metabiome-taxonomic-profiling
+*****************************
+
+- MetaPhlAn3 (v3.0)
+
+metabiome-humann
+****************
+
+- HUMAnN3 (v3.0)
+
+metabiome-taxonomic-binnig
+**************************
+
+- Kaiju (v1.7)
+- Kraken2 (v2.1)
+- Krona (v2.7)
+
+metabiome-picking16S
+********************
+
+- BBMap (v38.87)
+
+metabiome-genome-assembly
+*************************
+
+- MEGAHIT (v1.2)
+- QUAST (v5.0)
+- SPAdes (v3.12)
