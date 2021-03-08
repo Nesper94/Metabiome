@@ -3,7 +3,7 @@
 How-to...
 =========
 
-Run software natively
+...Run software natively
 ---------------------
 If you need to run software in a way Metabiome does not support, you can run it
 natively by simply activating the environment where it lives and then using it
