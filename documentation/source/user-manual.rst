@@ -92,7 +92,7 @@ Metabiome modules
 This pipeline contains 6 modules that comprise the necessary tools for the analysis
 of the main points within metagenomics. They are separated by conda environments,
 created from a ``.yaml`` file, which describes the software that each one implements
-and the required version. These files are stored in the ``conda_envs`` directory. A module
+and the required version. These files are stored in the :file:`conda_envs/` directory. A module
 can have one or more than one tool or software, and each one has a separate script
 to execute it. They are stored in the :file:`scripts/` directory.
 
