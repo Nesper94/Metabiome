@@ -3,7 +3,9 @@
 Tutorial
 ========
 
-The purpose of this tutorial is to perform several steps of a metagenomic analysis using a data set from (), through our pipeline `Metabiome <https://github.com/Nesper94/metabiome>`_ .
+The purpose of this tutorial is to perform several steps of a metagenomic
+analysis using a data set from (), through our pipeline
+`Metabiome <https://github.com/Nesper94/metabiome>`_ .
 
 By the end of the tutorial, you will be able to:
     * Get to know the ``Metabiome`` working environment.
@@ -100,7 +102,10 @@ let's perform the decontamination with :code:`bowtie2` command like so:
 
     metabiome bowtie2 -i filtered_reads/ -o decontaminated_reads/ -hu Human.fasta -ph PhiX_NC_001422.1.fasta
 
-The most important output files from this step are located in :file:`decontaminated_reads/`. These files are each of the paired-end and single-end reads in gzip format, and the summary stats from the alignments. For example, assume your output file prefix is output:
+The most important output files from this step are located in
+:file:`decontaminated_reads/`. These files are each of the paired-end and
+single-end reads in gzip format, and the summary stats from the alignments.
+For example, assume your output file prefix is output:
 
 +-------------------------------------+--------------------------------------------------------------+
 | File                                | Description                                                  |
@@ -126,27 +131,36 @@ Read-based analysis
 Taxonomic profiling
 -------------------
 
-Now, consider that you want to predict the taxonomic identity and relative abundance of your metagenomic samples. To do so, run the :code:`metaphlan3` command like so:
+Now, consider that you want to predict the taxonomic identity and relative
+abundance of your metagenomic samples. To do so, run the :code:`metaphlan3`
+command like so:
 
 .. code-block:: bash
 
     metabiome metaphlan3 -i decontaminated_reads/ -o mphlan_out/
 
-In the ouput directory :file:`mphlan_out/`, you will find the taxa identity and relative abundances from the metagenomic samples.
+In the ouput directory :file:`mphlan_out/`, you will find the taxa identity and
+relative abundances from the metagenomic samples.
 
 
 Taxonomic binning
 -----------------
 
-In addition to taxonomic profiling, you can also predict the taxonomic identity of your metagenomic samples by taxonomic binning. You can perform the taxonomic binning through :code:`kaiju` or :code:`kraken2` commands.
+In addition to taxonomic profiling, you can also predict the taxonomic identity
+of your metagenomic samples by taxonomic binning. You can perform the taxonomic
+binning through :code:`kaiju` or :code:`kraken2` commands.
 
-First, let's do it through :code:`kaiju` command. This command will perform the taxonomic binning, but focusing only in viral communities from your metagenomic samples.
+First, let's do it through :code:`kaiju` command. This command will perform the
+taxonomic binning, but focusing only in viral communities from your metagenomic
+samples.
 
 .. code-block:: bash
 
     metabiome kaiju -i decontaminated_reads/ -o kaiju_out/ -x taxa_names/ -k krona/ -D kaiju_db/ -d viruses
 
-From this running, you will find two main output directories:  :file:`taxa_names/` and :file:`krona/`, which contain the taxa classification of the assigned reads and their visualization through krona figures, respectively.
+From this running, you will find two main output directories:
+:file:`taxa_names/` and :file:`krona/`, which contain the taxa classification of
+the assigned reads and their visualization through krona figures, respectively.
 
 
 Functional profiling
@@ -179,13 +193,21 @@ After downloading databases we are ready to profile our samples with HUMAnN:
 
 16S rDNA picking
 ----------------
-Now, lets suppose you want to perform additional analyses based on the 16S rDNA. The :code:`BBDuk` command can pick the 16S rDNA from your metagenomic samples. But first, you will need to download the 16S rDNA sequences from the database of your choice. We recommend to download the 16S rDNA sequences from the up-to-date `SILVA_16S database <https://www.arb-silva.de/>`_ and store it in a directory (:file:`SILVA_16S/`)
+Now, lets suppose you want to perform additional analyses based on the 16S rDNA.
+The :code:`BBDuk` command can pick the 16S rDNA from your metagenomic samples.
+But first, you will need to download the 16S rDNA sequences from the database of
+your choice. We recommend to download the 16S rDNA sequences from the up-to-date
+`SILVA_16S database <https://www.arb-silva.de/>`_ and store it in a directory
+(:file:`SILVA_16S/`)
 
 .. code-block:: bash
 
     metabiome bbduk -i decontaminated_reads/ -o bbduk_out/ -D SILVA_16S/
 
-The output of :code:`BBDuk` is located in :file:`bbduk_out/`. This output is very similar to the `Decontamination section <Decontamination_>`_ output. However, in this context, these files represent the metagenomic reads that did aligned to the 16S rDNA sequences.
+The output of :code:`BBDuk` is located in :file:`bbduk_out/`. This output is
+very similar to the `Decontamination section <Decontamination_>`_ output.
+However, in this context, these files represent the metagenomic reads that did
+aligned to the 16S rDNA sequences.
 
 *De-novo* Assembly
 ******************
@@ -216,7 +238,10 @@ Quality assembly
 Genome binning
 **************
 
-The following step is to generate bins from the previous draft genomes or contigs. To do so, we will use three different binners::code:`Metabat2`, :code:`Maxbin2` and :code:`CONCOCT`. Let's begin with :code:`Metabat2`, but before that let's generate a read coverage table with the next command: 
+The following step is to generate bins from the previous draft genomes or
+contigs. To do so, we will use three different binners::code:`Metabat2`,
+:code:`Maxbin2` and :code:`CONCOCT`. Let's begin with :code:`Metabat2`, but
+before that let's generate a read coverage table with the next command:
 
 .. code-block:: bash
     
