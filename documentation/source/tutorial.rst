@@ -150,6 +150,9 @@ In addition to taxonomic profiling, you can also predict the taxonomic identity
 of your metagenomic samples by taxonomic binning. You can perform the taxonomic
 binning through :code:`kaiju` or :code:`kraken2` commands.
 
+Using Kaiju
+...........
+
 First, let's do it through :code:`kaiju` command. This command will perform the
 taxonomic binning, but focusing only in viral communities from your metagenomic
 samples.
@@ -162,6 +165,42 @@ From this running, you will find two main output directories:
 :file:`taxa_names/` and :file:`krona/`, which contain the taxa classification of
 the assigned reads and their visualization through krona figures, respectively.
 
+Using Kraken
+............
+
+To perform the taxonomic binning with Kraken, we must first download a database
+for Kraken to use. In `this link <https://benlangmead.github.io/aws-indexes/k2>`
+you can find a set of different databases to use with Kraken depending on your
+needs. In this tutorial, we will use the Viral database just because it is a
+lightweight one and you can download it quickly:
+
+.. code-block:: bash
+
+    # Download and extract Viral database
+    mkdir kraken2_db
+    cd kraken2_db
+    wget https://genome-idx.s3.amazonaws.com/kraken/k2_viral_20201202.tar.gz
+    tar -xvzf k2_viral_20201202.tar.gz
+
+Now that we have a database, we can perform the taxonomic classification using
+the following command:
+
+.. code-block:: bash
+
+    ../scripts/kraken2.sh -i decontaminated_reads/ -o kraken2_out/ -db kraken2_db/
+
+Visualizing Kraken results
+''''''''''''''''''''''''''
+
+We have just performed the taxonomic classification of our reads with Kraken, so
+let's visualize these results using Krona:
+
+.. code-block:: bash
+
+    metabiome krona -i kraken2_out/ -o krona_out/
+
+And that's all! Inside the :file:`krona_out/` folder you will now find the Krona
+graphs displaying the composition of your samples.
 
 Functional profiling
 --------------------
