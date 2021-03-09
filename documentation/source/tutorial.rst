@@ -225,8 +225,6 @@ this tutorial. To perform the assembly, just run the following commands:
     # metaSPAdes
     metabiome metaspades -i decontaminated_reads/ -o metaspades-assembled-reads/
 
-.. code-block:: bash
-
     # MEGAHIT
     metabiome megahit -i decontaminated_reads/ -o megahit-assembled-reads/
 
