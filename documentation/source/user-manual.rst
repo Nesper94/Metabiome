@@ -56,8 +56,8 @@ the Metabiome's folder and execute the :file:`uninstall.sh` script:
     cd scripts/
     bash uninstall.sh
 
-Use
----
+Additional command line options
+-------------------------------
 
 Some Metabiome commands accept the flag ``-opts``, if this flag is used
 then it must be the last flag used in the command. After this flag you can
