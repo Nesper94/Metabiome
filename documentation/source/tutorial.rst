@@ -169,7 +169,7 @@ Using Kraken
 ............
 
 To perform the taxonomic binning with Kraken, we must first download a database
-for Kraken to use. In `this link <https://benlangmead.github.io/aws-indexes/k2>`
+for Kraken to use. In `this link <https://benlangmead.github.io/aws-indexes/k2>`_
 you can find a set of different databases to use with Kraken depending on your
 needs. In this tutorial, we will use the Viral database just because it is a
 lightweight one and you can download it quickly:
