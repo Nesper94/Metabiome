@@ -49,41 +49,36 @@ activate_env metabiome-preprocessing
 ##-------------Download Human and PhiX reference genomes-----------------##:
 # Highlight: Next code downloads PhiX and Human genome and checks if the
 # downloads were successfull.
-for i in {1..10}; do
-    if [ -e "$Human" ]; then
-        echo "Human Reference Genome already downloaded"
-        break
-    else
-        echo "Downloading Human Reference Genome"
-        esearch -db nucleotide -query "GCA_000001405.28" | \
-            efetch -format fasta > Human_GCA_000001405.28.fasta
-        if [[ -s Human_GCA_000001405.28.fasta ]]; then
-            echo "Human genome was downloaded"
-            Human=$(readlink -f Human_GCA_000001405.28.fasta)
-            break
-        else
-            echo "Try again downloading the human genome"
-        fi
-    fi
-done
-
-for i in {1..10}; do
-    if [ -e "$PhiX" ]; then
-        echo "PhiX Genome already downloaded"
-        break
-    else
-        echo "Downloading PhiX Reference Genome"
-        esearch -db nucleotide -query "NC_001422.1" | \
-            efetch -format fasta > PhiX_NC_001422.1.fasta
-        if [[ -s PhiX_NC_001422.1.fasta ]]; then
-            echo "PhiX genome was downloaded"
-            PhiX=$(readlink -f PhiX_NC_001422.1.fasta)
-            break
-        else
-            echo "Try again downloading the PhiX genome"
-        fi
-    fi
-done
+if [ ! -e "$Human" ]; then
+        URL="https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/annotation/GRCh38_latest/refseq_identifiers/GRCh38_latest_genomic.fna.gz"
+        for i in {1..10}; do
+            echo "Downloading Human Reference Genome"
+            cd "$out_dir"
+            wget "$URL"
+            if [[ -s GRCh38_latest_genomic.fna.gz ]]; then
+                    gunzip GRCh38_latest_genomic.fna.gz
+                    echo "Human genome was downloaded"
+                    Human=$(readlink -f GRCh38_latest_genomic.fna)
+                    break
+            else
+                    echo "Try downloading again the Human Reference Genome"
+            fi
+        done
+fi
+if [ ! -e "$PhiX" ]; then
+        for i in {1..10}; do
+            echo "Downloading PhiX Reference Genome"
+            cd "$out_dir"
+            esearch -db nucleotide -query "NC_001422.1" | efetch -format fasta > PhiX_NC_001422.1.fasta
+            if [[ -s PhiX_NC_001422.1.fasta ]]; then
+                    echo "PhiX genome was downloaded"
+                    PhiX=$(readlink -f PhiX_NC_001422.1.fasta)
+                    break
+            else
+                    echo "Try downloading again the PhiX genome"
+            fi
+        done
+fi
 # Verify that input directory is set and exists
 validate_input_dir
 # Create output directory if it doesn't exists
