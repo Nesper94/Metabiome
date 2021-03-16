@@ -105,13 +105,13 @@ subsample the Human reference genome, for tutorial purposes only:
 
 .. code-block:: bash
 
-    ##Activate environment to subsample Human Reference Genome:
+    # Activate environment to subsample Human Reference Genome
     conda activate metabiome-preprocessing
-    ##Download Human Reference Genome:
+    # Download Human Reference Genome
     wget https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/annotation/GRCh38_latest/refseq_identifiers/GRCh38_latest_genomic.fna.gz
-    ##Decompress Human Reference Genome:
+    # Decompress Human Reference Genome
     gunzip GRCh38_latest_genomic.fna.gz
-    ##Subsample Human Reference Genome:
+    # Subsample Human Reference Genome
     fasta-subsample GRCh38_latest_genomic.fna 1 -norand > GRCh38_sub.fna
 
 .. note:: Be aware that we subsampled the Human Reference Genome in order to 
@@ -318,14 +318,14 @@ Using Metabat2
 
 .. code-block:: bash
     
-    ##Generate read coverage table for Metabat2 running:
+    # Generate read coverage table for Metabat2 running
     metabiome coverage_table  -i contigs_reads/ -o read_coverage/
 
 Now, let's run :code:`Metabat2` through the next command:
 
 .. code-block:: bash
 
-    ##Metabat2
+    # Metabat2
     metabiome metabat2 -i contigs/ -co read_coverage/ -o metabat2/ 
 
 Using Maxbin2
@@ -335,7 +335,7 @@ The next binner will be :code:`Maxbin2`. Let's run the command like so:
 
 .. code-block:: bash
 
-    ##Maxbin2
+    # Maxbin2
     metabiome maxbin2 -i contigs_reads/ -o maxbin2_out/
 
 Using CONCOCT
@@ -345,5 +345,5 @@ Last but not least, let's run :code:`CONCOCT` command:
 
 .. code-block:: bash
 
-    ##CONCOCT
+    # CONCOCT
     metabiome concoct -i contigs_reads/ -o concoct_out/
