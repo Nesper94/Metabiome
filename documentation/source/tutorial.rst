@@ -4,7 +4,7 @@ Tutorial
 ========
 
 The purpose of this tutorial is to perform several steps of a metagenomic
-analysis using a data set from (), through our pipeline
+analysis using a data set from `Project PRJEB10295 <https://www.ebi.ac.uk/ena/browser/view/PRJEB10295>`_, through our pipeline
 `Metabiome <https://github.com/Nesper94/metabiome>`_ .
 
 By the end of the tutorial, you will be able to:
@@ -49,10 +49,25 @@ parameters it needs or accepts.
 Tutorial Data Set
 *****************
 
+The  data set for this tutorial is from the project *PRJEB10295*, which is
+a metagenomic study of the human palms. It consists of two samples derived
+from paired-end sequencing: *ERR981212* and *EEE981213*. Without further ado,
+let's download these metagenomic samples like so:
+
 .. code-block:: bash
 
+    ##Create directory of the raw reads:
     mkdir sample_data
-    wget -P sample_data
+    ##Move to the previous directory:
+    cd sample_data/
+    ##Activate environment containing fasterq-dump function:
+    conda activate metabiome-preprocessing
+    ##Download raw reads for downstream analysis:
+    fasterq-dump --split-files ERR981212
+    fasterq-dump --split-files ERR981213
+    ##Compress the raw reads:
+    gzip *.fq
+
 
 Preprocessing
 *************
@@ -90,17 +105,27 @@ The next step is to remove contaminant reads from our data. Two common
 contaminants are sequences coming from researchers or people manipulating the
 samples and sequences from the Phi-X174 phage used as control in the
 sequencing machines, so we will remove reads coming from these sources using
-:code:`bowtie2` command. To obtain these sequences, you must download the Human
-Reference Genome (`GRCh38.p13 <https://www.ncbi.nlm.nih.gov/assembly/GCF_000001405.39>`_)
-and the PhiX (`phi-X174 <https://www.ncbi.nlm.nih.gov/nuccore/9626372>`_) Genome
-from the provided links.
-
-Now that we have downloaded the human and phage reference genomes,
-let's perform the decontamination with :code:`bowtie2` command like so:
+:code:`bowtie2` command. But before running :code:`bowtie2`, we will need to 
+subsample the Human reference genome, for tutorial purposes only: 
 
 .. code-block:: bash
 
-    metabiome bowtie2 -i filtered_reads/ -o decontaminated_reads/ -hu Human.fasta -ph PhiX_NC_001422.1.fasta
+    ##Activate environment to subsample Human Reference Genome:
+    conda activate metabiome-preprocessing
+    ##Download Human Reference Genome:
+    wget https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/annotation/GRCh38_latest/refseq_identifiers/GRCh38_latest_genomic.fna.gz
+    ##Decompress Human Reference Genome:
+    gunzip GRCh38_latest_genomic.fna.gz
+    ##Subsample Human Reference Genome:
+    fasta-subsample GRCh38_latest_genomic.fna 1 -norand > GRCh38_sub.fna
+
+.. include:: note_bt2.rst
+
+Now that we have subsampled the Human Reference Genome, let's perform the decontamination with :code:`bowtie2` command like so:
+
+.. code-block:: bash
+
+    metabiome bowtie2 -i filtered_reads/ -o decontaminated_reads/ -hu GRCh38_sub.fna 
 
 The most important output files from this step are located in
 :file:`decontaminated_reads/`. These files are each of the paired-end and
@@ -259,15 +284,26 @@ In this step you can use two different assemblers that receive the output from
 You can use just the assembler you like the most, or use both as we will do in
 this tutorial. To perform the assembly, just run the following commands:
 
+
+Using MetaSPAdes
+................
+
 .. code-block:: bash
 
     # metaSPAdes
     metabiome metaspades -i decontaminated_reads/ -o metaspades-assembled-reads/
 
+
+Using MEGAHIT
+.............
+
+.. code-block:: bash
+
     # MEGAHIT
     metabiome megahit -i decontaminated_reads/ -o megahit-assembled-reads/
 
-This resulted sequences are frequently used to know the taxonomic profiling.
+These output genome draft assemblies are frequently used to perform genome quality assessment
+and binning.
 
 Quality assembly
 ----------------
@@ -279,6 +315,9 @@ The following step is to generate bins from the previous draft genomes or
 contigs. To do so, we will use three different binners::code:`Metabat2`,
 :code:`Maxbin2` and :code:`CONCOCT`. Let's begin with :code:`Metabat2`, but
 before that let's generate a read coverage table with the next command:
+
+Using Metabat2
+--------------
 
 .. code-block:: bash
     
@@ -292,12 +331,18 @@ Now, let's run :code:`Metabat2` through the next command:
     ##Metabat2
     metabiome metabat2 -i contigs/ -co read_coverage/ -o metabat2/ 
 
+Using Maxbin2
+-------------
+
 The next binner will be :code:`Maxbin2`. Let's run the command like so: 
 
 .. code-block:: bash
 
     ##Maxbin2
     metabiome maxbin2 -i contigs_reads/ -o maxbin2_out/
+
+Using CONCOCT
+-------------
 
 Last but not least, let's run :code:`CONCOCT` command:
 
