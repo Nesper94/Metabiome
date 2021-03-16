@@ -299,6 +299,13 @@ Using MEGAHIT
     # MEGAHIT
     metabiome megahit -i decontaminated_reads/ -o megahit-assembled-reads/
 
+.. note::
+
+    By default, Metabiome doesn't perform co-assembly of multiple samples but
+    instead it runs individual assemblies for each sample. If you want to
+    perform co-assembly of many samples, see :ref:`How to perform co-assembly of
+    samples <co-assembly>`.
+
 These output genome draft assemblies are frequently used to perform genome quality assessment
 and binning.
 
