@@ -59,10 +59,8 @@ let's download these metagenomic samples like so:
     # Create directory of the raw reads
     mkdir sample_data
     # Download raw reads for downstream analysis
-    wget -P sample_data ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR981/ERR981212/ERR981212_1.fastq.gz
-    wget -P sample_data ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR981/ERR981212/ERR981212_2.fastq.gz
-    wget -P sample_data ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR981/ERR981213/ERR981213_1.fastq.gz
-    wget -P sample_data ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR981/ERR981213/ERR981213_2.fastq.gz
+    wget -P sample_data ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR981/ERR981212/*
+    wget -P sample_data ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR981/ERR981213/*
 
 Preprocessing
 *************
