@@ -204,9 +204,8 @@ lightweight one and you can download it quickly:
 
     # Download and extract Viral database
     mkdir kraken2_db
-    cd kraken2_db
-    wget https://genome-idx.s3.amazonaws.com/kraken/k2_viral_20201202.tar.gz
-    tar -xvzf k2_viral_20201202.tar.gz
+    wget -P kraken2_db https://genome-idx.s3.amazonaws.com/kraken/k2_viral_20201202.tar.gz
+    tar -xvzf kraken2_db/k2_viral_20201202.tar.gz -C kraken2_db/
 
 Now that we have a database, we can perform the taxonomic classification using
 the following command:
