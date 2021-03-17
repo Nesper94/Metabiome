@@ -107,12 +107,18 @@ subsample the Human reference genome, for tutorial purposes only:
 
     # Activate environment to subsample Human Reference Genome
     conda activate metabiome-preprocessing
+
     # Download Human Reference Genome
     wget https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/annotation/GRCh38_latest/refseq_identifiers/GRCh38_latest_genomic.fna.gz
+
     # Decompress Human Reference Genome
     gunzip GRCh38_latest_genomic.fna.gz
+
     # Subsample Human Reference Genome
     fasta-subsample GRCh38_latest_genomic.fna 1 -norand > GRCh38_sub.fna
+
+    # Deactivate environment
+    conda deactivate
 
 .. note:: Be aware that we subsampled the Human Reference Genome in order to 
     perform the decontamination step quickly and smoothly. However, for real 
