@@ -215,7 +215,7 @@ the following command:
 
 .. code-block:: bash
 
-    ../scripts/kraken2.sh -i decontaminated_reads/ -o kraken2_out/ -db kraken2_db/
+    metabiome kraken2 -i decontaminated_reads/ -o kraken2_out/ -db kraken2_db/
 
 Visualizing Kraken results
 ''''''''''''''''''''''''''
