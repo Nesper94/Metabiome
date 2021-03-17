@@ -19,7 +19,9 @@ By the end of the tutorial, you will be able to:
     * Assess the quality of the metagenomic contigs.
     * Generate bins with metagenomic contigs and their respective paired-end reads.
 
-.. contents:: :depth: 2
+.. contents:: Tutorial contents
+    :depth: 1
+    :local:
 
 Getting help
 ************
