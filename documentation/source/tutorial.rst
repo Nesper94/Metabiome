@@ -124,7 +124,8 @@ subsample the Human reference genome, for tutorial purposes only:
     perform the decontamination step quickly and smoothly. However, for real 
     metagenomic studies you should always use the whole Human Reference Genome.
 
-Now that we have subsampled the Human Reference Genome, let's perform the decontamination with :code:`bowtie2` command like so:
+Now that we have subsampled the Human Reference Genome, let's perform the 
+decontamination with :code:`bowtie2` command like so:
 
 .. code-block:: bash
 
@@ -159,16 +160,19 @@ Read-based analysis
 Taxonomic profiling
 -------------------
 
-Now, consider that you want to predict the taxonomic identity and relative
-abundance of your metagenomic samples. To do so, run the :code:`metaphlan3`
-command like so:
+Now, consider that you want to predict through marker-based methods, the taxonomic
+identity and relative abundance of your metagenomic samples.To do so, you can run 
+the :code:`metaphlan3` command. First, you will have to download our demo 
+database located here `metaphlan3_db <https://drive.google.com/drive/folders/1xNzSYTjSYlfycDsSC6_QM47y9Yid9Oe5?usp=sharing>`_.
+After downloading the database, we can perform the taxonomic profiling of the viral 
+communities from the metagenomic samples like so:
 
 .. code-block:: bash
 
-    metabiome metaphlan3 -i decontaminated_reads/ -o mphlan_out/
+    metabiome metaphlan3 -i decontaminated_reads/ -o mphlan_out/ -d metaphlan3_db/ -opts add_viruses --ignore_eukaryotes --ignore_bacteria --ignore_archaea
 
 In the ouput directory :file:`mphlan_out/`, you will find the taxa identity and
-relative abundances from the metagenomic samples.
+relative abundances of the metagenomic samples.
 
 
 Taxonomic binning
@@ -176,17 +180,23 @@ Taxonomic binning
 
 In addition to taxonomic profiling, you can also predict the taxonomic identity
 of your metagenomic samples by taxonomic binning. You can perform the taxonomic
-binning through :code:`kaiju` or :code:`kraken2` commands.
+binning with DNA-to-protein classifiers like :code:`kaiju` or with DNA-to-DNA 
+classifiers like :code:`kraken2`.
 
 Using Kaiju
 ...........
 
-First, let's do it through :code:`kaiju` command. This command will perform the
-taxonomic binning, but focusing only in viral communities from your metagenomic
-samples.
+First, let's do it through :code:`kaiju` command. To run :code:`kaiju`, we have 
+to choose which database we want kaiju to download. In this case, we will only
+focus in the viral communities of the metagenomic samples. Let's run the 
+:code:`kaiju` command like so:
 
 .. code-block:: bash
 
+    #Create directories:
+    mkdir krona kaiju_db taxa_names kaiju_out 
+
+    #Run kaiju:
     metabiome kaiju -i decontaminated_reads/ -o kaiju_out/ -x taxa_names/ -k krona/ -D kaiju_db/ -d viruses
 
 From this running, you will find two main output directories:
@@ -249,6 +259,9 @@ the demo version of UniRef90 database by running the following commands:
     # Download databases
     humann_databases --download chocophlan DEMO humann_db/
     humann_databases --download uniref DEMO_diamond humann_db/
+
+    # Deactivate environment
+    conda deactivate
 
 After downloading databases we are ready to profile our samples with HUMAnN:
 
@@ -322,23 +335,28 @@ Genome binning
 
 The following step is to generate bins from the previous draft genomes or
 contigs. To do so, we will use three different binners::code:`Metabat2`,
-:code:`Maxbin2` and :code:`CONCOCT`. Let's begin with :code:`Metabat2`, but
-before that let's generate a read coverage table with the next command:
+:code:`Maxbin2` and :code:`CONCOCT`. Depending on the options you provide, 
+these binners will need the contigs and their respective paired-end reads 
+in order to run. In this case, we will use both files located in the
+directory :file:`contigs_reads/`.
+
 
 Using Metabat2
 --------------
+
+Let's begin with :code:`Metabat2`, but before that let's generate a read
+coverage table with the next command:
 
 .. code-block:: bash
     
     # Generate read coverage table for Metabat2 running
     metabiome coverage_table  -i contigs_reads/ -o read_coverage/
 
-Now, let's run :code:`Metabat2` through the next command:
+Now, let's use this read coverage table to run :code:`Metabat2` command:
 
 .. code-block:: bash
 
-    # Metabat2
-    metabiome metabat2 -i contigs/ -co read_coverage/ -o metabat2/ 
+    metabiome metabat2 -i contigs/ -co read_coverage/ -o metabat2_out/ 
 
 Using Maxbin2
 -------------
@@ -347,7 +365,6 @@ The next binner will be :code:`Maxbin2`. Let's run the command like so:
 
 .. code-block:: bash
 
-    # Maxbin2
     metabiome maxbin2 -i contigs_reads/ -o maxbin2_out/
 
 Using CONCOCT
@@ -357,5 +374,4 @@ Last but not least, let's run :code:`CONCOCT` command:
 
 .. code-block:: bash
 
-    # CONCOCT
     metabiome concoct -i contigs_reads/ -o concoct_out/
