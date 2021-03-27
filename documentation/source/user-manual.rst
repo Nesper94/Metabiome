@@ -11,12 +11,11 @@ Basic requirements
 Metabiome was built under different bioinformatics considerations to simplify its use. Prior to installation you require:
 
 
-1.  Linux terminal. If you are a windows user, you can use a virtual machine. For more information, please check `VirtualBox <https://www.virtualbox.org/>`_.
+1. Linux terminal. If you are a windows user, you can use a virtual machine. For more information, please check `VirtualBox <https://www.virtualbox.org/>`_.
 2. CONDA as a package manager. We recommend installing MINICONDA as it contains all necessary packages, and the latest version can be downloaded from `this page <https://docs.conda.io/en/latest/miniconda.html#linux-installers>`_. To install it, run the following commands:
 
 .. code-block:: bash
 
-    sudo apt-get update
     bash Miniconda3-latest-Linux-x86_64.sh
 
 3. Access to a computer server, given the large size of metagenomic data sets and the complexity of subsequent analyzes.
