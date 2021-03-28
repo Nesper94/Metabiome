@@ -116,8 +116,8 @@ metabiome-humann
 
 - HUMAnN3 (v3.0)
 
-metabiome-taxonomic-binnig
-**************************
+metabiome-taxonomic-binning
+***************************
 
 - Kaiju (v1.7)
 - Kraken2 (v2.1)
