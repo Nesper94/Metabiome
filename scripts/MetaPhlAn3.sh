@@ -35,7 +35,7 @@ while (("$#")); do
         -h|--help ) usage; exit 0;;
         -i )        input_dir=$(readlink -f "$2"); shift 2;;
         -o )        out_dir=$(readlink -m "$2"); shift 2;;
-        -d )        met_database=$(readlink -f "$2"); shift 2;;
+        -d )        met_db=$(readlink -f "$2"); shift 2;;
         -t )        threads="$2"; shift 2;;
         -opts )     shift; metaphlan_opts="$@"; break ;;
         * )         echo "Option '$1' not recognized"; exit 1;;
@@ -69,7 +69,7 @@ echo "Conda environment: $CONDA_DEFAULT_ENV"
 echo "Input directory: $input_dir"
 echo "Output directory: $out_dir"
 echo "Number of threads: ${threads:=1}"
-echo "MetaPhlAn3 database: ${met_database:?'Database not downloaded'}"
+echo "MetaPhlAn3 database: ${met_db:?'Database not downloaded'}"
 echo "MetaPhlAn3 version: $(metaphlan -v)"
 echo "MetaPhlAn3 called with options: $metaphlan_opts"
 
@@ -80,7 +80,7 @@ for file in "$input_dir"/*; do
         forward_file="$file"
         core_name=$(get_core_name "$forward_file")
         metaphlan "$forward_file",$(forward_to_reverse "$forward_file") \
-            --input_type fastq  --bowtie2db "$met_database" \
+            --input_type fastq  --bowtie2db "$met_db" \
             -o "$out_dir"/$(echo "$core_name" | sed 's/_bt2/_mphlan/').txt \
             --nproc "$threads" --bowtie2out "$out_dir"/$(echo "$core_name" | sed 's/_bt2/_mphlan/').sam \
             $metaphlan_opts
@@ -89,7 +89,7 @@ for file in "$input_dir"/*; do
     elif [[ ! "$file" ==  *_@(*R1_*|*1.|*R2_*|*2.)* ]] && [[ "$file" == *.@(fq|fastq|fq.gz|fastq.gz) ]]; then
         unpaired_file="$file"
         core_name=$(get_core_name "$unpaired_file")
-        metaphlan "$unpaired_file" --input_type fastq --bowtie2db "$met_database" \
+        metaphlan "$unpaired_file" --input_type fastq --bowtie2db "$met_db" \
             -o "$out_dir"/$(echo "$core_name" | sed 's/_bt2/_mphlan/').txt \
             --nproc "$threads" --bowtie2out "$out_dir"/$(echo "$core_name" | sed 's/_bt2/_mphlan/').sam \
             $metaphlan_opts
