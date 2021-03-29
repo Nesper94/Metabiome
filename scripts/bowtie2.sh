@@ -100,8 +100,12 @@ else
     cat "$PhiX" "$Human" > Mixed.fasta
 fi
 ##-----------------------Index the mixed fasta-------------------------------##:
-[ ! -f Mix.3.bt2 ] && { echo "Index needs to be generated:";
+## small index if the genome is small:
+[ ! -f "$host" ] && [ ! -f Mix.rev.2.bt2 ] && { echo "Index needs to be generated:";
     bowtie2-build Mixed.fasta Mix --threads "$threads";}
+##large index if the genome is large due to the presence of the host genome:
+[ -f "$host" ] && [ ! -f Mix.rev.2.bt2l ] && { echo "Large index needs to be generated:";
+    bowtie2-build --large-index Mixed.fasta Mix --threads "$threads";}
 ##-----------------------Alignment------------------------------------##:
 for file in "$input_dir"/*; do
     # Paired end reads
