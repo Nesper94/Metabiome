@@ -53,16 +53,11 @@ Tutorial Data Set
 
 The  data set for this tutorial is from the project *PRJEB10295*, which is
 a metagenomic study of the human palms. It consists of two samples derived
-from paired-end sequencing: *ERR981212* and *EEE981213*. Without further ado,
-let's download these metagenomic samples like so:
-
-.. code-block:: bash
-
-    # Create directory of the raw reads
-    mkdir sample_data
-    # Download raw reads for downstream analysis
-    wget -P sample_data ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR981/ERR981212/*
-    wget -P sample_data ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR981/ERR981213/*
+from paired-end sequencing: *ERR981212* and *EEE981213*. However, for tutorial
+purposes only, we have subsampled these files which you can download from here: 
+`sample data <https://drive.google.com/drive/folders/1TxZPUrRVkoRa8rJNHiOx1sm7GdYN__5y?usp=sharing>`_.
+Now that you have downloaded these samples, store them in a directory called 
+:file:`sample_data` for downstream analysis.  
 
 Preprocessing
 *************
