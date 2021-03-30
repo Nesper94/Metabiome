@@ -14,19 +14,20 @@ Generate taxonomic bins of metagenomic samples with kaiju.
 Usage: metabiome kaiju [options] -i <in_dir> -o <out_dir> -D <db_dir> -d <kaiju_db> -opts kaiju_options
 
 Required:
-  -i in_dir         Input directory containing FASTQ reads files.
-  -o out_dir        Directory in which results will be saved. This directory
-                    will be created if it doesn't exist.
-  -D db_dir         Directory where to download Kaiju Database.
-  -d kaiju_db       Kaiju Database name. Please refer to the Kaiju github repository.
+  -i in_dir         Input directory containing FASTQ files.
+  -o out_dir        Directory in which results will be saved. This directory will be created if it
+                    doesn't exist.
+  -D db_dir         Directory containing Kaiju's Database. If the database is not downloaded in this
+                    directory, Kaiju will download it automatically.
+  -d kaiju_db       Kaiju Database name. (Please refer to the Kaiju GitHub repository)
 
 Options:
   -t NUM            Number of threads to use (default=1).
-  -c class_dir      Output directory of the kaiju taxa classification.
-  -x taxa_dir       Output directory of the kaiju taxa name assignation.
-  -m merge_dir      Output directory of the kaiju and kraken2 merged files.
-  -k krona_dir      Output directory of the kaiju-to-krona figures.
-  -kr kraken2_dir   Directory containing Kraken2 output files.(Must be set if merge option is set.)
+  -c class_dir      Output directory of the Kaiju taxa classification.
+  -x taxa_dir       Output directory of the Kaiju taxa name assignation.
+  -m merge_dir      Output directory of the Kaiju and kraken2 merged files.
+  -k krona_dir      Output directory of the Kaiju-to-krona figures.
+  -kr kraken2_dir   Directory containing Kraken2 output files.(Must be set if merge option is set)
   -opts OPTIONS     Kaiju's options.
   -h, --help        Show this help.
 HELP_USAGE

@@ -14,10 +14,10 @@ Extract 16S rDNA sequences from metagenomic samples with BBDuk.
 Usage: metabiome bbduk [options] -i <in_dir> -o <out_dir> -D <16S_db> -opts bbduk_opts
 
 Required:
-  -i in_dir             Input directory containing clean FASTQ files.
+  -i in_dir             Input directory containing FASTQ files.
   -o out_dir            Directory in which results will be saved. This directory
                         will be created if it doesn't exist.
-  -D 16S_db             Directory containing 16S DNAr sequences in fasta format.
+  -D 16S_db             Directory containing 16S rDNA sequences in fasta format.
 
 Options:
   -t NUM                Number of threads to use. (default=1)
