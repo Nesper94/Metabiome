@@ -4,7 +4,7 @@ Tutorial
 ========
 
 The purpose of this tutorial is to perform several steps of a metagenomic
-analysis using a data set from `Project PRJEB10295 <https://www.ebi.ac.uk/ena/browser/view/PRJEB10295>`_, through our pipeline
+analysis through our pipeline
 `Metabiome <https://github.com/Nesper94/metabiome>`_ .
 
 By the end of the tutorial, you will be able to:
@@ -51,13 +51,14 @@ parameters it needs or accepts.
 Tutorial Data Set
 *****************
 
-The  data set for this tutorial is from the project *PRJEB10295*, which is
-a metagenomic study of the human palms. It consists of two samples derived
+The  data set for this tutorial is from the
+`project PRJEB10295 <https://www.ebi.ac.uk/ena/browser/view/PRJEB10295>`_,
+which is a metagenomic study of the human palms. It consists of two samples derived
 from paired-end sequencing: *ERR981212* and *EEE981213*. However, for tutorial
-purposes only, we have subsampled these files which you can download from here: 
+purposes only, we have subsampled these files which you can download from here:
 `sample data <https://drive.google.com/drive/folders/1TxZPUrRVkoRa8rJNHiOx1sm7GdYN__5y?usp=sharing>`_.
-Now that you have downloaded these samples, store them in a directory called 
-:file:`sample_data` for downstream analysis.  
+After you download these samples, store them in a directory called
+:file:`sample_data` for downstream analysis.
 
 Preprocessing
 *************
@@ -95,36 +96,21 @@ The next step is to remove contaminant reads from our data. Two common
 contaminants are sequences coming from researchers or people manipulating the
 samples and sequences from the Phi-X174 phage used as control in the
 sequencing machines, so we will remove reads coming from these sources using
-:code:`bowtie2` command. But before running :code:`bowtie2`, we will need to 
-subsample the Human reference genome, for tutorial purposes only: 
+Bowtie2. Thus, before running :code:`bowtie2` command let's download
+through the next links the `subsampled Human Genome
+<https://drive.google.com/file/d/1f49lWDaX63FefH150PZ_p9FUa5UwE5zk/view?usp=sharing>`_
+and the `Phi-X174 genome
+<https://drive.google.com/file/d/1uRdEzysZCySSkBqp-uEn-Cx5MbsQ5F8n/view?usp=sharing>`_,
+which we will use to decontaminate the filtered reads like so:
 
-.. code-block:: bash
 
-    # Activate environment to subsample Human Reference Genome
-    conda activate metabiome-preprocessing
-
-    # Download Human Reference Genome
-    wget https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/annotation/GRCh38_latest/refseq_identifiers/GRCh38_latest_genomic.fna.gz
-
-    # Decompress Human Reference Genome
-    gunzip GRCh38_latest_genomic.fna.gz
-
-    # Subsample Human Reference Genome
-    fasta-subsample GRCh38_latest_genomic.fna 1 -norand > GRCh38_sub.fna
-
-    # Deactivate environment
-    conda deactivate
-
-.. note:: Be aware that we subsampled the Human Reference Genome in order to 
-    perform the decontamination step quickly and smoothly. However, for real 
+.. note:: Be aware that we subsampled the Human Reference Genome in order to
+    perform the decontamination step quickly and smoothly. However, for real
     metagenomic studies you should always use the whole Human Reference Genome.
 
-Now that we have subsampled the Human Reference Genome, let's perform the 
-decontamination with :code:`bowtie2` command like so:
-
 .. code-block:: bash
 
-    metabiome bowtie2 -i filtered_reads/ -o decontaminated_reads/ -hu GRCh38_sub.fna 
+    metabiome bowtie2 -i filtered_reads/ -o decontaminated_reads/ -hu GRCh38_sub.fna -ph PhiX_NC_001422.1.fasta
 
 The most important output files from this step are located in
 :file:`decontaminated_reads/`. These files are each of the paired-end and
@@ -140,14 +126,21 @@ For example, assume your output file prefix is output:
 +-------------------------------------+--------------------------------------------------------------+
 | (output)_paired_bt2_summary.txt     | summary stats for paired-end alignment.                      |
 +-------------------------------------+--------------------------------------------------------------+
-| (output)_unpaired_bt2_f.fq.gz       | Decontaminated forward single-end reads in gzipped format.   |
+| (output)_unpaired_bt2_f.fq.gz       | decontaminated forward single-end reads in gzipped format.   |
 +-------------------------------------+--------------------------------------------------------------+
 | (output)_unpaired_bt2_f_summary.txt | summary stats for forward single-end alignment.              |
 +-------------------------------------+--------------------------------------------------------------+
-| (output)_unpaired_bt2_r.fq.gz       | Decontaminated reverse single-end reads in gzipped format.   |
+| (output)_unpaired_bt2_r.fq.gz       | decontaminated reverse single-end reads in gzipped format.   |
 +-------------------------------------+--------------------------------------------------------------+
 | (output)_unpaired_bt2_r_summary.txt | summary stats for reverse single-end alignment.              |
 +-------------------------------------+--------------------------------------------------------------+
+
+.. note:: It is important to point out that in this particular case, we did not have any
+    decontaminated reverse single-end reads ( :file:`output_unpaired_bt2_r.fq.gz` ).
+    Therefore, in order to avoid problems we will not use these files for downstream
+    analysis, and we must remove them from the output directory :file:`decontaminated reads/`.
+    However, keep in mind that the following read-based analysis can also handle unpaired reads
+    if desired.
 
 Read-based analysis
 *******************
@@ -156,11 +149,11 @@ Taxonomic profiling
 -------------------
 
 Now, consider that you want to predict through marker-based methods, the taxonomic
-identity and relative abundance of your metagenomic samples.To do so, you can run 
-the :code:`metaphlan3` command. First, you will have to download our demo 
+identity and relative abundance of your metagenomic samples. To do so, you can run
+the :code:`metaphlan3` command. First, you will have to download our demo
 database located here `metaphlan3_db <https://drive.google.com/drive/folders/1xNzSYTjSYlfycDsSC6_QM47y9Yid9Oe5?usp=sharing>`_.
-After downloading the database, we can perform the taxonomic profiling of the viral 
-communities from the metagenomic samples like so:
+After downloading the database, we can perform the taxonomic profiling of the viral
+communities from the metagenomic samples through MetaPhlAn3 like so:
 
 .. code-block:: bash
 
@@ -175,15 +168,15 @@ Taxonomic binning
 
 In addition to taxonomic profiling, you can also predict the taxonomic identity
 of your metagenomic samples by taxonomic binning. You can perform the taxonomic
-binning with DNA-to-protein classifiers like :code:`kaiju` or with DNA-to-DNA 
-classifiers like :code:`kraken2`.
+binning with DNA-to-protein classifiers like Kaiju or with DNA-to-DNA
+classifiers like Kraken2.
 
 Using Kaiju
 ...........
 
-First, let's do it through :code:`kaiju` command. To run :code:`kaiju`, we have 
-to choose which database we want kaiju to download. In this case, we will only
-focus in the viral communities of the metagenomic samples. Let's run the 
+First, let's do it through :code:`kaiju` command. To do so, we have
+to choose which database we want Kaiju to download. In this case, we will only
+focus on the viral communities of the metagenomic samples. Let's run the
 :code:`kaiju` command like so:
 
 .. code-block:: bash
@@ -191,7 +184,7 @@ focus in the viral communities of the metagenomic samples. Let's run the
     #Create directories:
     mkdir krona kaiju_db taxa_names kaiju_out 
 
-    #Run kaiju:
+    #Run Kaiju:
     metabiome kaiju -i decontaminated_reads/ -o kaiju_out/ -x taxa_names/ -k krona/ -D kaiju_db/ -d viruses
 
 From this running, you will find two main output directories:
@@ -268,11 +261,12 @@ After downloading databases we are ready to profile our samples with HUMAnN:
 16S rDNA picking
 ----------------
 Now, lets suppose you want to perform additional analyses based on the 16S rDNA.
-The :code:`BBDuk` command can pick the 16S rDNA from your metagenomic samples.
-But first, you will need to download the 16S rDNA sequences from the database of
+The :code:`bbduk` command can pick the 16S rDNA from your metagenomic samples through
+BBDuk. But first, you will need to download the 16S rDNA sequences from the database of
 your choice. We recommend to download the 16S rDNA sequences from the up-to-date
 `SILVA_16S database <https://www.arb-silva.de/>`_ and store it in a directory
-(:file:`SILVA_16S/`)
+(:file:`SILVA_16S/`). In this case, we will use our custom 16S rDNA database located here:
+`custom 16S_SILVA_db <https://drive.google.com/file/d/1sK03oL5b3dvsWW_CKDhaZEfmfQ9c4tc4/view?usp=sharing>`_
 
 .. code-block:: bash
 
@@ -290,9 +284,10 @@ Genome assembly
 ---------------
 
 In this step you can use two different assemblers that receive the output from
-:code:`bowtie2`: metaSPAdes and MEGAHIT, in order to obtain longer sequences.
+:code:`bowtie2`: metaSPAdes and MEGAHIT, in order to obtain contigs.
 You can use just the assembler you like the most, or use both as we will do in
-this tutorial. To perform the assembly, just run the following commands:
+this tutorial. To perform the assembly, just run the following commands but keep 
+present that this may take several minutes so just sit tight!
 
 
 Using MetaSPAdes
@@ -329,44 +324,103 @@ Genome binning
 **************
 
 The following step is to generate bins from the previous draft genomes or
-contigs. To do so, we will use three different binners::code:`Metabat2`,
-:code:`Maxbin2` and :code:`CONCOCT`. Depending on the options you provide, 
-these binners will need the contigs and their respective paired-end reads 
-in order to run. In this case, we will use both files located in the
-directory :file:`contigs_reads/`.
+contigs. To do so, we will use three different binners: MetaBAT2, MaxBin2
+and CONCOCT. Depending on the options you provide, these binners will need
+the contigs and their respective paired-end reads in order to run. In this 
+case, we will use both files located in the directory :file:`contigs_reads/`. 
+
+.. note:: Keep in mind that your contigs must have the same filename as
+    their respective paired-end reads. Thus, your :file:`contigs_reads`
+    directory should look like this:
+
+    .. code-block:: bash
+
+        #Contig and its respective paired-end reads of the sample ERR981212:
+        ERR981212_sub_paired_bt2.fasta
+        ERR981212_sub_paired_bt2_1.fq.gz
+        ERR981212_sub_paired_bt2_2.fq.gz
+        #Contig and its respective paired-end reads of the sample ERR981213:
+        ERR981213_sub_paired_bt2.fasta
+        ERR981213_sub_paired_bt2_1.fq.gz
+        ERR981213_sub_paired_bt2_2.fq.gz
 
 
-Using Metabat2
+Using MetaBAT2
 --------------
 
-Let's begin with :code:`Metabat2`, but before that let's generate a read
+Let's begin with MetaBAT2, but before that let's generate a read
 coverage table with the next command:
 
 .. code-block:: bash
-    
-    # Generate read coverage table for Metabat2 running
+
+    # Generate read coverage table for MetaBAT2 running
     metabiome coverage_table  -i contigs_reads/ -o read_coverage/
 
-Now, let's use this read coverage table to run :code:`Metabat2` command:
+Now, let's use this read coverage table to run :code:`metabat2` command.
+But first, MetaBAT2 requires the contigs in gzip format in order to run.
+Here is an example of how you should do it before running :code:`metabat2`
+command :
 
 .. code-block:: bash
 
-    metabiome metabat2 -i contigs/ -co read_coverage/ -o metabat2_out/ 
+    #Create input directory:
+    mkdir gzip_contigs
+    #Copy contigs to the input directory:
+    cp contigs_reads/*.fasta gzip_contigs/
+    #Compress those files in the required format:
+    gzip gzip_contigs/*.fasta
 
-Using Maxbin2
+    #Run MetaBAT2:
+    metabiome metabat2 -i gzip_contigs/ -co read_coverage/ -o metabat2_out/ -opts -m 1500 --maxP 50 --minS 30 --maxEdges 100 --minClsSize 1000
+
+For instance, MetaBAT2 will generate 23 bins from the assembly of the sample ERR981212,
+which are located in :file:`metabat2_out/`:
+
+.. code-block:: bash
+
+    ERR981212_sub_paired_bt2.1.fa
+    ERR981212_sub_paired_bt2.2.fa
+    ERR981212_sub_paired_bt2.3.fa
+    ERR981212_sub_paired_bt2.4.fa
+    ......
+    RR981212_sub_paired_bt2.21.fa
+    ERR981212_sub_paired_bt2.22.fa 
+    ERR981212_sub_paired_bt2.23.fa
+
+Using MaxBin2
 -------------
 
-The next binner will be :code:`Maxbin2`. Let's run the command like so: 
+The next binner will be MaxBin2. Let's run the command like so:
 
 .. code-block:: bash
 
-    metabiome maxbin2 -i contigs_reads/ -o maxbin2_out/
+    metabiome maxbin2 -i contigs_reads/ -o maxbin2_out/ -opts -min_contig_length 500 -prob_threshold 0.6
+
+MaxBin2 will generate just 1 bin and many too-short bins of the sample
+ERR981212, which are located in  :file:`maxbin2_out` and
+:file:`maxbin2_out/ERR981212_sub_paired_bt2.tooshort`, respectively.
 
 Using CONCOCT
 -------------
 
-Last but not least, let's run :code:`CONCOCT` command:
+Last but not least, let's run CONCOCT. Like in genome assembly,
+this may also take several minutes, so just go on and grab a cup of coffee!
 
 .. code-block:: bash
 
-    metabiome concoct -i contigs_reads/ -o concoct_out/
+    metabiome concoct -i contigs_reads/ -o concoct_out/ 
+
+CONCOCT will generate 40 bins from the assembly of the sample ERR981212,
+which are located in :file:`concoct_out/fasta_bins/ERR981212_sub_paired_bt2/`:
+
+.. code-block:: bash
+
+    0.fa
+    1.fa
+    2.fa
+    .....
+    38.fa
+    39.fa
+    40.fa
+
+
