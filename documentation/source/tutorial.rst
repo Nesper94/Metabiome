@@ -354,7 +354,7 @@ coverage table with the next command:
 .. code-block:: bash
 
     # Generate read coverage table for MetaBAT2 running
-    metabiome coverage_table  -i contigs_reads/ -o read_coverage/
+    metabiome coverm  -i contigs_reads/ -o read_coverage/
 
 Now, let's use this read coverage table to run :code:`metabat2` command.
 But first, MetaBAT2 requires the contigs in gzip format in order to run.
