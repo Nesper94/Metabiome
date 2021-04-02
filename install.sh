@@ -41,6 +41,15 @@ create_envs(){
 
     echo "Creating picking16S environment..."
     conda env create --file "$METABIOME_DIR"/conda-envs/picking16S.yml
+
+    echo "Creating MetaBAT2 environment..."
+    conda env create --file "$METABIOME_DIR"/conda-envs/metabat2.yml
+
+    echo "Creating MaxBin2 environment..."
+    conda env create --file "$METABIOME_DIR"/conda-envs/maxbin2.yml
+
+    echo "Creating CONCOCT environment..."
+    conda env create --file "$METABIOME_DIR"/conda-envs/concoct.yml
 }
 
 # Copy link to bash completion script
