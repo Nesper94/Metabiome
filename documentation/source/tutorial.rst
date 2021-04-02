@@ -157,7 +157,7 @@ communities from the metagenomic samples through MetaPhlAn3 like so:
 
 .. code-block:: bash
 
-    metabiome metaphlan3 -i decontaminated_reads/ -o mphlan_out/ -d metaphlan3_db/ -opts add_viruses --ignore_eukaryotes --ignore_bacteria --ignore_archaea
+    metabiome metaphlan3 -i decontaminated_reads/ -o mphlan_out/ -d metaphlan3_db/ -opts --add_viruses --ignore_eukaryotes --ignore_bacteria --ignore_archaea
 
 In the ouput directory :file:`mphlan_out/`, you will find the taxa identity and
 relative abundances of the metagenomic samples.
