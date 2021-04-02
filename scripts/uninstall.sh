@@ -25,6 +25,15 @@ remove_envs(){
 
   echo "Removing picking16S environment..."
   conda env remove --name metabiome-picking16S
+
+  echo "Removing metabat2 environment..."
+  conda env remove --name metabiome-metabat2
+
+  echo "Removing maxbin2 environment..."
+  conda env remove --name metabiome-maxbin2
+
+  echo "Removing concoct environment..."
+  conda env remove --name metabiome-concoct
 }
 
 remove_links(){
