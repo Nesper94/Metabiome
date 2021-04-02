@@ -296,7 +296,7 @@ Using MetaSPAdes
 .. code-block:: bash
 
     # metaSPAdes
-    metabiome metaspades -i decontaminated_reads/ -o metaspades-assembled-reads/
+    metabiome metaspades -i decontaminated_reads/ -o metaspades_assembled_reads/
 
 
 Using MEGAHIT
@@ -305,7 +305,7 @@ Using MEGAHIT
 .. code-block:: bash
 
     # MEGAHIT
-    metabiome megahit -i decontaminated_reads/ -o megahit-assembled-reads/
+    metabiome megahit -i decontaminated_reads/ -o megahit_assembled_reads/
 
 .. note::
 
