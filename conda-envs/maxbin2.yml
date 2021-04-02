@@ -1,0 +1,10 @@
+name: metabiome-maxbin2
+channels:
+  - ursky
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - maxbin2=2.2.*
+  - perl=5.26.*
+  - perl-lwp-simple=6.15

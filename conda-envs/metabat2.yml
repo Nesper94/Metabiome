@@ -1,0 +1,8 @@
+name: metabiome-metabat2
+channels:
+  - ursky
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - metabat2=2.15
