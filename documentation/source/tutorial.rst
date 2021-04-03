@@ -104,7 +104,7 @@ and the `Phi-X174 genome
 which we will use to decontaminate the filtered reads like so:
 
 
-.. note:: Be aware that we subsampled the Human Reference Genome in order to
+.. warning:: Be aware that we subsampled the Human Reference Genome in order to
     perform the decontamination step quickly and smoothly. However, for real
     metagenomic studies you should always use the whole Human Reference Genome.
 
@@ -135,12 +135,16 @@ For example, assume your output file prefix is output:
 | (output)_unpaired_bt2_r_summary.txt | summary stats for reverse single-end alignment.              |
 +-------------------------------------+--------------------------------------------------------------+
 
-.. note:: It is important to point out that in this particular case, we did not have any
-    decontaminated reverse single-end reads ( :file:`output_unpaired_bt2_r.fq.gz` ).
-    Therefore, in order to avoid problems we will not use these files for downstream
-    analysis, and we must remove them from the output directory :file:`decontaminated reads/`.
-    However, keep in mind that the following read-based analysis can also handle unpaired reads
-    if desired.
+
+.. warning:: It is important to point out that in this particular case,
+    we did not have any reads in the files: :file:`ERR981212_sub_unpaired_bt2_r.fq.gz`
+    and :file:`ERR981213_sub_unpaired_bt2_r.fq.gz`. Therefore, we must
+    remove these files in order to avoid problems for downstream analysis.
+    To do so, take a look in the next command:
+
+    .. code-block:: bash
+
+        rm decontaminated_reads/*sub_unpaired_bt2_r*
 
 Read-based analysis
 *******************
@@ -324,22 +328,23 @@ Genome binning
 **************
 
 The following step is to generate bins from the previous draft genomes or
-contigs. To do so, we will use three different binners: MetaBAT2, MaxBin2
-and CONCOCT. Depending on the options you provide, these binners will need
-the contigs and their respective paired-end reads in order to run. In this 
-case, we will use both files located in the directory :file:`contigs_reads/`. 
+contigs (wether from MetaSPAdes or MEGAHIT). To do so, we will use three
+different binners: MetaBAT2, MaxBin2 and CONCOCT. Depending on the options
+you provide, these binners will need the contigs and their respective
+paired-end reads in order to run. In this case, we will use both files
+located in the directory :file:`contigs_reads/`.
 
 .. note:: Keep in mind that your contigs must have the same filename as
-    their respective paired-end reads. Thus, your :file:`contigs_reads`
+    their respective paired-end reads. Thus, your :file:`contigs_reads/`
     directory should look like this:
 
     .. code-block:: bash
 
-        #Contig and its respective paired-end reads of the sample ERR981212:
+        #Contig and the respective paired-end reads of the sample ERR981212:
         ERR981212_sub_paired_bt2.fasta
         ERR981212_sub_paired_bt2_1.fq.gz
         ERR981212_sub_paired_bt2_2.fq.gz
-        #Contig and its respective paired-end reads of the sample ERR981213:
+        #Contig and the respective paired-end reads of the sample ERR981213:
         ERR981213_sub_paired_bt2.fasta
         ERR981213_sub_paired_bt2_1.fq.gz
         ERR981213_sub_paired_bt2_2.fq.gz
@@ -348,18 +353,9 @@ case, we will use both files located in the directory :file:`contigs_reads/`.
 Using MetaBAT2
 --------------
 
-Let's begin with MetaBAT2, but before that let's generate a read
-coverage table with the next command:
-
-.. code-block:: bash
-
-    # Generate read coverage table for MetaBAT2 running
-    metabiome coverm  -i contigs_reads/ -o read_coverage/
-
-Now, let's use this read coverage table to run :code:`metabat2` command.
-But first, MetaBAT2 requires the contigs in gzip format in order to run.
-Here is an example of how you should do it before running :code:`metabat2`
-command :
+Let's begin with MetaBAT2, which requires the contigs in gzip format in
+order to run. Here is an example of how you should do it before running
+:code:`metabat2` command :
 
 .. code-block:: bash
 
@@ -367,13 +363,13 @@ command :
     mkdir gzip_contigs
     #Copy contigs to the input directory:
     cp contigs_reads/*.fasta gzip_contigs/
-    #Compress those files in the required format:
+    #Compress the contigs in the required gzip format:
     gzip gzip_contigs/*.fasta
 
     #Run MetaBAT2:
-    metabiome metabat2 -i gzip_contigs/ -co read_coverage/ -o metabat2_out/ -opts -m 1500 --maxP 50 --minS 30 --maxEdges 100 --minClsSize 1000
+    metabiome metabat2 -i gzip_contigs/ -o metabat2_out/ -opts -m 1500 --maxP 50 --minS 30 --maxEdges 100 --minClsSize 1000
 
-For instance, MetaBAT2 will generate 23 bins from the assembly of the sample ERR981212,
+For example, MetaBAT2 will generate 23 bins from the assembly of the sample ERR981212,
 which are located in :file:`metabat2_out/`:
 
 .. code-block:: bash
@@ -383,7 +379,7 @@ which are located in :file:`metabat2_out/`:
     ERR981212_sub_paired_bt2.3.fa
     ERR981212_sub_paired_bt2.4.fa
     ......
-    RR981212_sub_paired_bt2.21.fa
+    ERR981212_sub_paired_bt2.21.fa
     ERR981212_sub_paired_bt2.22.fa 
     ERR981212_sub_paired_bt2.23.fa
 
@@ -396,7 +392,7 @@ The next binner will be MaxBin2. Let's run the command like so:
 
     metabiome maxbin2 -i contigs_reads/ -o maxbin2_out/ -opts -min_contig_length 500 -prob_threshold 0.6
 
-MaxBin2 will generate just 1 bin and many too-short bins of the sample
+For example, MaxBin2 will generate just 1 bin and many too-short bins of the sample
 ERR981212, which are located in  :file:`maxbin2_out` and
 :file:`maxbin2_out/ERR981212_sub_paired_bt2.tooshort`, respectively.
 
@@ -408,9 +404,9 @@ this may also take several minutes, so just go on and grab a cup of coffee!
 
 .. code-block:: bash
 
-    metabiome concoct -i contigs_reads/ -o concoct_out/ 
+    metabiome concoct -i contigs_reads/ -o concoct_out/
 
-CONCOCT will generate 40 bins from the assembly of the sample ERR981212,
+For example, CONCOCT will generate 40 bins from the assembly of the sample ERR981212,
 which are located in :file:`concoct_out/fasta_bins/ERR981212_sub_paired_bt2/`:
 
 .. code-block:: bash
