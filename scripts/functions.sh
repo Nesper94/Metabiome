@@ -77,3 +77,15 @@ create_dir(){
         fi
     fi
 }
+
+get_genome_format(){
+     if (( $# == 1 ));then
+         if [[ -e "$1".fa ]];then
+             echo "$1.fa"
+         elif [[ -e "$1".fasta ]];then
+             echo "$1.fasta"
+         elif [[ -e "$1".fna ]];then
+             echo "$1.fna"
+         fi
+     fi
+}

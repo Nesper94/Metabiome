@@ -26,6 +26,10 @@ Commands:
   metaphlan3    Generate taxonomic profiling bins.
   metaquast     Evaluate genome assembly.
   bbduk         Extract 16S rDNA sequences.
+  metabat2      Generate bins from contigs and paired-end reads.
+  maxbin2       Generate bins from contigs and paired-end reads.
+  concoct       Generate bins from contigs and paired-end reads.
+  coverm        Create read-coverage tables.
 
 Options:
   -h, --help    Show this help.
@@ -72,6 +76,18 @@ elif [[ "$1" = "qc" ]]; then
 
 elif [[ "$1" = "trimmomatic" ]]; then
   bash "$SCRIPTS_DIR"/trimmomatic.sh ${@:2}
+
+elif [[ "$1" = "metabat2" ]]; then
+  bash "$SCRIPTS_DIR"/metabat2.sh ${@:2}
+
+elif [[ "$1" = "maxbin2" ]]; then
+  bash "$SCRIPTS_DIR"/maxbin2.sh ${@:2}
+
+elif [[ "$1" = "concoct" ]]; then
+  bash "$SCRIPTS_DIR"/concoct.sh ${@:2}
+
+elif [[ "$1" = "coverm" ]]; then
+  bash "$SCRIPTS_DIR"/coverm.sh ${@:2}
 
 elif [[ "$1" = "-h" ]] || [[ "$1" = "--help" ]]; then
   usage
