@@ -1,5 +1,6 @@
 name: metabiome-taxonomic-profiling
 channels:
+  - biobakery
   - bioconda
   - conda-forge
   - defaults
@@ -7,3 +8,4 @@ dependencies:
   - python=3.7
   - metaphlan=3.0.*
   - tbb=2020.2
+  - humann=3.0.*
