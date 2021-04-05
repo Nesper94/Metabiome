@@ -8,9 +8,6 @@ source "$SCRIPTS_DIR"/config.sh
 
 # Remove Conda environments
 remove_envs(){
-  echo "Removing hummann2 environment..."
-  conda env remove --name metabiome-humann
-
   echo "Removing preprocessing environment..."
   conda env remove --name metabiome-preprocessing
 
