@@ -140,7 +140,7 @@ For example, assume your output file prefix is output:
     we did not have any reads in the files: :file:`ERR981212_sub_unpaired_bt2_r.fq.gz`
     and :file:`ERR981213_sub_unpaired_bt2_r.fq.gz`. Therefore, we must
     remove these files in order to avoid problems for downstream analysis.
-    To do so, take a look in the next command:
+    To do so, take a look at the next command:
 
     .. code-block:: bash
 
@@ -152,19 +152,28 @@ Read-based analysis
 Taxonomic profiling
 -------------------
 
-Now, consider that you want to predict through marker-based methods, the taxonomic
-identity and relative abundance of your metagenomic samples. To do so, you can run
-the :code:`metaphlan3` command. First, you will have to download our demo
-database located here `metaphlan3_db <https://drive.google.com/drive/folders/1xNzSYTjSYlfycDsSC6_QM47y9Yid9Oe5?usp=sharing>`_.
-After downloading the database, we can perform the taxonomic profiling of the viral
-communities from the metagenomic samples through MetaPhlAn3 like so:
+Now, consider that you want to predict the taxonomic identity and relative
+abundance of your metagenomic samples, through marker-based methods. To do so,
+we will use MetaPhlAn3. However, due to tutorial purposes only, you will have
+to download our custom database located here `metaphlan3_custom_db <https://drive.google.com/drive/folders/1xNzSYTjSYlfycDsSC6_QM47y9Yid9Oe5?usp=sharing>`_. Be aware that this database is
+compressed and after downloading it, you must extract the :file:`metaphlan_custom_db.tar.gz`
+like so:
 
 .. code-block:: bash
 
-    metabiome metaphlan3 -i decontaminated_reads/ -o mphlan_out/ -d metaphlan3_db/ -opts --add_viruses --ignore_eukaryotes --ignore_bacteria --ignore_archaea
+    tar -xvf metaphlan3_custom_db.tar.gz
 
-In the ouput directory :file:`mphlan_out/`, you will find the taxa identity and
-relative abundances of the metagenomic samples.
+Now, we can perfom the taxonomic profiling of the metagenomics samples with the
+:code:`metaphlan3` command like so:
+
+.. code-block:: bash
+
+    metabiome metaphlan3 -i decontaminated_reads/ -o mphlan_out/ -d metaphlan3_custom_db/ -opts --add_viruses --ignore_eukaryotes --ignore_bacteria --ignore_archaea
+
+In the output directory :file:`mphlan_out/`, you will find the taxa identity and
+relative abundances of the metagenomic samples. Additionally, you will find the
+following file :file:`merged_mphlan.txt`, which contains the taxonomic profiling
+of all samples.
 
 
 Taxonomic binning
@@ -185,15 +194,12 @@ focus on the viral communities of the metagenomic samples. Let's run the
 
 .. code-block:: bash
 
-    #Create directories:
-    mkdir krona kaiju_db taxa_names kaiju_out 
+    metabiome kaiju -i decontaminated_reads/ -o kaiju_out/ -x -k -d viruses
 
-    #Run Kaiju:
-    metabiome kaiju -i decontaminated_reads/ -o kaiju_out/ -x taxa_names/ -k krona/ -D kaiju_db/ -d viruses
-
-From this running, you will find two main output directories:
-:file:`taxa_names/` and :file:`krona/`, which contain the taxa classification of
-the assigned reads and their visualization through krona figures, respectively.
+From this running, you will find two main output directories in the directory
+:file:`kaiju_out/`: :file:`taxa_names/` and :file:`krona/`, which contain
+the taxa classification of the assigned reads and their visualization through
+krona figures, respectively.
 
 Using Kraken
 ............
@@ -276,7 +282,7 @@ your choice. We recommend to download the 16S rDNA sequences from the up-to-date
 
     metabiome bbduk -i decontaminated_reads/ -o bbduk_out/ -D SILVA_16S/
 
-The output of :code:`BBDuk` is located in :file:`bbduk_out/`. This output is
+The output of :code:`BBDuk` command is located in :file:`bbduk_out/`. This output is
 very similar to the `Decontamination section <Decontamination_>`_ output.
 However, in this context, these files represent the metagenomic reads that did
 aligned to the 16S rDNA sequences.
@@ -369,8 +375,8 @@ order to run. Here is an example of how you should do it before running
     #Run MetaBAT2:
     metabiome metabat2 -i gzip_contigs/ -o metabat2_out/ -opts -m 1500 --maxP 50 --minS 30 --maxEdges 100 --minClsSize 1000
 
-For example, MetaBAT2 will generate 23 bins from the assembly of the sample ERR981212,
-which are located in :file:`metabat2_out/`:
+For example, MetaBAT2 will generate 23 bins from the assembly of
+the sample ERR981212, which are located in :file:`metabat2_out/ERR981212_sub_paired_bt2/`.
 
 .. code-block:: bash
 
@@ -392,22 +398,26 @@ The next binner will be MaxBin2. Let's run the command like so:
 
     metabiome maxbin2 -i contigs_reads/ -o maxbin2_out/ -opts -min_contig_length 500 -prob_threshold 0.6
 
-For example, MaxBin2 will generate just 1 bin and many too-short bins of the sample
-ERR981212, which are located in  :file:`maxbin2_out` and
-:file:`maxbin2_out/ERR981212_sub_paired_bt2.tooshort`, respectively.
+For example, MaxBin2 will generate just 1 bin and many too-short
+bins from the sample ERR981212, which are located in
+:file:`maxbin2_out/ERR981212_sub_paired_bt2/` and 
+:file:`maxbin2_out/ERR981212_sub_paired_bt2/ERR981212_sub_paired_bt2.tooshort`,
+respectively.
 
 Using CONCOCT
 -------------
 
 Last but not least, let's run CONCOCT. Like in genome assembly,
-this may also take several minutes, so just go on and grab a cup of coffee!
+this may also take several minutes, so just go on and grab a
+cup of coffee while waiting!
 
 .. code-block:: bash
 
     metabiome concoct -i contigs_reads/ -o concoct_out/
 
-For example, CONCOCT will generate 40 bins from the assembly of the sample ERR981212,
-which are located in :file:`concoct_out/fasta_bins/ERR981212_sub_paired_bt2/`:
+For example, CONCOCT will generate 40 bins from the assembly
+of the sample ERR981212, which are located in
+:file:`concoct_out/fasta_bins/ERR981212_sub_paired_bt2/`:
 
 .. code-block:: bash
 
