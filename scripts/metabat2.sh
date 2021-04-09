@@ -12,20 +12,22 @@ function usage() {
 cat<<HELP_USAGE
 Generate bins from metagenomic samples with MetaBAT2.
 Usage: metabiome metabat2 [options] -i <in_dir> -o <out_dir> -opts metabat2_options
+
 Required:
--i  in_dir                  Directory containing contigs in gzipped fasta format.
--o out_dir                  Directory in which results will be saved. This directory
-                            will be created if it doesn't exist.
+  -i  in_dir        Directory containing contigs in gzipped fasta format.
+  -o out_dir        Directory in which results will be saved. This directory
+                    will be created if it doesn't exists.
+
 Options:
--co cov_dir                 Directory containing MetaBAT2's reads coverage file; each coverage
-                            filename must match to their respective contig filename.(These coverage
-                            files can be generated with 'metabiome coverm')
--t NUM                      Number of threads. (default=1)
--opts OPTIONS               MetaBAT2's options.
--h, --help                  Show this help.
+  -co cov_dir       Directory containing MetaBAT2's reads coverage file; each
+                    coverage filename must match to their respective contig
+                    filename.(These coverage files can be generated with
+                    'metabiome coverm')
+  -t NUM            Number of threads. (default=1)
+  -opts OPTIONS     MetaBAT2's options.
+  -h, --help        Show this help.
 HELP_USAGE
 }
-
 ##--------------------------Exiting if input files are missing---------------##:
 validate_arguments "$#"
 ##----------------------Saving input orders into variables------------------##:
