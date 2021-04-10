@@ -13,16 +13,16 @@ Profile the taxa of your metagenomic samples through MetaPhlAn3.
 Usage: metabiome metaphlan3 -i <in_dir> -o <out_dir> -opts metaphlan3_options
 
 Required:
-  -i    in_dir    Input directory containing FASTQ reads files.
-  -o    out_dir   Directory in which results will be saved. This directory
-                  will be created if it doesn't exist.
+  -i    in_dir      Input directory containing FASTQ reads files.
+  -o    out_dir     Directory in which results will be saved. This directory
+                    will be created if it doesn't exist.
 
 Options:
-  -d    db_dir    Directory containing the MetaPhlAn3 Database.
-                  The database will be automatically downloaded if it this directory is not set.
-  -t    NUM       Number of threads to use. (default=1)
-  -opts OPTIONS   MetaPhlAn3's options.
-  -h, --help      Show this help.
+  -d    db_dir      Directory containing the MetaPhlAn3 Database. (The database
+                    will be automatically downloaded if it this directory is not set).
+  -t    NUM         Number of threads to use. (default=1)
+  -opts OPTIONS     MetaPhlAn3's options.
+  -h, --help        Show this help.
 HELP_USAGE
 }
 

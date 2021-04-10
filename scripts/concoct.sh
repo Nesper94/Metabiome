@@ -11,17 +11,19 @@ function usage() {
   cat <<HELP_USAGE
 Generate bins from metagenomic samples with CONCOCT.
 Usage: metabiome concoct [options] -i <in_dir> -o <out_dir> -opts concoct_options
+
 Required:
--i  in_dir                      Directory containing paired-end reads and contigs in fastq
-                                and fasta format, respectively.(The filenames of the contigs and
-                                their respective paired-end reads must match)
--o  out_dir                     Directory in which results will be saved. This directory
-                                will be created if it doesn't exist.
+  -i  in_dir        Directory containing paired-end reads and contigs in fastq
+                    and fasta format, respectively.(The filenames of the contigs
+                    and their respective paired-end reads must match)
+  -o  out_dir       Directory in which results will be saved. This directory will
+                    be created if it doesn't exist.
+
 Options:
--t  NUM                         Number of threads. (default=1)
--ch NUM                         Contigs's chunk size. (default=1000)
--opts concoct_options           CONCOCT's options.
--h, --help                      Show this help.
+  -t  NUM           Number of threads. (default=1)
+  -ch NUM           Contigs's chunk size. (default=1000)
+  -opts OPTIONS     CONCOCT's options.
+  -h, --help        Show this help.
 HELP_USAGE
 }
 ##--------------------------Exiting if input files are missing---------------##:

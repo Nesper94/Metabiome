@@ -14,17 +14,17 @@ Remove contaminant sequences with bowtie2.
 Usage: metabiome bowtie2 [options] -i <in_dir> -o <out_dir> -opts bowtie2_options
 
 Required:
-  -i in_dir               Input directory containing FASTQ files.
-  -o out_dir              Directory in which results will be saved. This directory
-                          will be created if it doesn't exist.
+  -i in_dir         Input directory containing FASTQ files.
+  -o out_dir        Directory in which results will be saved. This directory will
+                    be created if it doesn't exist.
 
 Options:
-  -ho host                Host reference genome in FASTA format.
-  -ph PhiX                PhiX-174 phage reference genome in FASTA format.
-  -hu human               Human reference genome in FASTA format.
-  -t  NUM                 Number of threads to use. (default=1)
-  -opts bowtie2_options   bowtie2's options.
-  -h, --help              Show this help.
+  -ho host          Host reference genome in FASTA format.
+  -ph PhiX          PhiX-174 phage reference genome in FASTA format.
+  -hu human         Human reference genome in FASTA format.
+  -t  NUM           Number of threads to use. (default=1)
+  -opts OPTIONS     bowtie2's options.
+  -h, --help        Show this help.
 HELP_USAGE
 }
 
@@ -88,8 +88,8 @@ echo "Conda environment: $CONDA_DEFAULT_ENV"
 echo "Input directory: $input_dir"
 echo "Output directory: $out_dir"
 echo "Number of threads: ${threads:=1}"
-echo "Phix Genome: ${PhiX:?'=PhiX genome not set'}"
-echo "Human Genome: ${Human:?'=Human genome not set'}"
+echo "Phix Genome: ${PhiX:?'PhiX genome not set'}"
+echo "Human Genome: ${Human:?'Human genome not set'}"
 echo "Bowtie2 called with options: $bowtie2_opts"
 ##------------Concatenate genomes to be aligned and build genome index-------##:
 # First checks if the index is already generated, otherwise it will be generated.

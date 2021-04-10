@@ -12,19 +12,21 @@ function usage() {
 cat<<HELP_USAGE
 Generate bins from metagenomic samples with MaxBin2.
 Usage: metabiome maxbin2 [options] -i <in_dir> -o <out_dir> -opts maxbin2_options
+
 Required
--i  in_dir                  Directory containing paired-end reads and contigs in fastq and
-                            fasta format, respectively.(The filenames of the contigs and
-                            their respective paired-end reads must match)
--o out_dir                  Directory in which results will be saved. This directory
-                            will be created if it doesn't exist.
+  -i  in_dir        Directory containing paired-end reads and contigs in fastq and
+                    fasta format, respectively.(The filenames of the contigs and
+                    their respective paired-end reads must match)
+  -o out_dir        Directory in which results will be saved. This directory
+                    will be created if it doesn't exist.
+
 Options:
--a                          Directory containing abundance files; each abundance filename must match
-                            their respective contig filename. (if not set, MaxBin2 will generate the
-                            abundance files)
--t NUM                      Number of threads. (default=1)
--h, --help                  Show this help.
--opts OPTIONS               MaxBin2's options.
+  -a                Directory containing abundance files; each abundance filename
+                    must match their respective contig filename. (if not set,
+                    MaxBin2 will generate the abundance files)
+  -t NUM            Number of threads. (default=1)
+  -opts OPTIONS     MaxBin2's options.
+  -h, --help        Show this help.
 HELP_USAGE
 }
 ##--------------------------Exiting if input files are missing---------------##:

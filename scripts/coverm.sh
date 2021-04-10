@@ -12,18 +12,20 @@ function usage() {
 cat<<HELP_USAGE
 Generate read-based coverage tables with CoverM.
 Usage: metabiome coverm [options] -i <in_dir> -o <out_dir> -opts coverm_options
+
 Required:
--i  in_dir                  Directory containing paired-end reads and contigs in fastq
-                            and fasta format, respectively. (The filenames of the contigs and
-                            their respective paired-end reads must match)
--o out_dir                  Directory in which results will be saved. This directory
-                            will be created if it doesn't exist.
+  -i  in_dir        Directory containing paired-end reads and contigs in fastq
+                    and fasta format, respectively. (The filenames of the contigs and
+                    their respective paired-end reads must match)
+  -o out_dir        Directory in which results will be saved. This directory
+                    will be created if it doesn't exist.
+
 Options
--m method                   Method to generate the read-based coverage table.(default=metabat).
-                            (Refer to CoverM manual in order to use other methods)
--t NUM                      Number of threads. (default=1)
--opts OPTIONS               CoverM's options.
--h, --help                  Show this help.
+  -m method         Method to generate the read-based coverage table.(default=metabat).
+                    (Refer to CoverM manual in order to use other methods)
+  -t NUM            Number of threads. (default=1)
+  -opts OPTIONS     CoverM's options.
+  -h, --help        Show this help.
 HELP_USAGE
 }
 

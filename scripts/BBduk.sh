@@ -14,15 +14,15 @@ Extract 16S rDNA sequences from metagenomic samples with BBDuk.
 Usage: metabiome bbduk [options] -i <in_dir> -o <out_dir> -D <16S_db> -opts bbduk_opts
 
 Required:
-  -i in_dir             Input directory containing FASTQ files.
-  -o out_dir            Directory in which results will be saved. This directory
-                        will be created if it doesn't exist.
-  -D 16S_db             Directory containing 16S rDNA sequences in fasta format.
+  -i in_dir         Input directory containing FASTQ files.
+  -o out_dir        Directory in which results will be saved. This directory will be
+                    created if it doesn't exist.
+  -D 16S_db         Directory containing 16S rDNA sequences in fasta format.
 
 Options:
-  -t NUM                Number of threads to use. (default=1)
-  -opts bbduk_options   BBDuk's options.
-  -h, --help            Show this help.
+  -t NUM            Number of threads to use. (default=1)
+  -opts OPTIONS     BBDuk's options.
+  -h, --help        Show this help.
 HELP_USAGE
 }
 
@@ -49,7 +49,7 @@ echo "Conda environment: $CONDA_DEFAULT_ENV"
 echo "Input directory: $input_dir"
 echo "Output directory: $out_dir"
 echo "Number of threads: ${threads:=1}"
-echo "Reference database: ${database:?'=reference database not set'}"
+echo "Reference database: ${database:?'reference database not set'}"
 echo "BBDuk called with options: $bbduk_opts"
 ##-----------------------Activate conda environment--------------------------##:
 activate_env metabiome-picking16S
