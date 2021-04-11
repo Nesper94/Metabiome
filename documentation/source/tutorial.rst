@@ -411,7 +411,8 @@ the sample ERR981212, which are located in :file:`metabat2_out/ERR981212_sub_pai
 Using MaxBin2
 -------------
 
-The next binner will be MaxBin2. Let's run the command like so:
+The next binner will be MaxBin2. Let's run the command :code:`maxbin2`
+like so:
 
 .. code-block:: bash
 
@@ -426,15 +427,13 @@ respectively.
 Using CONCOCT
 -------------
 
-Last but not least, let's run CONCOCT. Like in genome assembly,
-this may also take several minutes, so just go on and grab a
-cup of coffee while waiting!
+Last but not least, let's run :code:`concoct` command like so:
 
 .. code-block:: bash
 
-    metabiome concoct -i contigs_reads/ -o concoct_out/
+    metabiome concoct -i contigs_reads/ -o concoct_out/ -opts --no_original_data
 
-For example, CONCOCT will generate 40 bins from the assembly
+For example, CONCOCT will generate 8 bins from the assembly
 of the sample ERR981212, which are located in
 :file:`concoct_out/fasta_bins/ERR981212_sub_paired_bt2/`:
 
@@ -444,6 +443,5 @@ of the sample ERR981212, which are located in
     1.fa
     2.fa
     .....
-    38.fa
-    39.fa
-    40.fa
+    7.fa
+    8.fa
