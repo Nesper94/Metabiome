@@ -355,8 +355,8 @@ Genome binning
 The following step is to generate bins from the previous draft genomes or
 contigs (wether from MetaSPAdes or MEGAHIT). To do so, we will use three
 different binners: MetaBAT2, MaxBin2 and CONCOCT. Depending on the options
-you provide, these binners will need the contigs and their respective
-paired-end reads in order to run. In this case, we will use both files
+you provide, these binners will need the contigs and the reads that generated
+those contigs in order to run. In this case, we will use both files
 located in the directory :file:`contigs_reads/`.
 
 .. note:: Keep in mind that your contigs must have the same filename as
