@@ -63,8 +63,8 @@ for file in "$input_dir"/*;do
     if [[ "$file" == *@(*_R1_*|*_1).@(fq|fastq|fq.gz|fastq.gz) ]];then
             forward_file="$file"
             core_name=$(get_core_name "$forward_file")
-            draft=$(get_genome_format "$input_dir"/"$core_name")
+            contig=$(get_genome_format "$input_dir"/"$core_name")
             coverm contig -1 "$forward_file" -2 $(forward_to_reverse "$forward_file") \
-                --reference "$draft" -m "$method" -t "$threads" $cov_opts > "$core_name".tsv
+                --reference "$contig" -m "$method" -t "$threads" $cov_opts > "$core_name".tsv
     fi
 done
