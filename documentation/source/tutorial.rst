@@ -186,7 +186,7 @@ focus on the viral communities of the metagenomic samples. Let's run the
 .. code-block:: bash
 
     #Create directories:
-    mkdir krona kaiju_db taxa_names kaiju_out 
+    mkdir krona kaiju_db taxa_names kaiju_out
 
     #Run Kaiju:
     metabiome kaiju -i decontaminated_reads/ -o kaiju_out/ -x taxa_names/ -k krona/ -D kaiju_db/ -d viruses
@@ -290,7 +290,7 @@ Genome assembly
 In this step you can use two different assemblers that receive the output from
 :code:`bowtie2`: metaSPAdes and MEGAHIT, in order to obtain contigs.
 You can use just the assembler you like the most, or use both as we will do in
-this tutorial. To perform the assembly, just run the following commands but keep 
+this tutorial. To perform the assembly, just run the following commands but keep
 present that this may take several minutes so just sit tight!
 
 
@@ -323,6 +323,25 @@ and binning.
 
 Quality assembly
 ----------------
+
+In order to assess the quality of the assemblies performed in the previous step,
+we are going to use MetaQUAST. The minimal input for MetaQUAST is a folder with
+contigs in FASTA format, then MetaQUAST will search and download reference
+sequences for you. However, in this tutorial we will use the Metabiome's
+``-opts`` flag (See :ref:`opts-flag`) in order to give MetaQUAST a reference
+sequence to compare our contigs. As BeAn 58058 virus was one of the most
+abundant virus in our samples, we will use its genome:
+
+.. code-block:: bash
+
+    # Create directory with reference sequence
+    mkdir metaquast_ref_seq
+
+    # Download reference genome
+    wget -P metaquast_ref_seq ftp://ftp.ncbi.nlm.nih.gov/genomes/refseq/viral/BeAn_58058_virus/latest_assembly_versions/GCF_001907825.1_ViralProj357638/GCF_001907825.1_ViralProj357638_genomic.fna.gz
+
+    # Run MetaQUAST
+    metabiome metaquast -i megahit_assembled_reads/ERR981212_sub_paired_bt2/ -o metaquast_out -opts -r metaquast_ref_seqs/GCF_001907825.1_ViralProj357638_genomic.fna.gz
 
 Genome binning
 **************
@@ -380,7 +399,7 @@ which are located in :file:`metabat2_out/`:
     ERR981212_sub_paired_bt2.4.fa
     ......
     ERR981212_sub_paired_bt2.21.fa
-    ERR981212_sub_paired_bt2.22.fa 
+    ERR981212_sub_paired_bt2.22.fa
     ERR981212_sub_paired_bt2.23.fa
 
 Using MaxBin2
