@@ -447,5 +447,3 @@ of the sample ERR981212, which are located in
     38.fa
     39.fa
     40.fa
-
-
