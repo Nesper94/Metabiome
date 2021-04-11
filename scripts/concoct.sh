@@ -1,5 +1,5 @@
 #!/bin/bash
-# CONCOCT wrapper script for the binning of draft assemblies.
+# CONCOCT wrapper script for the binning of contig assemblies.
 # Written by: Phagomica Group
 # Last updated on: 2021-02-14
 
@@ -21,6 +21,8 @@ Required:
 
 Options:
   -t  NUM           Number of threads. (default=1)
+  -co cov_dir       Directory containing read-based coverage files. (The filename of the
+                    read-based coverage files must match to their respective contig filenames)
   -ch NUM           Contigs's chunk size. (default=1000)
   -opts OPTIONS     CONCOCT's options.
   -h, --help        Show this help.
@@ -35,6 +37,7 @@ while (("$#")); do
         -i )        input_dir=$(readlink -f "$2"); shift 2 ;;
         -o )        out_dir=$(readlink -m "$2"); shift 2 ;;
         -ch )       chunk_size="$2"; shift 2 ;;
+        -co )       cov_dir="$(readlink -f "$2")"; shift 2 ;;
         -t )        threads="$2"; shift 2 ;;
         -opts )     shift; concoct_opts="$@"; break ;;
         * )         echo "Option '$1' not recognized"; exit 1 ;;
@@ -56,33 +59,64 @@ echo "Contig chunk size: ${chunk_size:=1000}"
 echo "CONCOCT called with options: $concoct_opts"
 ##-----------------------------CONCOCT binning-------------------------------##:
 create_dir "$out_dir" fasta_bins
-for file in "$input_dir"/*;do
-    #Check correct forward file format:
-    if [[ "$file" == *@(*_R1_*|*_1).@(fq|fastq|fq.gz|fastq.gz) ]]; then
-            forward_file="$file"
-            core_name=$(get_core_name "$forward_file")
-            #check the format of the contig or draft genome:
-            draft=$(get_genome_format "$input_dir"/"$core_name")
-            #create output directory:
-            create_dir "$out_dir" "$core_name" && cd "$out_dir"/"$core_name"
-            #cut contigs into smaller parts
-            cut_up_fasta.py "$draft" -m -o 0 -c "$chunk_size" > "$core_name".k"$chunk_size".fa
-            #building Kallisto index:
-            [ ! -f "$core_name".idx ] && { echo "Generate Kallisto index:";
-            kallisto index "$core_name".k"$chunk_size".fa -i "$core_name".idx;}
-            #Map the reads to their contigs from each replicate:
-            kallisto quant "$forward_file" $(forward_to_reverse "$forward_file") \
-                -i "$core_name".idx -o "$out_dir"/"$core_name" -t "$threads"
-            #Generate the coverage table for concoct:
-            input_table.py abundance.tsv > "$core_name".kcov.tsv
-            #run concoct:
-            concoct --composition_file "$core_name".k"$chunk_size".fa \
-                --coverage_file "$core_name".kcov.tsv -t "$threads" -b "$core_name" $concoct_opts
-            #merge subcontig clustering into original contigs:
-            merge_cutup_clustering.py "$core_name"_clustering_gt*.csv > "$core_name"_clust_merged.csv
-            create_dir "$out_dir"/fasta_bins "$core_name"
-            #extract bins as individual FASTA:
-            extract_fasta_bins.py "$draft" "$core_name"_clust_merged.csv \
-                --output_path "$out_dir"/fasta_bins/"$core_name"
-    fi
-done
+
+if [[ ! -d "$cov_dir" ]];then
+    for file in "$input_dir"/*;do
+        #Check correct forward file format:
+        if [[ "$file" == *@(*_R1_*|*_1).@(fq|fastq|fq.gz|fastq.gz) ]]; then
+                forward_file="$file"
+                core_name=$(get_core_name "$forward_file")
+                #check the format of the contig or contig genome:
+                contig=$(get_genome_format "$input_dir"/"$core_name")
+                #create output directory:
+                create_dir "$out_dir" "$core_name" && cd "$out_dir"/"$core_name"
+                #cut contigs into smaller parts
+                cut_up_fasta.py "$contig" \
+                    -m -o 0 -c "$chunk_size" > "$core_name".k"$chunk_size".fa
+                #building Kallisto index:
+                [ ! -f "$core_name".idx ] && { echo "Generate Kallisto index:";
+                    kallisto index "$core_name".k"$chunk_size".fa -i "$core_name".idx;}
+                #Map the reads to their contigs from each sample:
+                kallisto quant "$forward_file" $(forward_to_reverse "$forward_file") \
+                    -i "$core_name".idx -o "$out_dir"/"$core_name" -t "$threads"
+                #Generate the coverage table for concoct:
+                input_table.py abundance.tsv > "$core_name".kcov.tsv
+                #run concoct:
+                concoct --composition_file "$core_name".k"$chunk_size".fa \
+                    --coverage_file "$core_name".kcov.tsv \
+                    -t "$threads" -b "$core_name" $concoct_opts
+                #merge subcontig clustering into original contigs:
+                merge_cutup_clustering.py "$core_name"_clustering_gt*.csv > "$core_name"_clust_merged.csv
+                create_dir "$out_dir"/fasta_bins "$core_name"
+                #extract bins as individual FASTA:
+                extract_fasta_bins.py "$contig" "$core_name"_clust_merged.csv \
+                    --output_path "$out_dir"/fasta_bins/"$core_name"
+        fi
+    done
+
+elif [[ -d "$cov_dir" ]];then
+    for file in "$input_dir"/*;do
+        #Check correct forward file format:
+        if [[ "$file" == *.@(fna|fasta|fa) ]];then
+                contig="$file"
+                core_name=$(get_core_name "$contig")
+                #check the format of the contig or contig genome:
+                contig=$(get_genome_format "$input_dir"/"$core_name")
+                #create output directory:
+                create_dir "$out_dir" "$core_name" && cd "$out_dir"/"$core_name"
+                #cut contigs into smaller parts
+                cut_up_fasta.py "$contig" \
+                    -m -o 0 -c "$chunk_size" > "$core_name".k"$chunk_size".fa
+                #run concoct:
+                concoct --composition_file "$core_name".k"$chunk_size".fa \
+                    --coverage_file "$cov_dir"/*"$core_name"* \
+                    -t "$threads" -b "$core_name" $concoct_opts
+                #merge subcontig clustering into original contigs:
+                merge_cutup_clustering.py "$core_name"_clustering_gt*.csv > "$core_name"_clust_merged.csv
+                create_dir "$out_dir"/fasta_bins "$core_name"
+                #extract bins as individual FASTA:
+                extract_fasta_bins.py "$contig" "$core_name"_clust_merged.csv \
+                    --output_path "$out_dir"/fasta_bins/"$core_name"
+        fi
+    done
+fi
