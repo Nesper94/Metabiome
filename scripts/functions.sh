@@ -1,3 +1,7 @@
+#
+# Definition of functions used in wrapper scripts
+#
+
 # Exit if command is called with no arguments
 validate_arguments(){
     if [[ "$1" == 0 ]]; then
