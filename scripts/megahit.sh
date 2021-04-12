@@ -48,7 +48,7 @@ validate_output_dir
 # Activate conda environment
 activate_env metabiome-genome-assembly
 
-#Output info
+# Output info
 echo "Input directory: $input_dir"
 echo "Output directory: $out_dir"
 echo "Number of threads: ${threads:=4}"

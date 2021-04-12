@@ -1,6 +1,6 @@
 #!/bin/bash
-#FastQC and MultiQC script to make a screening of FASTQ files quality
-#Made by: PhagePipe
+# FastQC and MultiQC script to make a screening of FASTQ files quality
+# Made by: PhagePipe
 
 set -e
 shopt -s extglob
