@@ -43,3 +43,48 @@ according to the ``_1.``/``_2.`` naming convention:
 
     # Run assembly
     metabiome metaspades -i co-assembly -o assembly_results
+
+...Create read-based coverage files for genome binning
+------------------------------------------------------
+
+If you want to create read-based coverage files to boost the
+binning of your contigs or genomes, you can do it easily
+through our pipeline Metabiome. Metabiome has three different
+software (CONCOCT, MaxBin2 and MetaBAT2) for genome binning. So,
+let's just take a look on how to create these read-based coverage
+files and bin our contigs alongside:
+
+For CONCOCT and MaxBin2 is pretty straightforward because the commands
+:code:`concoct` and :code:`maxbin2` create the read-based coverage files
+automatically like so:
+
+.. code-block:: bash
+
+    ##Run CONCOCT:
+    metabiome concoct -i contigs_reads/ -o concoct_out/
+
+    ##Run MaxBin2:
+    metabiome maxbin2 -i contigs_reads/ -o maxbin2_out/
+
+Whereas for MetaBAT2, if you want to perform the binning with read-based
+coverage files, you must generate them previously. To do so you can use
+our command :code:`coverm` like so:
+
+.. code-block:: bash
+
+    ##Run CoverM:
+    metabiome coverm  -i contigs_reads/ -o read_coverage/
+
+Now, let's use this read coverage files to run :code:`metabat2` command.
+But keep in mind that MetaBAT2 requires the contigs in gzip format in
+order to run:
+
+.. code-block:: bash
+
+    #Run MetaBAT2:
+    metabiome metabat2 -i gzip_contigs/ -co read_coverage/ -o metabat2_out/
+
+
+Moreover, if you already have your read-based coverage files, you can also
+provide it to any of the binners and automatically skip the process of
+creating these read-based coverage files.
