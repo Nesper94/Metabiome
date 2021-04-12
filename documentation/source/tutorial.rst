@@ -74,8 +74,9 @@ using the command :code:`qc` from Metabiome:
     metabiome qc -i sample_data/ -o quality_check/
 
 After running this command the folder :file:`quality-check/` will be created
-and inside it you will find a FastQC report with quality info for each input
-file. You can also view this info summarized in the file from MultiQC.
+and inside it you will find a `FastQC <https://www.bioinformatics.babraham.ac.uk/projects/fastqc/>`_
+report with quality info for each input file. You can also view this info
+summarized in the file from `MultiQC <https://multiqc.info/>`_.
 
 Quality filtering
 -----------------
@@ -96,11 +97,10 @@ The next step is to remove contaminant reads from our data. Two common
 contaminants are sequences coming from researchers or people manipulating the
 samples and sequences from the Phi-X174 phage used as control in the
 sequencing machines, so we will remove reads coming from these sources using
-Bowtie2. Thus, before running :code:`bowtie2` command let's download
-through the next links the `subsampled Human Genome
-<https://drive.google.com/file/d/1f49lWDaX63FefH150PZ_p9FUa5UwE5zk/view?usp=sharing>`_
-and the `Phi-X174 genome
-<https://drive.google.com/file/d/1uRdEzysZCySSkBqp-uEn-Cx5MbsQ5F8n/view?usp=sharing>`_,
+`Bowtie2 <http://bowtie-bio.sourceforge.net/bowtie2/index.shtml>`_. Thus, before
+running :code:`bowtie2` command let's download through the next links the
+`subsampled Human Genome <https://drive.google.com/file/d/1f49lWDaX63FefH150PZ_p9FUa5UwE5zk/view?usp=sharing>`_
+and the `Phi-X174 genome <https://drive.google.com/file/d/1uRdEzysZCySSkBqp-uEn-Cx5MbsQ5F8n/view?usp=sharing>`_,
 which we will use to decontaminate the filtered reads like so:
 
 
@@ -154,10 +154,11 @@ Taxonomic profiling
 
 Now, consider that you want to predict the taxonomic identity and relative
 abundance of your metagenomic samples, through marker-based methods. To do so,
-we will use MetaPhlAn3. However, due to tutorial purposes only, you will have
-to download our custom database located here `metaphlan3_custom_db <https://drive.google.com/drive/folders/1xNzSYTjSYlfycDsSC6_QM47y9Yid9Oe5?usp=sharing>`_. Be aware that this database is
-compressed and after downloading it, you must extract the :file:`metaphlan_custom_db.tar.gz`
-like so:
+we will use `MetaPhlAn3 <https://huttenhower.sph.harvard.edu/metaphlan/>`_.
+However, due to tutorial purposes only, you will have to download our custom
+database located here: `metaphlan3_custom_db <https://drive.google.com/drive/folders/1xNzSYTjSYlfycDsSC6_QM47y9Yid9Oe5?usp=sharing>`_.
+Be aware that this database is compressed and after downloading it, you must
+extract the :file:`metaphlan_custom_db.tar.gz` like so:
 
 .. code-block:: bash
 
@@ -181,8 +182,8 @@ Taxonomic binning
 
 In addition to taxonomic profiling, you can also predict the taxonomic identity
 of your metagenomic samples by taxonomic binning. You can perform the taxonomic
-binning with DNA-to-protein classifiers like Kaiju or with DNA-to-DNA
-classifiers like Kraken2.
+binning with DNA-to-protein classifiers like `Kaiju <http://kaiju.binf.ku.dk/>`_
+or with DNA-to-DNA classifiers like `Kraken2 <https://github.com/DerrickWood/kraken2/wiki>`_.
 
 Using Kaiju
 ...........
@@ -228,7 +229,7 @@ Visualizing Kraken results
 ''''''''''''''''''''''''''
 
 We have just performed the taxonomic classification of our reads with Kraken, so
-let's visualize these results using Krona:
+let's visualize these results using `Krona <https://github.com/marbl/Krona/wiki>`_:
 
 .. code-block:: bash
 
@@ -240,11 +241,12 @@ graphs displaying the composition of your samples.
 Functional profiling
 --------------------
 
-The first time you use HUMAnN, you must download two databases, ChocoPhlAn and
-a translated search database (UniRef), see `HUMAnN documentation
-<https://github.com/biobakery/humann#5-download-the-databases>`_ for more info
-about this. Here we will download the demo version of ChocoPhlAn database and
-the demo version of UniRef90 database by running the following commands:
+The first time you use `HUMAnN <https://huttenhower.sph.harvard.edu/humann/>`_,
+you must download two databases, ChocoPhlAn and a translated search database
+(UniRef), see `HUMAnN documentation <https://github.com/biobakery/humann#5-download-the-databases>`_
+for more info about this. Here we will download the demo version of ChocoPhlAn
+database and the demo version of UniRef90 database by running the following
+commands:
 
 .. code-block:: bash
 
@@ -272,7 +274,8 @@ After downloading databases we are ready to profile our samples with HUMAnN:
 ----------------
 Now, lets suppose you want to perform additional analyses based on the 16S rDNA.
 The :code:`bbduk` command can pick the 16S rDNA from your metagenomic samples through
-BBDuk. But first, you will need to download the 16S rDNA sequences from the database of
+`BBDuk <https://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/bbduk-guide/>`_.
+But first, you will need to download the 16S rDNA sequences from the database of
 your choice. We recommend to download the 16S rDNA sequences from the up-to-date
 `SILVA_16S database <https://www.arb-silva.de/>`_ and store it in a directory
 (:file:`SILVA_16S/`). In this case, we will use our custom 16S rDNA database located here:
@@ -294,7 +297,8 @@ Genome assembly
 ---------------
 
 In this step you can use two different assemblers that receive the output from
-:code:`bowtie2`: metaSPAdes and MEGAHIT, in order to obtain contigs.
+:code:`bowtie2`: `metaSPAdes <https://cab.spbu.ru/software/spades/>`_ and
+`MEGAHIT <https://github.com/voutcn/megahit>`_, in order to obtain contigs.
 You can use just the assembler you like the most, or use both as we will do in
 this tutorial. To perform the assembly, just run the following commands but keep
 present that this may take several minutes so just sit tight!
@@ -331,12 +335,13 @@ Quality assembly
 ----------------
 
 In order to assess the quality of the assemblies performed in the previous step,
-we are going to use MetaQUAST. The minimal input for MetaQUAST is a folder with
-contigs in FASTA format, then MetaQUAST will search and download reference
-sequences for you. However, in this tutorial we will use the Metabiome's
-``-opts`` flag (See :ref:`opts-flag`) in order to give MetaQUAST a reference
-sequence to compare our contigs. As BeAn 58058 virus was one of the most
-abundant virus in our samples, we will use its genome:
+we are going to use `MetaQUAST <http://quast.sourceforge.net/metaquast>`_. The
+minimal input for MetaQUAST is a folder with contigs in FASTA format, then
+MetaQUAST will search and download reference sequences for you. However, in this
+tutorial we will use the Metabiome's ``-opts`` flag (See :ref:`opts-flag`) in
+order to give MetaQUAST a reference sequence to compare our contigs. As BeAn
+58058 virus was one of the most abundant virus in our samples, we will use its
+genome:
 
 .. code-block:: bash
 
@@ -354,10 +359,11 @@ Genome binning
 
 The following step is to generate bins from the previous draft genomes or
 contigs (wether from MetaSPAdes or MEGAHIT). To do so, we will use three
-different binners: MetaBAT2, MaxBin2 and CONCOCT. Depending on the options
-you provide, these binners will need the contigs and their respective
-paired-end reads in order to run. In this case, we will use both files
-located in the directory :file:`contigs_reads/`.
+different binners: `MetaBAT2 <https://bitbucket.org/berkeleylab/metabat/>`_,
+`MaxBin2 <https://sourceforge.net/projects/maxbin2/>`_ and `CONCOCT <https://concoct.readthedocs.io/en/latest/>`_.
+Depending on the options you provide, these binners will need the contigs and
+their respective paired-end reads in order to run. In this case, we will use
+both files located in the directory :file:`contigs_reads/`.
 
 .. note:: Keep in mind that your contigs must have the same filename as
     their respective paired-end reads. Thus, your :file:`contigs_reads/`
