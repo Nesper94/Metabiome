@@ -102,7 +102,7 @@ done
 
 # Merge tables from utility scripts
 cd "$out_dir"
-merge_metaphlan_tables.py *.txt > merged_mphlan.txt
+merge_metaphlan_tables.py *.txt > merged_abundance_table.txt
 
 echo "Done."
 echo "You can now use this metagenomic profiling to:"
