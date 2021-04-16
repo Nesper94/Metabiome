@@ -30,8 +30,5 @@ can use with Metabiome.
 ### Evaluation of assembly
 - MetaQUAST
 
-## Metagenomics analysis Flowchart
-![Flowchart](figs/flowchart.png)
-
 ## Pipeline
 ![Pipeline](https://i.imgur.com/nnm7qi3.png)
