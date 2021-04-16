@@ -181,4 +181,3 @@ copybutton_prompt_text = r"\#\s.*"
 copybutton_prompt_is_regexp = True
 copybutton_only_copy_prompt_lines = False
 copybutton_remove_prompts = True
-
