@@ -177,7 +177,7 @@ epub_title = project
 epub_exclude_files = ['search.html']
 
 # The prompt text that will be removed  from copied text in your code blocks.
-copybutton_prompt_text = r"^\n.*$"
+copybutton_prompt_text = r"\#\s.*"
 copybutton_prompt_is_regexp = True
 copybutton_only_copy_prompt_lines = False
 copybutton_remove_prompts = True
