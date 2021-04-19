@@ -30,7 +30,8 @@ HELP_USAGE
 
 # Exit if command is called with no arguments
 validate_arguments "$#"
-##---------------------Save input parameters into variables------------------##:
+
+# Parse command line arguments
 while (("$#")); do
     case "$1" in
         -h|--help ) usage; exit 0 ;;
@@ -44,45 +45,51 @@ while (("$#")); do
         * )         echo "Option '$1' not recognized"; exit 1 ;;
     esac
 done
-##----------------------Activate Conda environment-----------------------------##:
+
+# Activate Conda environment
 activate_env metabiome-preprocessing
-##-------------Download Human and PhiX reference genomes-----------------##:
+
+# Download Human and PhiX reference genomes
 # Highlight: Next code downloads PhiX and Human genome and checks if the
 # downloads were successfull.
 if [ ! -e "$Human" ]; then
-        URL="https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/annotation/GRCh38_latest/refseq_identifiers/GRCh38_latest_genomic.fna.gz"
-        for i in {1..10}; do
-            echo "Downloading Human Reference Genome"
-            cd "$out_dir"
-            wget "$URL"
-            if [[ -s GRCh38_latest_genomic.fna.gz ]]; then
-                    gunzip GRCh38_latest_genomic.fna.gz
-                    echo "Human genome was downloaded"
-                    Human=$(readlink -f GRCh38_latest_genomic.fna)
-                    break
-            else
-                    echo "Try downloading again the Human Reference Genome"
-            fi
-        done
+    URL="https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/annotation/GRCh38_latest/refseq_identifiers/GRCh38_latest_genomic.fna.gz"
+    for i in {1..10}; do
+        echo "Downloading Human Reference Genome"
+        cd "$out_dir"
+        wget "$URL"
+        if [[ -s GRCh38_latest_genomic.fna.gz ]]; then
+            gunzip GRCh38_latest_genomic.fna.gz
+            echo "Human genome was downloaded"
+            Human=$(readlink -f GRCh38_latest_genomic.fna)
+            break
+        else
+            echo "Try downloading again the Human Reference Genome"
+        fi
+    done
 fi
+
 if [ ! -e "$PhiX" ]; then
-        for i in {1..10}; do
-            echo "Downloading PhiX Reference Genome"
-            cd "$out_dir"
-            esearch -db nucleotide -query "NC_001422.1" | efetch -format fasta > PhiX_NC_001422.1.fasta
-            if [[ -s PhiX_NC_001422.1.fasta ]]; then
-                    echo "PhiX genome was downloaded"
-                    PhiX=$(readlink -f PhiX_NC_001422.1.fasta)
-                    break
-            else
-                    echo "Try downloading again the PhiX genome"
-            fi
-        done
+    for i in {1..10}; do
+        echo "Downloading PhiX Reference Genome"
+        cd "$out_dir"
+        esearch -db nucleotide -query "NC_001422.1" | efetch -format fasta > PhiX_NC_001422.1.fasta
+        if [[ -s PhiX_NC_001422.1.fasta ]]; then
+            echo "PhiX genome was downloaded"
+            PhiX=$(readlink -f PhiX_NC_001422.1.fasta)
+            break
+        else
+            echo "Try downloading again the PhiX genome"
+        fi
+    done
 fi
+
 # Verify that input directory is set and exists
 validate_input_dir
+
 # Create output directory if it doesn't exists
 validate_output_dir
+
 # Output info
 echo "Conda environment: $CONDA_DEFAULT_ENV"
 echo "Input directory: $input_dir"
@@ -91,22 +98,26 @@ echo "Number of threads: ${threads:=1}"
 echo "Phix Genome: ${PhiX:?'PhiX genome not set'}"
 echo "Human Genome: ${Human:?'Human genome not set'}"
 echo "Bowtie2 called with options: $bowtie2_opts"
-##------------Concatenate genomes to be aligned and build genome index-------##:
+
+# Concatenate genomes to be aligned and build genome index
 # First checks if the index is already generated, otherwise it will be generated.
 cd "$out_dir"
-if [ -f "$host" ]; then # checks if the host sequence file is provided.
+if [ -f "$host" ]; then # Check if the host sequence file is provided.
     cat "$host" "$PhiX" "$Human" > Mixed.fasta
 else
     cat "$PhiX" "$Human" > Mixed.fasta
 fi
-##-----------------------Index the mixed fasta-------------------------------##:
-## small index if the genome is small:
+
+# Index the mixed fasta
+# Small index if the genome is small:
 [ ! -f "$host" ] && [ ! -f Mix.rev.2.bt2 ] && { echo "Index needs to be generated:";
     bowtie2-build Mixed.fasta Mix --threads "$threads";}
-##large index if the genome is large due to the presence of the host genome:
+
+# Large index if the genome is large due to the presence of the host genome:
 [ -f "$host" ] && [ ! -f Mix.rev.2.bt2l ] && { echo "Large index needs to be generated:";
     bowtie2-build --large-index Mixed.fasta Mix --threads "$threads";}
-##-----------------------Alignment------------------------------------##:
+
+# Alignment
 for file in "$input_dir"/*; do
     # Paired end reads
     if [[ "$file" == @(*_R1_*|*_1).@(fq|fastq|fq.gz|fastq.gz) ]]; then
@@ -131,9 +142,11 @@ for file in "$input_dir"/*; do
         echo -e "$(basename -- "$file") will not be processed as is not a .fastq or .fq.gz file."
     fi
 done
+
 # Rename bowtie2 output files
 rename "s/.fq.1.gz/_1.fq.gz/" *.fq.1.gz 2> /dev/null
 rename "s/.fq.2.gz/_2.fq.gz/" *.fq.2.gz 2> /dev/null
+
 # Set the correct file extension (.gz) for unpaired output files
 rename -f "s/fq/fq.gz/" *.fq 2> /dev/null
 rename -f "s/fastq/fastq.gz/"  *.fastq 2> /dev/null

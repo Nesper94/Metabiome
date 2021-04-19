@@ -3,7 +3,6 @@
 # Written by: Phagomica Group
 # Last updated on: 2021-02-14
 
-##------------------------------Checking the input---------------------------##:
 set -e
 SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
@@ -29,9 +28,10 @@ Options
 HELP_USAGE
 }
 
-##--------------------------Exiting if input files are missing---------------##:
+# Exit if command is called with no arguments
 validate_arguments "$#"
-##----------------------Saving input orders into variables------------------##:
+
+# Parse command line arguments
 while (("$#")); do
     case "$1" in
         -h|--help ) usage; exit 0 ;;
@@ -43,13 +43,17 @@ while (("$#")); do
         * )        echo "Option '$1' not recognized"; exit 1 ;;
     esac
 done
-##----------------Verify that input directory exists------------------------##:
+
+# Verify that input directory is set and exists
 validate_input_dir
+
 # Create output directory if it doesn't exists
 validate_output_dir
-##----------------Activate conda environment--------------------------------##:
+
+# Activate conda environment
 activate_env metabiome-concoct
-##---------------Output info-------------------------------------------------##:
+
+# Output info
 echo "Conda environment: $CONDA_DEFAULT_ENV"
 echo "Input directory: ${input_dir:?'Input directory not set'}"
 echo "Output directory: ${out_dir}"
@@ -57,14 +61,15 @@ echo "Number of threads: ${threads:=1}"
 echo "Coverage method: ${method:=metabat}"
 echo "Coverm version: $(coverm -V)"
 echo "Coverm called with options: $cov_opts"
-##--------------------------Generate the read-base coverage table file---------------------------##:
+
+# Generate the read-base coverage table file
 cd "$out_dir"
 for file in "$input_dir"/*;do
     if [[ "$file" == *@(*_R1_*|*_1).@(fq|fastq|fq.gz|fastq.gz) ]];then
-            forward_file="$file"
-            core_name=$(get_core_name "$forward_file")
-            contig=$(get_genome_format "$input_dir"/"$core_name")
-            coverm contig -1 "$forward_file" -2 $(forward_to_reverse "$forward_file") \
-                --reference "$contig" -m "$method" -t "$threads" $cov_opts > "$core_name".tsv
+        forward_file="$file"
+        core_name=$(get_core_name "$forward_file")
+        contig=$(get_genome_format "$input_dir"/"$core_name")
+        coverm contig -1 "$forward_file" -2 $(forward_to_reverse "$forward_file") \
+            --reference "$contig" -m "$method" -t "$threads" $cov_opts > "$core_name".tsv
     fi
 done

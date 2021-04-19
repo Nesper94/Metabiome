@@ -24,7 +24,7 @@ validate_input_dir(){
     fi
 }
 
-# Create output directory if it doesn't exists.
+# Create output directory if it doesn't exists
 validate_output_dir(){
     if [[ -z "$out_dir" ]]; then
         echo "$0: Error: Output directory is not set." >&2
@@ -72,7 +72,7 @@ get_core_name(){
     fi
 }
 
-#create output directories:
+# Create output directories
 create_dir(){
     if (( $# >= 2 ));then
         dir_path="$1"
@@ -85,7 +85,8 @@ create_dir(){
         done
     fi
 }
-##get the format of the input genome or contig files:
+
+# Get the format of the input genome or contig files
 get_genome_format(){
     if (( $# == 1 ));then
         if [[ -e "$1".fa ]];then

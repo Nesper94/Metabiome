@@ -28,7 +28,8 @@ HELP_USAGE
 
 # Exit if command is called with no arguments
 validate_arguments "$#"
-##---------------------Save input parameters into variables------------------##:
+
+# Parse command line arguments
 while (("$#")); do
     case "$1" in
         -h|--help ) usage; exit 0 ;;
@@ -40,20 +41,25 @@ while (("$#")); do
         * )         echo "Option '$1' not recognized"; exit 1 ;;
     esac
 done
+
 # Verify that input directory is set and exists
 validate_input_dir
+
 # Create output directory if it doesn't exists.
 validate_output_dir
-##----------------------------Output info------------------------------------##:
+
+# Output info
 echo "Conda environment: $CONDA_DEFAULT_ENV"
 echo "Input directory: $input_dir"
 echo "Output directory: $out_dir"
 echo "Number of threads: ${threads:=1}"
 echo "Reference database: ${database:?'reference database not set'}"
 echo "BBDuk called with options: $bbduk_opts"
-##-----------------------Activate conda environment--------------------------##:
+
+# Activate conda environment
 activate_env metabiome-picking16S
-##------------Match reads against the 16S rDNA SSU from SILVA Database-------##:
+
+# Match reads against the 16S rDNA SSU from SILVA Database
 for file in "$input_dir"/*; do
     # Paired end reads
     if [[ "$file" == @(*_R1_*|*_1).@(fq|fastq|fq.gz|fastq.gz) ]]; then
@@ -76,12 +82,13 @@ for file in "$input_dir"/*; do
             stats="$out_dir"/$(echo "$core_name" | sed 's/_bt2//')_bbdk_summary.txt \
             $bbduk_opts
 
-    #Files that do not match the required extension:
+    # Files that do not match the required extension:
     elif [[ ! "$file" == *.@(fq|fastq|fq.gz|fastq.gz) ]]; then
         echo -e "$(basename -- "$file") will not be processed as is not a .fastq or .fq.gz file."
     fi
 done
-##-------------------------------Compress output-----------------------------##:
+
+# Compress output
 cd "$out_dir"
 gzip *.fq
 
