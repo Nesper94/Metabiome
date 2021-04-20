@@ -74,10 +74,11 @@ get_core_name(){
 
 # Create output directories
 create_dir(){
-    if (( $# >= 2 ));then
-        dir_path="$1"
-        for new_dir in "$@";do
-            if [[ "$new_dir" != "$dir_path" ]] && [[ ! -d "$dir_path"/"$new_dir" ]];then
+    if (( $# >= 2 )); then
+        local dir_path="$1"
+        local new_dir
+        for new_dir in "$@"; do
+            if [[ "$new_dir" != "$dir_path" ]] && [[ ! -d "$dir_path"/"$new_dir" ]]; then
                 echo -e "Output directory path: $dir_path"
                 echo -e "Name of the directory to be created: $new_dir"
                 mkdir "$dir_path"/"$new_dir"
@@ -86,15 +87,16 @@ create_dir(){
     fi
 }
 
-# Get the format of the input genome or contig files
+# get contig file format
 get_genome_format(){
-    if (( $# == 1 ));then
-        if [[ -e "$1".fa ]];then
-            echo "$1.fa"
-        elif [[ -e "$1".fasta ]];then
-            echo "$1.fasta"
-        elif [[ -e "$1".fna ]];then
-            echo "$1.fna"
+    if (( $# == 1 )); then
+        local filename="$1"
+        if [[ -e "$filename".fa ]]; then
+            echo "$filename.fa"
+        elif [[ -e "$filename".fasta ]]; then
+            echo "$filename.fasta"
+        elif [[ -e "$filename".fna ]]; then
+            echo "$filename.fna"
         fi
     fi
 }
