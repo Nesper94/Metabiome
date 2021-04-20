@@ -1,9 +1,8 @@
 #!/bin/bash
-# MaxBin2 wrapper script for the binning of contigs.
+# MaxBin2 wrapper script for binning contigs.
 # Written by: Phagomica Group
 # Last updated on:  2021-03-24
 
-##------------------------------Checking the input---------------------------##:
 set -e
 SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
@@ -29,9 +28,11 @@ Options:
   -h, --help        Show this help.
 HELP_USAGE
 }
-##--------------------------Exiting if input files are missing---------------##:
+
+# Exit if command is called with no arguments
 validate_arguments "$#"
-##----------------------Saving input orders into variables------------------##:
+
+# Parse command line arguments
 while [[ -n "$1" ]]; do
     case "$1" in
         -h|--help ) usage; exit 0 ;;
@@ -44,42 +45,51 @@ while [[ -n "$1" ]]; do
     esac
 done
 
-##----------------Verify that input directory exists------------------------##:
+# Verify that input directory exists
 validate_input_dir
+
 # Create output directory if it doesn't exists
 validate_output_dir
-##----------------Activate conda environment--------------------------------##:
+
+# Activate conda environment
 activate_env metabiome-maxbin2
-##---------------Output info-------------------------------------------------##:
+
+# Output info
 echo "Conda environment: $CONDA_DEFAULT_ENV"
 echo "Input directory: ${input_dir:?'Input directory not set'}"
 echo "Output directory: ${out_dir}"
 echo "Number of threads: ${threads:=1}"
-echo "Maxbin2 version: $(run_MaxBin.pl -v)"
-echo "Maxbin2 called with options: $maxbin2_opts"
-##----------------------------Binning----------------------------------------##:
-##When the abundance file is not provided:
-if [[ ! -d "$abundance_dir" ]];then
-        for file in "$input_dir"/*;do
-            if [[ "$file" == *@(*_R1_*|*_1).@(fq|fastq|fq.gz|fastq.gz) ]]; then
-                    forward_file="$file"
-                    core_name=$(get_core_name "$forward_file")
-                    contig=$(get_genome_format "$input_dir"/"$core_name")
-                    create_dir "$out_dir" "$core_name" && cd "$out_dir"/"$core_name"
-                    run_MaxBin.pl -contig "$contig" -reads "$forward_file" \
-                        -reads2  $(forward_to_reverse "$forward_file") -out "$core_name" \
-                        -thread "$threads" $maxbin2_opts
-            fi
-        done
-##When the abundance file is provided:
-elif [[ -d "$abundance_dir" ]];then
-        for file in "$input_dir"/*;do
-            if [[ "$file" == *.@(fna|fasta|fa) ]];then
-                    contig="$file"
-                    core_name=$(get_core_name "$contig")
-                    create_dir "$out_dir" "$core_name" && cd "$out_dir"/"$core_name"
-                    run_MaxBin.pl -contig "$contig" -abund "$abundance_dir"/*"$core_name"* \
-                        -out "$core_name" -thread "$threads" $maxbin2_opts
-            fi
-        done
+echo "MaxBin2 version: $(run_MaxBin.pl -v)"
+echo "MaxBin2 called with options: $maxbin2_opts"
+
+# MaxBin2 binning
+# if the abundance file is not provided
+if [[ ! -d "$abundance_dir" ]]; then
+    for file in "$input_dir"/*; do
+        if [[ "$file" == *@(*_R1_*|*_1).@(fq|fastq|fq.gz|fastq.gz) ]]; then
+            forward_file="$file"
+            core_name=$(get_core_name "$forward_file")
+            contig=$(get_genome_format "$input_dir"/"$core_name")
+            create_dir "$out_dir" "$core_name" && cd "$out_dir"/"$core_name"
+
+            # Run Maxbin2
+            run_MaxBin.pl -contig "$contig" -reads "$forward_file" \
+                -reads2  $(forward_to_reverse "$forward_file") -out "$core_name" \
+                -thread "$threads" $maxbin2_opts
+        fi
+    done
+
+# if the abundance file is provided
+elif [[ -d "$abundance_dir" ]]; then
+    for file in "$input_dir"/*; do
+        if [[ "$file" == *.@(fna|fasta|fa) ]]; then
+            contig="$file"
+            core_name=$(get_core_name "$contig")
+            create_dir "$out_dir" "$core_name" && cd "$out_dir"/"$core_name"
+
+            # Run Maxbin2
+            run_MaxBin.pl -contig "$contig" -abund "$abundance_dir"/*"$core_name"* \
+                -out "$core_name" -thread "$threads" $maxbin2_opts
+        fi
+    done
 fi

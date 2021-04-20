@@ -1,5 +1,5 @@
 #!/bin/bash
-# Kaiju wrapper script for the taxonomic binning from metagenomic samples
+# Kaiju wrapper script for the taxonomic binning of metagenomic samples.
 # Written by: Phagomica Group
 # Last updated on: 2021-04-7
 
@@ -23,7 +23,7 @@ Required:
 Options:
   -t NUM            Number of threads to use (default=1).
   -D db_dir         Directory containing Kaiju's Database. If this directory does not exist, it will
-                    be created and the database will be downloaded automatically.
+                    be created and the database downloaded automatically.
   -c                Create classification summary of Kaiju's output files.
   -x                Add taxa names to Kaiju's output files.
   -k                Generate krona graphs of Kaiju's output files.
@@ -31,9 +31,11 @@ Options:
   -h, --help        Show this help.
 HELP_USAGE
 }
-##-----------------------Exit if called with no arguments--------------------##:
+
+# Exit if called with no arguments
 validate_arguments "$#"
-##------------------Saving input orders into variables-----------------------##:
+
+# Get input parameters
 while (("$#")); do
     case "$1" in
         -h|--help ) usage; exit 0 ;;
@@ -50,76 +52,100 @@ while (("$#")); do
     esac
 done
 
-##----------------Verify that input directory exists-------------------------##:
+# Verify that input directory exists
 validate_input_dir
-##---------------Create output directory if it doesn't exists----------------##:
+
+# Create output directory if it doesn't exists
 validate_output_dir
-##------------------------Activate conda environment-------------------------##:
+
+# Activate conda environment
 activate_env metabiome-taxonomic-binning
-##------------------------------Output info----------------------------------##:
+
+# Output info
 echo "Conda environment: $CONDA_DEFAULT_ENV"
 echo "Input directory: $input_dir"
 echo "Output directory: $out_dir"
 echo "Number of threads: ${threads:=1}"
 echo "Kaiju database name: ${name_kaijudb:?'Kaiju database name not set'}"
 echo "Kaiju called with options: $kaiju_opts"
-##---------------------------Make Kaiju Database-----------------------------##:
-##Check if the database directory is provided:
+
+# Make Kaiju Database
+# Check if the database directory is provided
 if [[ ! -d "$database" ]]; then
         create_dir "$out_dir" kaiju_db
         database="$out_dir"/kaiju_db
         echo "the database will be created in $database"
         cd "$database"
+
+        # Make kaiju database
         kaiju-makedb -s "$name_kaijudb" -t "$threads"
-## If the directory is provided but the specific database is not downloaded:
+
+# If the directory is provided but the specific database is not downloaded
 elif [[ -d "$database" ]] && [[ ! -d "$database"/"$name_kaijudb" ]]; then
         echo "Database $name_kaijudb needs to be generated:"
         cd "$database"
+
+        # Make kaiju database
         kaiju-makedb -s "$name_kaijudb" -t "$threads"
 fi
-##-----------------------Taxonomic binning------------------------------------##:
+
+# Taxonomic binning
 for file in "$input_dir"/*; do
     # Paired end reads
     if [[ "$file" == @(*_R1_*|*_1).@(fq|fastq|fq.gz|fastq.gz) ]]; then
         forward_file="$file"
         core_name=$(get_core_name "$forward_file")
-        kaiju -t "$database"/*nodes.dmp -f "$database"/"$name_kaijudb"/*.fmi -i "$forward_file" \
+        kaiju -t "$database"/*nodes.dmp \
+            -f "$database"/"$name_kaijudb"/*.fmi \
+            -i "$forward_file" \
             -j $(forward_to_reverse "$forward_file") \
             -o  "$out_dir"/$(get_core_name "$forward_file" | sed 's/_bt2/_kaiju/').txt \
             -z "$threads" $kaiju_opts
 
-    # Single end reads
+    # Unpaired reads
     elif [[ ! "$file" ==  *_@(*R1_*|*1.|*R2_*|*2.)* ]] && [[ "$file" == *.@(fq|fastq|fq.gz|fastq.gz) ]]; then
         unpaired_file="$file"
         core_name=$(get_core_name "$unpaired_file")
-        kaiju -t "$database"/*nodes.dmp -f "$database"/"$name_kaijudb"/*.fmi -i "$unpaired_file" \
+        kaiju -t "$database"/*nodes.dmp \
+            -f "$database"/"$name_kaijudb"/*.fmi \
+            -i "$unpaired_file" \
             -o "$out_dir"/$(get_core_name "$unpaired_file" | sed 's/_bt2/_kaiju/').txt \
             -z "$threads" $kaiju_opts
 
-    #Files that do not match the required extension:
+    # Files that do not match the required extension:
     elif [[ ! "$file" == *.@(fq|fastq|fq.gz|fastq.gz) ]]; then
         echo -e "$(basename -- "$file") will not be processed as is not a .fastq or .fq.gz file."
     fi
 done
- ##-----------------------------Kaiju to Krona--------------------------------##:
-if [ -n "$krona" ]; then
+
+# Kaiju to Krona
+if [[ -n "$krona" ]]; then
+    # Create output directory for krona figures
     create_dir "$out_dir" "$krona" && create_dir "$out_dir"/"$krona" html
     cd "$out_dir"/"$krona"
-    for kaiju_out in "$out_dir"/*.txt;do
+
+    # Generate krona figures from kaiju output files
+    for kaiju_out in "$out_dir"/*.txt; do
         kaiju2krona -t "$database"/nodes.dmp \
             -n "$database"/names.dmp \
             -i "$kaiju_out" \
             -o "$out_dir"/"$krona"/$(get_core_name "$kaiju_out" | sed 's/_kaiju/.krona/')
     done
-    for krona_out in "$out_dir"/"$krona"/*krona*;do
+
+    # Generate the .html of the krona figures
+    for krona_out in "$out_dir"/"$krona"/*krona*; do
         ktImportText "$krona_out" \
             -o "$out_dir"/"$krona"/html/$(get_core_name "$krona_out" | sed 's/.krona/_krona/').html
     done
 fi
- ##---------------Classification summary from Kaiju's output------------------##:
-if [ -n "$class" ]; then
+
+# Classification summary of Kaiju's output
+if [[ -n "$class" ]]; then
+    # Create output directory for classification summary
     create_dir "$out_dir" "$class"
-    for kaiju_out in "$out_dir"/*.txt;do
+
+    # Generate classification summary of Kaiju output files
+    for kaiju_out in "$out_dir"/*.txt; do
         kaiju2table "$kaiju_out" \
             -t "$database"/nodes.dmp  \
             -n "$database"/names.dmp \
@@ -127,10 +153,14 @@ if [ -n "$class" ]; then
             -o "$out_dir"/"$class"/$(get_core_name "$kaiju_out" | sed 's/kaiju/classif/').txt
     done
 fi
- ##-----------------------Add taxa names to output file-----------------------##:
-if [ -n "$taxa_names" ]; then
+
+# Add taxa names to output file
+if [[ -n "$taxa_names" ]]; then
+    # Create output directory for the assignation of taxa names
     create_dir "$out_dir" "$taxa_names"
-    for kaiju_out in "$out_dir"/*.txt;do
+
+    # Generate assignation of taxa names of Kaiju output files
+    for kaiju_out in "$out_dir"/*.txt; do
         kaiju-addTaxonNames -t "$database"/nodes.dmp -p \
             -n "$database"/names.dmp \
             -i "$kaiju_out" \

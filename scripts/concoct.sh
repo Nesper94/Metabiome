@@ -8,7 +8,7 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-  cat <<HELP_USAGE
+cat <<HELP_USAGE
 Generate bins from metagenomic samples with CONCOCT.
 Usage: metabiome concoct [options] -i <in_dir> -o <out_dir> -opts concoct_options
 
@@ -67,14 +67,15 @@ echo "CONCOCT called with options: $concoct_opts"
 # CONCOCT binning
 create_dir "$out_dir" fasta_bins
 
-if [[ ! -d "$cov_dir" ]];then
+# if the directory containing read-based coverage files is not provided
+if [[ ! -d "$cov_dir" ]]; then
     for file in "$input_dir"/*; do
         # Check correct forward file format
         if [[ "$file" == *@(*_R1_*|*_1).@(fq|fastq|fq.gz|fastq.gz) ]]; then
             forward_file="$file"
             core_name=$(get_core_name "$forward_file")
 
-            # Check the format of the contig or contig genome
+            # Check the format of the contig
             contig=$(get_genome_format "$input_dir"/"$core_name")
 
             # Create output directory
@@ -85,14 +86,16 @@ if [[ ! -d "$cov_dir" ]];then
                 -m -o 0 -c "$chunk_size" > "$core_name".k"$chunk_size".fa
 
             # Build Kallisto index
-            [ ! -f "$core_name".idx ] && { echo "Generate Kallisto index:";
-                kallisto index "$core_name".k"$chunk_size".fa -i "$core_name".idx;}
+            if [[ ! -f "$core_name".idx ]]; then
+                echo "Generate Kallisto index:"
+                kallisto index "$core_name".k"$chunk_size".fa -i "$core_name".idx
+            fi
 
             # Map the reads to their contigs from each sample
             kallisto quant "$forward_file" $(forward_to_reverse "$forward_file") \
                 -i "$core_name".idx -o "$out_dir"/"$core_name" -t "$threads"
 
-            # Generate the coverage table for concoct
+            # Generate the coverage table for CONCOCT
             input_table.py abundance.tsv > "$core_name".kcov.tsv
 
             # Run concoct
@@ -110,14 +113,15 @@ if [[ ! -d "$cov_dir" ]];then
         fi
     done
 
+# if the directory containing the read-based coverage file is provided:
 elif [[ -d "$cov_dir" ]]; then
     for file in "$input_dir"/*; do
         # Check correct forward file format
-        if [[ "$file" == *.@(fna|fasta|fa) ]];then
+        if [[ "$file" == *.@(fna|fasta|fa) ]]; then
             contig="$file"
             core_name=$(get_core_name "$contig")
 
-            # Check the format of the contig or contig genome
+            # Check the format of the contig
             contig=$(get_genome_format "$input_dir"/"$core_name")
 
             # Create output directory
@@ -127,7 +131,7 @@ elif [[ -d "$cov_dir" ]]; then
             cut_up_fasta.py "$contig" \
                 -m -o 0 -c "$chunk_size" > "$core_name".k"$chunk_size".fa
 
-            # Run concoct
+            # Run CONCOCT
             concoct --composition_file "$core_name".k"$chunk_size".fa \
                 --coverage_file "$cov_dir"/*"$core_name"* \
                 -t "$threads" -b "$core_name" $concoct_opts

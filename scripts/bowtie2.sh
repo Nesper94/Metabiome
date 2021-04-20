@@ -1,5 +1,5 @@
 #!/bin/bash
-# Bowtie2 wrapper script for the filtering of contaminating reads from metagenomic samples:
+# Bowtie2 wrapper script to filter out contaminations from metagenomic samples.
 # Written by: Phagomica Group
 # Last updated on: 2020-13-11
 
@@ -10,7 +10,7 @@ source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
 cat <<HELP_USAGE
-Remove contaminant sequences with bowtie2.
+Remove contaminant sequences with Bowtie2.
 Usage: metabiome bowtie2 [options] -i <in_dir> -o <out_dir> -opts bowtie2_options
 
 Required:
@@ -23,7 +23,7 @@ Options:
   -ph PhiX          PhiX-174 phage reference genome in FASTA format.
   -hu human         Human reference genome in FASTA format.
   -t  NUM           Number of threads to use. (default=1)
-  -opts OPTIONS     bowtie2's options.
+  -opts OPTIONS     Bowtie2's options.
   -h, --help        Show this help.
 HELP_USAGE
 }
@@ -51,35 +51,34 @@ activate_env metabiome-preprocessing
 
 # Download Human and PhiX reference genomes
 # Highlight: Next code downloads PhiX and Human genome and checks if the
-# downloads were successfull.
-if [ ! -e "$Human" ]; then
+# downloads were successfull
+cd "$out_dir"
+if [[ ! -e "$Human" ]]; then
     URL="https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/annotation/GRCh38_latest/refseq_identifiers/GRCh38_latest_genomic.fna.gz"
     for i in {1..10}; do
-        echo "Downloading Human Reference Genome"
-        cd "$out_dir"
-        wget "$URL"
+        echo "Downloading Human reference genome"
+        wget "$URL" -P "$out_dir"
         if [[ -s GRCh38_latest_genomic.fna.gz ]]; then
             gunzip GRCh38_latest_genomic.fna.gz
             echo "Human genome was downloaded"
-            Human=$(readlink -f GRCh38_latest_genomic.fna)
+            Human="$(readlink -f GRCh38_latest_genomic.fna)"
             break
         else
-            echo "Try downloading again the Human Reference Genome"
+            echo "Try downloading again the Human reference genome"
         fi
     done
 fi
 
-if [ ! -e "$PhiX" ]; then
+if [[ ! -e "$PhiX" ]]; then
     for i in {1..10}; do
-        echo "Downloading PhiX Reference Genome"
-        cd "$out_dir"
+        echo "Downloading PhiX reference genome"
         esearch -db nucleotide -query "NC_001422.1" | efetch -format fasta > PhiX_NC_001422.1.fasta
         if [[ -s PhiX_NC_001422.1.fasta ]]; then
             echo "PhiX genome was downloaded"
             PhiX=$(readlink -f PhiX_NC_001422.1.fasta)
             break
         else
-            echo "Try downloading again the PhiX genome"
+            echo "Try downloading again the PhiX reference genome"
         fi
     done
 fi
@@ -99,23 +98,25 @@ echo "Phix Genome: ${PhiX:?'PhiX genome not set'}"
 echo "Human Genome: ${Human:?'Human genome not set'}"
 echo "Bowtie2 called with options: $bowtie2_opts"
 
-# Concatenate genomes to be aligned and build genome index
-# First checks if the index is already generated, otherwise it will be generated.
-cd "$out_dir"
-if [ -f "$host" ]; then # Check if the host sequence file is provided.
-    cat "$host" "$PhiX" "$Human" > Mixed.fasta
-else
+# Generate the mixed fasta and its index
+# Small index if the genome is small
+if [[ ! -f "$host" ]] && [[ ! -f Mix.rev.2.bt2 ]]; then
+    # Pool together the human and host genome
     cat "$PhiX" "$Human" > Mixed.fasta
+
+    # Generate a small index
+    echo "Small index needs to be generated"
+    bowtie2-build Mixed.fasta Mix --threads "$threads"
+
+# Large index if the genome is large due to the presence of the host genome
+elif [[ -f "$host" ]] && [[ ! -f Mix.rev.2.bt2l ]]; then
+    # Pool together the host, phage and human genome
+    cat "$host" "$PhiX" "$Human" > Mixed.fasta
+
+    # Generate a large index
+    echo "Large index needs to be generated"
+    bowtie2-build --large-index Mixed.fasta Mix --threads "$threads"
 fi
-
-# Index the mixed fasta
-# Small index if the genome is small:
-[ ! -f "$host" ] && [ ! -f Mix.rev.2.bt2 ] && { echo "Index needs to be generated:";
-    bowtie2-build Mixed.fasta Mix --threads "$threads";}
-
-# Large index if the genome is large due to the presence of the host genome:
-[ -f "$host" ] && [ ! -f Mix.rev.2.bt2l ] && { echo "Large index needs to be generated:";
-    bowtie2-build --large-index Mixed.fasta Mix --threads "$threads";}
 
 # Alignment
 for file in "$input_dir"/*; do
@@ -123,18 +124,18 @@ for file in "$input_dir"/*; do
     if [[ "$file" == @(*_R1_*|*_1).@(fq|fastq|fq.gz|fastq.gz) ]]; then
         forward_file="$file"
         core_name=$(get_core_name "$forward_file")
-        bowtie2 -x Mix -1 "$forward_file" -2 $(forward_to_reverse "$forward_file") \
-            --un-conc-gz "$out_dir"/$(echo "$core_name" | sed 's/_trim/_bt2/').fq.gz \
-            -q -p "$threads" 2> "$out_dir"/$(echo "$core_name" | sed 's/_trim/_bt2/')_summary.txt \
+        bowtie2 -x Mix -1 "$forward_file" -2 $(forward_to_reverse "$forward_file") -p "$threads" \
+            -q --un-conc-gz "$out_dir"/$(echo "$core_name" | sed 's/_trim/_bt2/').fq.gz \
+            2> "$out_dir"/$(echo "$core_name" | sed 's/_trim/_bt2/')_summary.txt \
             $bowtie2_opts > /dev/null # Bowtie2 output to terminal is excesive and we do not need it in this case
 
-    # Single end reads
+    # Unpaired reads
     elif [[ ! "$file" ==  *_@(R1_|1.|R2_|2.)* ]] && [[ "$file" == *.@(fq|fastq|fq.gz|fastq.gz) ]]; then
         unpaired_file="$file"
         core_name=$(get_core_name "$unpaired_file")
-        bowtie2 -x Mix -U "$unpaired_file" \
+        bowtie2 -x Mix -U "$unpaired_file" -q -p "$threads" \
             --un-gz "$out_dir"/$(basename -- "$unpaired_file" | sed 's/_trim/_bt2/') \
-            -q -p "$threads" 2> "$out_dir"/$(get_core_name "$unpaired_file" | sed 's/_trim/_bt2/')_summary.txt \
+            2> "$out_dir"/$(get_core_name "$unpaired_file" | sed 's/_trim/_bt2/')_summary.txt \
             $bowtie2_opts > /dev/null
 
     # Files that do not match the required extension
@@ -153,7 +154,7 @@ rename -f "s/fastq/fastq.gz/"  *.fastq 2> /dev/null
 
 echo "Done."
 echo "You can now use clean reads to:"
-echo "- Assemble genomes using metaspades.sh or megahit.sh."
-echo "- Perform taxonomic binning with kraken2.sh or MetaPhlAn3.sh"
-echo "- Perform functional profiling using humann2.sh"
-echo "- Extract 16S sequences with BBduk.sh"
+echo "- Assemble genomes using metabiome metaspades or megahit"
+echo "- Perform taxonomic binning with metabiome kraken2, kaiju or metaphlan3"
+echo "- Perform functional profiling using metabiome humann"
+echo "- Extract 16S sequences with metabiome bbduk"

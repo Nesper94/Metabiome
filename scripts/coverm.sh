@@ -1,5 +1,5 @@
 #!/bin/bash
-# Script to generate a read-based coverage table with CoverM.
+# Wrapper script to generate a read-based coverage table with CoverM.
 # Written by: Phagomica Group
 # Last updated on: 2021-02-14
 
@@ -59,13 +59,13 @@ echo "Input directory: ${input_dir:?'Input directory not set'}"
 echo "Output directory: ${out_dir}"
 echo "Number of threads: ${threads:=1}"
 echo "Coverage method: ${method:=metabat}"
-echo "Coverm version: $(coverm -V)"
-echo "Coverm called with options: $cov_opts"
+echo "CoverM version: $(coverm -V)"
+echo "CoverM called with options: $cov_opts"
 
 # Generate the read-base coverage table file
 cd "$out_dir"
-for file in "$input_dir"/*;do
-    if [[ "$file" == *@(*_R1_*|*_1).@(fq|fastq|fq.gz|fastq.gz) ]];then
+for file in "$input_dir"/*; do
+    if [[ "$file" == *@(*_R1_*|*_1).@(fq|fastq|fq.gz|fastq.gz) ]]; then
         forward_file="$file"
         core_name=$(get_core_name "$forward_file")
         contig=$(get_genome_format "$input_dir"/"$core_name")

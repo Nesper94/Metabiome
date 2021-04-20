@@ -1,5 +1,5 @@
 #!/bin/bash
-# MetaPhlAn3 wrapper script for the taxonomic profiling of reads.
+# MetaPhlAn3 wrapper script for the taxonomic profiling of metagenomic reads.
 # Written by: Phagomica Group
 # Last updated on: 2021-02-05
 
@@ -52,13 +52,16 @@ validate_output_dir
 activate_env metabiome-taxonomic-profiling
 
 # Install MetaPhlAn database
-# First check if MetaPhlAn3 database already generated, otherwise it will be generated.
-if [[ ! -d "$met_db" ]];then
+# First check if MetaPhlAn3 database directory is provided, otherwise it will be created
+# and the database downloaded.
+if [[ ! -d "$met_db" ]]; then
     create_dir "$out_dir" database
     met_db="$out_dir"/database
     metaphlan --install --bowtie2db "$met_db"
-elif [[ -d "$met_db" ]];then
-    for md5_file in "$met_db"/*.md5;do
+
+# Generate the index of the provided MetaPhlAn3 database
+elif [[ -d "$met_db" ]]; then
+    for md5_file in "$met_db"/*.md5; do
         name_idx=$(get_core_name "$md5_file")
         metaphlan --install --index "$name_idx" --bowtie2db "$met_db"
     done
@@ -73,25 +76,25 @@ echo "MetaPhlAn3 database: ${met_db:?'Database not downloaded'}"
 echo "MetaPhlAn3 version: $(metaphlan -v)"
 echo "MetaPhlAn3 called with options: $metaphlan_opts"
 
-# MetaPhlAn profiling
+# Taxonomic profiling
 for file in "$input_dir"/*; do
     # Paired end reads
     if [[ "$file" == @(*_R1_*|*_1).@(fq|fastq|fq.gz|fastq.gz) ]]; then
         forward_file="$file"
         core_name=$(get_core_name "$forward_file")
         metaphlan "$forward_file",$(forward_to_reverse "$forward_file") \
-            --input_type fastq  --bowtie2db "$met_db" \
+            --input_type fastq  --bowtie2db "$met_db" --nproc "$threads" \
             -o "$out_dir"/$(echo "$core_name" | sed 's/_bt2/_mphlan/').txt \
-            --nproc "$threads" --bowtie2out "$out_dir"/$(echo "$core_name" | sed 's/_bt2/_mphlan/').sam \
+            --bowtie2out "$out_dir"/$(echo "$core_name" | sed 's/_bt2/_mphlan/').sam \
             $metaphlan_opts
 
-    # Single end reads
+    # Unpaired reads
     elif [[ ! "$file" ==  *_@(*R1_*|*1.|*R2_*|*2.)* ]] && [[ "$file" == *.@(fq|fastq|fq.gz|fastq.gz) ]]; then
         unpaired_file="$file"
         core_name=$(get_core_name "$unpaired_file")
         metaphlan "$unpaired_file" --input_type fastq --bowtie2db "$met_db" \
-            -o "$out_dir"/$(echo "$core_name" | sed 's/_bt2/_mphlan/').txt \
-            --nproc "$threads" --bowtie2out "$out_dir"/$(echo "$core_name" | sed 's/_bt2/_mphlan/').sam \
+            -o "$out_dir"/$(echo "$core_name" | sed 's/_bt2/_mphlan/').txt --nproc "$threads" \
+            --bowtie2out "$out_dir"/$(echo "$core_name" | sed 's/_bt2/_mphlan/').sam \
             $metaphlan_opts
 
     # Files that do not match the required extension:

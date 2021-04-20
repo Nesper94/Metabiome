@@ -1,5 +1,5 @@
 #!/bin/bash
-# BBduk wrapper script for the DNAr 16S picking strategy from metagenomic samples:
+# BBduk wrapper script to pick 16S rDNA sequences from metagenomic samples.
 # Written by: Phagomica Group
 # Last updated on: 2020-12-11
 
@@ -45,7 +45,7 @@ done
 # Verify that input directory is set and exists
 validate_input_dir
 
-# Create output directory if it doesn't exists.
+# Create output directory if it doesn't exists
 validate_output_dir
 
 # Output info
@@ -73,7 +73,7 @@ for file in "$input_dir"/*; do
             stats="$out_dir"/$(echo "$core_name" | sed 's/_bt2//')_bbdk_summary.txt \
             $bbduk_opts
 
-    # Single end reads
+    # Unpaired reads
     elif [[ ! "$file" ==  *_@(*R1_*|*1.|*R2_*|*2.)* ]] && [[ "$file" == *.@(fq|fastq|fq.gz|fastq.gz) ]]; then
         unpaired_file="$file"
         core_name=$(get_core_name "$unpaired_file")
@@ -82,7 +82,7 @@ for file in "$input_dir"/*; do
             stats="$out_dir"/$(echo "$core_name" | sed 's/_bt2//')_bbdk_summary.txt \
             $bbduk_opts
 
-    # Files that do not match the required extension:
+    # Files that do not match the required extension
     elif [[ ! "$file" == *.@(fq|fastq|fq.gz|fastq.gz) ]]; then
         echo -e "$(basename -- "$file") will not be processed as is not a .fastq or .fq.gz file."
     fi
