@@ -96,7 +96,7 @@ if [[ ! -d "$cov_dir" ]]; then
                 -i "$core_name".idx -o "$out_dir"/"$core_name" -t "$threads"
 
             # Generate the coverage table for CONCOCT
-            input_table.py abundance.tsv > "$core_name".kcov.tsv
+            "$SCRIPTS_DIR"/input_table.py abundance.tsv > "$core_name".kcov.tsv
 
             # Run concoct
             concoct --composition_file "$core_name".k"$chunk_size".fa \
