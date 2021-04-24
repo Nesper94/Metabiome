@@ -1,15 +1,12 @@
 name: metabiome-concoct
 channels:
-  - ursky
-  - bioconda
   - conda-forge
   - defaults
+  - bioconda
+  - ursky
 dependencies:
   - kallisto=0.46.*
   - concoct=1.1.*
   - coverm=0.6.*
   - pip=21.0.*
-  - pip:
-    - intel-openmp==2021.1.*
-    - mkl==2021.1.*
-
+  - mkl==2021.2.*
