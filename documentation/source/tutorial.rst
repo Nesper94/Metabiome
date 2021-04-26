@@ -371,11 +371,11 @@ use both files located in the directory :file:`contigs_reads/`.
 
     .. code-block:: bash
 
-        #Contig and the respective paired-end reads of the sample ERR981212:
+        # Contig and their respective paired-end reads of the sample ERR981212:
         ERR981212_sub_paired_bt2.fasta
         ERR981212_sub_paired_bt2_1.fq.gz
         ERR981212_sub_paired_bt2_2.fq.gz
-        #Contig and the respective paired-end reads of the sample ERR981213:
+        # Contig and their respective paired-end reads of the sample ERR981213:
         ERR981213_sub_paired_bt2.fasta
         ERR981213_sub_paired_bt2_1.fq.gz
         ERR981213_sub_paired_bt2_2.fq.gz
@@ -390,14 +390,14 @@ order to run. Here is an example of how you should do it before running
 
 .. code-block:: bash
 
-    #Create input directory:
+    # Create input directory:
     mkdir gzip_contigs
-    #Copy contigs to the input directory:
+    # Copy contigs to the input directory:
     cp contigs_reads/*.fasta gzip_contigs/
-    #Compress the contigs in the required gzip format:
+    # Compress the contigs in the required gzip format:
     gzip gzip_contigs/*.fasta
 
-    #Run MetaBAT2:
+    # Run MetaBAT2:
     metabiome metabat2 -i gzip_contigs/ -o metabat2_out/ -opts -m 1500 --maxP 50 --minS 30 --maxEdges 100 --minClsSize 1000
 
 For example, MetaBAT2 will generate 23 bins from the assembly of
@@ -451,3 +451,10 @@ of the sample ERR981212, which are located in
     .....
     7.fa
     8.fa
+
+.. note::
+
+    In order to boost the binning process, you can also generate
+    read-based coverage files that will help improve the bins,
+    see :ref:`How to create read-based coverage files for genome
+    binning <boost_binning>`.
