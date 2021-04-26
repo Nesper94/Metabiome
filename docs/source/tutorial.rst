@@ -351,7 +351,7 @@ genome:
     mkdir metaquast_ref_seq
 
     # Download reference genome
-    wget -P metaquast_ref_seq ftp://ftp.ncbi.nlm.nih.gov/genomes/refseq/viral/BeAn_58058_virus/         latest_assembly_versions/GCF_001907825.1_ViralProj357638/GCF_001907825.1_ViralProj357638_genomic.fna.gz
+    wget -P metaquast_ref_seq ftp://ftp.ncbi.nlm.nih.gov/genomes/refseq/viral/BeAn_58058_virus/latest_assembly_versions/GCF_001907825.1_ViralProj357638/GCF_001907825.1_ViralProj357638_genomic.fna.gz
 
     # Run MetaQUAST
     metabiome metaquast -i megahit_assembled_reads/ERR981212_sub_paired_bt2/ -o metaquast_out \
