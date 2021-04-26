@@ -21,8 +21,8 @@ import sphinx_rtd_theme
 # -- Project information -----------------------------------------------------
 
 project = 'Metabiome'
-copyright = 'Copyright 2021, Metabiome development team'
-author = 'Metabiome development team'
+copyright = 'Copyright 2021, Estefany Lorenzana, Cristian Grisales, Juan Camilo Arboleda'
+author = 'Estefany Lorenzana, Cristian Grisales, Juan Camilo Arboleda'
 
 # The short X.Y version
 version = ''
