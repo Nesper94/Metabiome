@@ -67,3 +67,13 @@ get_core_name(){
         echo "${filename%%.*}"
     fi
 }
+
+create_dir(){
+	if (( $# == 2 ));then
+        if [[ ! -d "$1"/"$2" ]];then
+            echo -e "output directory path: $1"
+            echo -e "Name of the folder to be created: $2"
+			mkdir "$1"/"$2"
+        fi
+    fi
+}

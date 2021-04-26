@@ -1,7 +1,7 @@
 #!/bin/bash
 # Kraken2 wrapper script for the taxonomic binning of reads.
 # Written by: Phagomica group
-# Last updated on: 2020-08-19
+# Last updated on: 2021-02-08
 
 set -e
 
@@ -9,17 +9,18 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: metabiome kraken2 [Options] -i <input directory> -o <output directory>"
-    echo
-    echo "Required:"
-    echo "  -i in_dir       Input directory containing FASTQ files."
-    echo "  -o out_dir      Directory in which results will be saved. This directory"
-    echo "                  will be created if it doesn't exist."
-    echo
-    echo "Options:"
-    echo "  -db database    Path to database used to assign the taxonomic labels to sequences (default: standard-kraken2-db)"
-    echo "  -t  NUM         Number of threads to use (default: 1)"
-    echo "  -h, --help      Show this help"
+cat <<HELP_USAGE
+Usage: metabiome kraken2 [Options] -i <input directory> -o <output directory>
+Required:
+  -i in_dir       Input directory containing FASTQ files."
+  -o out_dir      Directory in which results will be saved. This directory"
+                  will be created if it doesn't exist."
+
+Options:
+  -db database    Path to database used to assign the taxonomic labels to sequences (default: standard-kraken2-db)"
+  -t  NUM         Number of threads to use (default: 1)"
+  -h, --help      Show this help"
+HELP_USAGE
 }
 
 # Exit if command is called with no arguments
@@ -72,39 +73,33 @@ if [[ ! -d "$DBNAME" ]]; then
 fi
 
 # Classification
+echo "Classifying reads..."
+for file in "$input_dir"/*; do
+    # Make sure to process only fastq, fq.gz or fastq.gz files
+    if [[ "$file" == @(*_R1*|*_1).@(fastq|fq.gz|fastq.gz) ]]; then
+        forward_file="$file"
+        reverse_file=$(echo "$forward_file" | forward_to_reverse)
+        core_name=$(get_core_name "$forward_file")
 
-FORWARD_FILE_SUFFIX=_1_paired_bt2.fq.gz
-REVERSE_FILE_SUFFIX=_2_paired_bt2.fq.gz
+        kraken2 --paired \
+            --db "$DBNAME" \
+            --threads "$threads" \
+            --classified-out "$out_dir"/${core_name}_paired_classified_seqs#.fq \
+            --unclassified-out "$out_dir"/${core_name}_paired_unclassified_seqs#.fq \
+            --report "$out_dir"/${core_name}_paired_report.txt \
+            --output "$out_dir"/${core_name}_paired_kraken2_out.tsv \
+            "$forward_file" "$reverse_file"
 
-# Paired reads
-echo "Classifying paired reads..."
-for forward_file in "$input_dir"/*"$FORWARD_FILE_SUFFIX"; do
+    # Unpaired reads
+    elif [[ "$file" == *unpaired*fq.gz ]]; then
+        core_name=$(get_core_name "$file")
 
-    reverse_file=$(echo "$forward_file" | sed "s/$FORWARD_FILE_SUFFIX/$REVERSE_FILE_SUFFIX/")
-    core_name=$(basename -- "$forward_file" | sed "s/$FORWARD_FILE_SUFFIX//")
-
-    kraken2 --paired \
-        --db "$DBNAME" \
-        --threads "$threads" \
-        --classified-out "$out_dir"/${core_name}_paired_classified_seqs#.fq \
-        --unclassified-out "$out_dir"/${core_name}_paired_unclassified_seqs#.fq \
-        --report "$out_dir"/${core_name}_paired_report.txt \
-        --output "$out_dir"/${core_name}_paired_kraken2_out.tsv \
-        "$forward_file" "$reverse_file"
-done
-
-# Unpaired reads
-echo "Classifying unpaired reads..."
-for file in "$input_dir"/*unpaired*fq.gz; do
-
-    filename=$(basename -- "$file")
-    core_name="${filename%%.*}"
-
-    kraken2 --db "$DBNAME" \
-        --threads "$threads" \
-        --classified-out "$out_dir"/${core_name}_classified_seqs.fq \
-        --unclassified-out "$out_dir"/${core_name}_unclassified_seqs.fq \
-        --report "$out_dir"/${core_name}_report.txt \
-        --output "$out_dir"/${core_name}_kraken2_out.tsv \
-        "$file"
+        kraken2 --db "$DBNAME" \
+            --threads "$threads" \
+            --classified-out "$out_dir"/${core_name}_classified_seqs.fq \
+            --unclassified-out "$out_dir"/${core_name}_unclassified_seqs.fq \
+            --report "$out_dir"/${core_name}_report.txt \
+            --output "$out_dir"/${core_name}_kraken2_out.tsv \
+            "$file"
+    fi
 done

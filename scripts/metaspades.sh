@@ -8,17 +8,20 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: metabiome metaspades [Options] -i <input directory> -o <output directory> [-opts MetaSPADES_OPTIONS]"
-    echo
-    echo "Required:"
-    echo "  -i in_dir       Input directory containing FASTQ files."
-    echo "  -o out_dir      Directory in which results will be saved. This directory"
-    echo "                  will be created if it doesn't exist."
-    echo
-    echo "Options:"
-    echo "  -t NUM          Number of threads to use (default: 4)."
-    echo "  -opts OPTIONS   MetaSPADES's options."
-    echo "  -h, --help      Show this help"
+cat <<HELP_USAGE
+Alignment of sequences derived from metagenomic samples with metaSPAdes.
+Usage: metabiome metaspades [Options] -i <input directory> -o <output directory> [-opts MetaSPADES_OPTIONS]
+
+Required:
+  -i in_dir       Input directory containing FASTQ files.
+  -o out_dir      Directory in which results will be saved. This directory
+                  will be created if it doesn't exist.
+
+Options:
+  -t NUM          Number of threads to use (default: 4).
+  -opts OPTIONS   MetaSPADES's options.
+  -h, --help      Show this help.
+HELP_USAGE
 }
 
 # Exit if command is called with no arguments
@@ -36,8 +39,6 @@ while [[ -n "$1" ]]; do
     shift
 done
 
-echo "Number of threads: ${threads:=4}"
-
 # Verify that input directory is set and exists
 validate_input_dir
 
@@ -47,15 +48,19 @@ validate_output_dir
 # Activate conda environment
 activate_env metabiome-genome-assembly
 
-# Run metaSPAdes #
+# Output info
+echo "Input directory: $input_dir"
+echo "Output directory: $out_dir"
+echo "Number of threads: ${threads:=4}"
+echo "SPAdes version: $(spades.py --version)"
 
+# Run metaSPAdes
 for file in "$input_dir"/*; do
-
     # Make sure to process only fastq, fq.gz or fastq.gz files
     if [[ "$file" == @(*_R1_*|*_1).@(fastq|fq.gz|fastq.gz) ]]; then
 
         echo "Performing PE assembly with files $(basename $file) and $(basename $file | forward_to_reverse)"
-        file_dir="$out_dir"/$(basename "$file" | remove_forward_suffix)
+        file_dir="$out_dir"/$(get_core_name "$file")
         mkdir "$file_dir"
         spades.py --meta \
             -o "$file_dir" \
@@ -63,5 +68,4 @@ for file in "$input_dir"/*; do
             -2 $(echo "$file" | forward_to_reverse) \
             -t "$threads" $MetaSPADES_opts # Obtain other options for metaSPAdes
     fi
-
 done
