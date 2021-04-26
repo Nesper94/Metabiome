@@ -110,7 +110,8 @@ which we will use to decontaminate the filtered reads like so:
 
 .. code-block:: bash
 
-    metabiome bowtie2 -i filtered_reads/ -o decontaminated_reads/ -hu GRCh38_sub.fna -ph PhiX_NC_001422.1.fasta
+    metabiome bowtie2 -i filtered_reads/ -o decontaminated_reads/ -hu GRCh38_sub.fna \
+        -ph PhiX_NC_001422.1.fasta
 
 The most important output files from this step are located in
 :file:`decontaminated_reads/`. These files are each of the paired-end and
@@ -169,7 +170,8 @@ Now, we can perfom the taxonomic profiling of the metagenomics samples with the
 
 .. code-block:: bash
 
-    metabiome metaphlan3 -i decontaminated_reads/ -o mphlan_out/ -d metaphlan3_custom_db/ -opts --add_viruses --ignore_eukaryotes --ignore_bacteria --ignore_archaea
+    metabiome metaphlan3 -i decontaminated_reads/ -o mphlan_out/ -d metaphlan3_custom_db/ \
+        -opts --add_viruses --ignore_eukaryotes --ignore_bacteria --ignore_archaea
 
 In the output directory :file:`mphlan_out/`, you will find the taxa identity and
 relative abundances of the metagenomic samples. Additionally, you will find the
@@ -349,10 +351,11 @@ genome:
     mkdir metaquast_ref_seq
 
     # Download reference genome
-    wget -P metaquast_ref_seq ftp://ftp.ncbi.nlm.nih.gov/genomes/refseq/viral/BeAn_58058_virus/latest_assembly_versions/GCF_001907825.1_ViralProj357638/GCF_001907825.1_ViralProj357638_genomic.fna.gz
+    wget -P metaquast_ref_seq ftp://ftp.ncbi.nlm.nih.gov/genomes/refseq/viral/BeAn_58058_virus/         latest_assembly_versions/GCF_001907825.1_ViralProj357638/GCF_001907825.1_ViralProj357638_genomic.fna.gz
 
     # Run MetaQUAST
-    metabiome metaquast -i megahit_assembled_reads/ERR981212_sub_paired_bt2/ -o metaquast_out -opts -r metaquast_ref_seqs/GCF_001907825.1_ViralProj357638_genomic.fna.gz
+    metabiome metaquast -i megahit_assembled_reads/ERR981212_sub_paired_bt2/ -o metaquast_out \
+        -opts -r metaquast_ref_seqs/GCF_001907825.1_ViralProj357638_genomic.fna.gz
 
 Genome binning
 **************
@@ -371,11 +374,12 @@ use both files located in the directory :file:`contigs_reads/`.
 
     .. code-block:: bash
 
-        # Contig and their respective paired-end reads of the sample ERR981212:
+        # Contig and their respective paired-end reads of the sample ERR981212
         ERR981212_sub_paired_bt2.fasta
         ERR981212_sub_paired_bt2_1.fq.gz
         ERR981212_sub_paired_bt2_2.fq.gz
-        # Contig and their respective paired-end reads of the sample ERR981213:
+
+        # Contig and their respective paired-end reads of the sample ERR981213
         ERR981213_sub_paired_bt2.fasta
         ERR981213_sub_paired_bt2_1.fq.gz
         ERR981213_sub_paired_bt2_2.fq.gz
@@ -390,15 +394,18 @@ order to run. Here is an example of how you should do it before running
 
 .. code-block:: bash
 
-    # Create input directory:
+    # Create input directory
     mkdir gzip_contigs
-    # Copy contigs to the input directory:
+
+    # Copy contigs to the input directory
     cp contigs_reads/*.fasta gzip_contigs/
-    # Compress the contigs in the required gzip format:
+
+    # Compress the contigs in the required gzip format
     gzip gzip_contigs/*.fasta
 
-    # Run MetaBAT2:
-    metabiome metabat2 -i gzip_contigs/ -o metabat2_out/ -opts -m 1500 --maxP 50 --minS 30 --maxEdges 100 --minClsSize 1000
+    # Run MetaBAT2
+    metabiome metabat2 -i gzip_contigs/ -o metabat2_out/ \
+        -opts -m 1500 --maxP 50 --minS 30 --maxEdges 100 --minClsSize 1000
 
 For example, MetaBAT2 will generate 23 bins from the assembly of
 the sample ERR981212, which are located in :file:`metabat2_out/ERR981212_sub_paired_bt2/`.
@@ -422,7 +429,8 @@ like so:
 
 .. code-block:: bash
 
-    metabiome maxbin2 -i contigs_reads/ -o maxbin2_out/ -opts -min_contig_length 500 -prob_threshold 0.6
+    metabiome maxbin2 -i contigs_reads/ -o maxbin2_out/ \
+        -opts -min_contig_length 500 -prob_threshold 0.6
 
 For example, MaxBin2 will generate just 1 bin and many too-short
 bins from the sample ERR981212, which are located in

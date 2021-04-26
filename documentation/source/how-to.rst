@@ -62,10 +62,10 @@ automatically like so:
 
 .. code-block:: bash
 
-    # Run CONCOCT:
+    # Run CONCOCT
     metabiome concoct -i contigs_reads/ -o concoct_out/
 
-    # Run MaxBin2:
+    # Run MaxBin2
     metabiome maxbin2 -i contigs_reads/ -o maxbin2_out/
 
 Whereas for MetaBAT2, if you want to perform the binning with read-based
@@ -74,7 +74,7 @@ our command :code:`coverm` like so:
 
 .. code-block:: bash
 
-    # Run CoverM:
+    # Run CoverM
     metabiome coverm  -i contigs_reads/ -o read_coverage/
 
 Now, let's use this read coverage files to run :code:`metabat2` command.
@@ -83,7 +83,7 @@ order to run:
 
 .. code-block:: bash
 
-    # Run MetaBAT2:
+    # Run MetaBAT2
     metabiome metabat2 -i gzip_contigs/ -co read_coverage/ -o metabat2_out/
 
 
