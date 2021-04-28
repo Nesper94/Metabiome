@@ -1,5 +1,5 @@
 # Metabiome
-Pipeline for metagenomics of rhizosphere and associated phages.
+A flexible and modular pipeline for microbiome analysis.
 
 ## Installation
 
