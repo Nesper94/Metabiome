@@ -238,7 +238,8 @@ let's visualize these results using `Krona <https://github.com/marbl/Krona/wiki>
     metabiome krona -i kraken2_out/ -o krona_out/
 
 And that's all! Inside the :file:`krona_out/` folder you will now find the Krona
-graphs displaying the composition of your samples.
+graphs displaying the composition of your samples. Your result should be
+similar to `this <_static/taxonomy.krona.html>`_.
 
 Functional profiling
 --------------------
