@@ -1,7 +1,7 @@
 name: metabiome-taxonomic-binning
 channels:
-  - bioconda
   - conda-forge
+  - bioconda
   - defaults
 dependencies:
   - kraken2=2.1

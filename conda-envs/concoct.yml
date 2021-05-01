@@ -3,7 +3,6 @@ channels:
   - conda-forge
   - defaults
   - bioconda
-  - ursky
 dependencies:
   - kallisto=0.46.*
   - concoct=1.1.*

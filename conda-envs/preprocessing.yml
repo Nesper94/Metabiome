@@ -1,7 +1,7 @@
 name: metabiome-preprocessing
 channels:
-  - bioconda
   - conda-forge
+  - bioconda
   - defaults
 dependencies:
   - trimmomatic=0.39
