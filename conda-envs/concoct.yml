@@ -1,9 +1,8 @@
 name: metabiome-concoct
 channels:
   - conda-forge
-  - defaults
   - bioconda
-  - ursky
+  - defaults
 dependencies:
   - kallisto=0.46.*
   - concoct=1.1.*

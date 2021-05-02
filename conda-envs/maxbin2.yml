@@ -3,7 +3,6 @@ channels:
   - conda-forge
   - bioconda
   - defaults
-  - ursky
 dependencies:
   - maxbin2=2.2.*
   - perl=5.26.*
