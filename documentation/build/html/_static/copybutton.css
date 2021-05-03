@@ -2,9 +2,9 @@
 a.copybtn {
     position: absolute;
     top: .2em;
-    right: 0.1em;
-    width: 1.8em;
-    height: 1.8em;
+    right: .2em;
+    width: 1em;
+    height: 1em;
 	opacity: .3;
     transition: opacity 0.5s;
     border: none;

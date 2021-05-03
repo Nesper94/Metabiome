@@ -19,11 +19,13 @@ high quality software tools that perform main steps in metagenomic analysis:
 - Contig binning
 
 Why this is important?
-El pipeline permite perfilar la comunidad desde un enfoque
-taxonómico y funcional basado en secuencias ensambladas o no ensambladas, e
-incluye un paso de extracción del gen 16S que da la posibilidad de realizar
-análisis comparativos, en relación a la abundancia, entre la composición
-bacteriana de una muestra analizada desde diferente enfoques.
+~~~~~~~~~~~~~~~~~~~~~~~
+The pipeline allows you to profile the community from a
+taxonomic and functional approach based on assembled or
+non-assembled sequences, and includes a 16S gene extraction
+step that gives the possibility to carry out comparative 
+analyzes, in relation to abundance, between the bacterial
+composition of a sample analyzed from different approaches. 
 
 .. toctree::
    :maxdepth: 2
