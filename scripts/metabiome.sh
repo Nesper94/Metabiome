@@ -42,7 +42,7 @@ validate_arguments "$#"
 
 # Get input arguments
 if [[ "$1" = "bbduk" ]]; then
-  bash "$SCRIPTS_DIR"/BBduk.sh ${@:2}
+  bash "$SCRIPTS_DIR"/bbduk.sh ${@:2}
 
 elif [[ "$1" = "bowtie2" ]]; then
   bash "$SCRIPTS_DIR"/bowtie2.sh ${@:2}
@@ -51,7 +51,7 @@ elif [[ "$1" = "humann" ]]; then
   bash "$SCRIPTS_DIR"/humann3.sh ${@:2}
 
 elif [[ "$1" = "kaiju" ]]; then
-  bash "$SCRIPTS_DIR"/Kaiju.sh ${@:2}
+  bash "$SCRIPTS_DIR"/kaiju.sh ${@:2}
 
 elif [[ "$1" = "kraken2" ]]; then
   bash "$SCRIPTS_DIR"/kraken2.sh ${@:2}
@@ -63,7 +63,7 @@ elif [[ "$1" = "megahit" ]]; then
   bash "$SCRIPTS_DIR"/megahit.sh ${@:2}
 
 elif [[ "$1" = "metaphlan3" ]]; then
-  bash "$SCRIPTS_DIR"/MetaPhlAn3.sh ${@:2}
+  bash "$SCRIPTS_DIR"/metaphlan3.sh ${@:2}
 
 elif [[ "$1" = "metaquast" ]]; then
   bash "$SCRIPTS_DIR"/metaquast.sh ${@:2}
