@@ -21,7 +21,7 @@ remove_envs(){
   conda env remove --name metabiome-genome-assembly
 
   echo "Removing metaphlan environment..."
-  conda env remove --name metabiome-metaphlan
+  conda env remove --name metabiome-taxonomic-profiling
 
   echo "Removing picking16S environment..."
   conda env remove --name metabiome-picking16S

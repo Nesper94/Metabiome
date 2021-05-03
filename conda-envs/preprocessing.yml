@@ -10,3 +10,4 @@ dependencies:
   - entrez-direct=13.9
   - fastqc=0.11
   - multiqc=1.6
+  - meme=4.11.2

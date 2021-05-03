@@ -9,14 +9,17 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: metabiome krona [Options] -i <input directory> -o <output directory>"
-    echo
-    echo "Required:"
-    echo "  -i in_dir   Input directory containing Kraken2 output files."
-    echo "  -o out_dir  Directory in which results will be saved. This directory"
-    echo "              will be created if it doesn't exist."
-    echo "Options:"
-    echo "  -h, --help  Show this help"
+cat <<HELP_USAGE
+Create Krona charts using Kraken2 output.
+Usage: metabiome krona [Options] -i <input directory> -o <output directory>
+
+Required:
+  -i in_dir    Input directory containing Kraken2 output files.
+  -o out_dir   Directory in which results will be saved. This directory
+               will be created if it doesn't exist.
+Options:
+  -h, --help   Show this help
+HELP_USAGE
 }
 
 # Exit if command is called with no arguments

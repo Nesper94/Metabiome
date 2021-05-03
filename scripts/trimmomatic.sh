@@ -1,6 +1,6 @@
 #!/bin/bash
 # Trimmomatic wrapper script to make quality control on FASTQ files
-# Last updated on: 2020-08-29
+# Last updated on: 2021-02-08
 
 set -e
 
@@ -8,16 +8,19 @@ SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
-    echo "Usage: metabiome trimmomatic [Options] -i <input directory> -o <output directory> -opts TRIMMOMATIC_OPTIONS"
-    echo ""
-    echo "Required:"
-    echo "  -i in_dir   Input directory containing clean FASTQ files."
-    echo "  -o out_dir  Directory in which results will be saved. This directory"
-    echo "              will be created if it doesn't exist."
-    echo
-    echo "Options:"
-    echo "  -t NUM      Number of threads to use (default: 4)"
-    echo "  -h, --help  Show this help"
+cat <<HELP_USAGE
+Perform quality trimming on Illumina sequence data.
+Usage: metabiome trimmomatic [Options] -i <input directory> -o <output directory> -opts TRIMMOMATIC_OPTIONS
+
+Required:
+  -i in_dir    Input directory containing clean FASTQ files.
+  -o out_dir   Directory in which results will be saved. This directory
+               will be created if it doesn't exist.
+
+Options:
+  -t NUM       Number of threads to use (default: 4)
+  -h, --help   Show this help
+HELP_USAGE
 }
 
 # Exit if command is called with no arguments
