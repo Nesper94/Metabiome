@@ -1,5 +1,5 @@
 #!/bin/bash
-# BBduk wrapper script to pick 16S rDNA sequences from metagenomic samples.
+# BBDuk wrapper script to pick 16S rDNA sequences from metagenomic samples.
 # Written by: Phagomica Group
 # Last updated on: 2020-12-11
 
