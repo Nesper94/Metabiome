@@ -22,10 +22,10 @@ Why this is important?
 ~~~~~~~~~~~~~~~~~~~~~~~
 The pipeline allows you to profile the community from a
 taxonomic and functional approach based on assembled or
-non-assembled sequences, and includes a 16S gene extraction
-step that gives the possibility to carry out comparative 
+non-assembled sequences. It also includes a 16S gene extraction
+step that gives the possibility to carry out comparative
 analyzes, in relation to abundance, between the bacterial
-composition of a sample analyzed from different approaches. 
+composition of a sample analyzed from different approaches.
 
 .. toctree::
    :maxdepth: 2
