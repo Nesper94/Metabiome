@@ -17,7 +17,7 @@ Required:
   -i in_dir         Input directory containing FASTQ files.
   -o out_dir        Directory in which results will be saved. This directory will be
                     created if it doesn't exist.
-  -D 16S_db         16S rRNA reference database in fasta format.
+  -D 16S_db         Directory containing 16S rDNA sequences in fasta format.
 
 Options:
   -t NUM            Number of threads to use. (default=1)
@@ -65,7 +65,7 @@ for file in "$input_dir"/*; do
     if [[ "$file" == @(*_R1_*|*_1).@(fq|fastq|fq.gz|fastq.gz) ]]; then
         forward_file="$file"
         core_name=$(get_core_name "$forward_file")
-        bbduk.sh in1="$forward_file" in2=$(echo "$forward_file" | forward_to_reverse) \
+        bbduk.sh in="$forward_file" in2= $(echo "$forward_file" | forward_to_reverse) \
             ref="$database" \
             outm="$out_dir"/$(basename -- "$forward_file" | sed 's/_bt2/_bbdk/') \
             outm2="$out_dir"/$(echo "$core_name" | sed 's/_bt2//')_bbdk_2.fq \
