@@ -71,6 +71,6 @@ done
 
 echo "Done."
 echo "You can now use assembled reads to:"
-echo "- Perform taxonomic binning with kraken2.sh or MetaPhlAn3.sh"
-echo "- Perform functional profiling using humann2.sh"
-echo "- Extract 16S sequences with BBduk.sh"
+echo "- Perform taxonomic binning with metabiome kraken2 or metabiome metaphlan3"
+echo "- Perform functional profiling using metabiome humann"
+echo "- Extract 16S sequences with metabiome bbduk"
