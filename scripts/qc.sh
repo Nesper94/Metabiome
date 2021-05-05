@@ -19,7 +19,7 @@ Required:
               will be created if it doesn't exist.
 
 Options:
-  -t NUM      Number of threads to use (default: 4).
+  -t NUM      Number of threads to use (default: 1).
   -h, --help  Show this help
 HELP_USAGE
 }
@@ -51,7 +51,7 @@ activate_env metabiome-preprocessing
 echo "Conda environment: $CONDA_DEFAULT_ENV"
 echo "Input directory: $input_dir"
 echo "Output directory: $out_dir"
-echo "Number of threads: ${threads:=4}"
+echo "Number of threads: ${threads:=1}"
 
 # Make sure to process only fastq, fq.gz or fastq.gz files
 fastqc -t "$threads" -o "$out_dir" "$input_dir"/*@(.fastq|.fastq.gz|.fq.gz)
