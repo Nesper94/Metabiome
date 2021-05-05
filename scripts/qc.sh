@@ -14,7 +14,7 @@ Quality control and visualization of sequence statistics from metagenomic sample
 Usage: metabiome qc -i <input directory> -o <output directory> [-t <threads>]
 
 Required:
-  -i in_dir   Input directory containing clean FASTQ files.
+  -i in_dir   Input directory containing FASTQ files.
   -o out_dir  Directory in which results will be saved. This directory
               will be created if it doesn't exist.
 
