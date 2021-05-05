@@ -37,10 +37,10 @@ while (("$#")); do
         -h|--help ) usage; exit 0 ;;
         -i )        input_dir=$(readlink -f "$2"); shift 2 ;;
         -o )        out_dir=$(readlink -m "$2"); shift 2 ;;
-        -ho )       host=$(readlink -f "$2"); shift 2 ;;
+        -ho )       host=$(readlink -m "$2"); shift 2 ;;
         -t )        threads="$2"; shift 2 ;;
-        -ph )       PhiX=$(readlink -f "$2"); shift 2 ;;
-        -hu )       Human=$(readlink -f "$2"); shift 2 ;;
+        -ph )       PhiX=$(readlink -m "$2"); shift 2 ;;
+        -hu )       Human=$(readlink -m "$2"); shift 2 ;;
         -opts )     shift; bowtie2_opts="$@"; break ;;
         * )         echo "Option '$1' not recognized"; exit 1 ;;
     esac

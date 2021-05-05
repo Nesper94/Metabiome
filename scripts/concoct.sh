@@ -39,7 +39,7 @@ while (("$#")); do
         -i )        input_dir=$(readlink -f "$2"); shift 2 ;;
         -o )        out_dir=$(readlink -m "$2"); shift 2 ;;
         -ch )       chunk_size="$2"; shift 2 ;;
-        -co )       cov_dir="$(readlink -f "$2")"; shift 2 ;;
+        -co )       cov_dir="$(readlink -m "$2")"; shift 2 ;;
         -t )        threads="$2"; shift 2 ;;
         -opts )     shift; concoct_opts="$@"; break ;;
         * )         echo "Option '$1' not recognized"; exit 1 ;;

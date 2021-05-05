@@ -35,7 +35,7 @@ while (("$#")); do
         -h|--help ) usage; exit 0;;
         -i )        input_dir=$(readlink -f "$2"); shift 2;;
         -o )        out_dir=$(readlink -m "$2"); shift 2;;
-        -d )        met_db=$(readlink -f "$2"); shift 2;;
+        -d )        met_db=$(readlink -m "$2"); shift 2;;
         -t )        threads="$2"; shift 2;;
         -opts )     shift; metaphlan_opts="$@"; break ;;
         * )         echo "Option '$1' not recognized"; exit 1;;
