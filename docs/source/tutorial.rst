@@ -279,19 +279,19 @@ Now, lets suppose you want to perform additional analyses based on the 16S rDNA.
 The :code:`bbduk` command can pick the 16S rDNA from your metagenomic samples through
 `BBDuk <https://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/bbduk-guide/>`_.
 But first, you will need to download the 16S rDNA sequences from the database of
-your choice. We recommend to download the 16S rDNA sequences from the up-to-date
-`SILVA_16S database <https://www.arb-silva.de/>`_ and store it in a directory
-(:file:`SILVA_16S/`). In this case, we will use our custom 16S rDNA database located here:
-`custom 16S_SILVA_db <https://drive.google.com/file/d/1sK03oL5b3dvsWW_CKDhaZEfmfQ9c4tc4/view?usp=sharing>`_
+your choice. In this case, we will use our custom 16S rDNA database of the
+phylum `Firmicutes <https://drive.google.com/file/d/1dOIgupiE-xpORIR-7jxaTMI63NXQBvdH/view?usp=sharing>`_. Go ahead and run :code:`bbduk` command like so:
+
 
 .. code-block:: bash
 
-    metabiome bbduk -i decontaminated_reads/ -o bbduk_out/ -D SILVA_16S/
+    metabiome bbduk -i decontaminated_reads/ -o bbduk_out/ \
+        -D Firmicutes_rRNA_16S_silva.fa.gz -opts -Xmx2g
 
-The output of :code:`BBDuk` command is located in :file:`bbduk_out/`. This output is
+The output of :code:`bbduk` command is located in :file:`bbduk_out/`. This output is
 very similar to the `Decontamination section <Decontamination_>`_ output.
-However, in this context, these files represent the metagenomic reads that did
-aligned to the 16S rDNA sequences.
+However, in this context these files are the metagenomic reads that did
+aligned to the Firmicutes 16S rDNA sequences.
 
 *De-novo* Assembly
 ******************
