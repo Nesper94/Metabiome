@@ -279,8 +279,9 @@ Now, lets suppose you want to perform additional analyses based on the 16S rDNA.
 The :code:`bbduk` command can pick the 16S rDNA from your metagenomic samples through
 `BBDuk <https://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/bbduk-guide/>`_.
 But first, you will need to download the 16S rDNA sequences from the database of
-your choice. In this case, we will use our custom 16S rDNA database of the
-phylum `Firmicutes <https://drive.google.com/file/d/1dOIgupiE-xpORIR-7jxaTMI63NXQBvdH/view?usp=sharing>`_. Go ahead and run :code:`bbduk` command like so:
+your choice. In this case, we will use our `custom 16S rDNA database of the phylum Firmicutes
+<https://drive.google.com/file/d/1dOIgupiE-xpORIR-7jxaTMI63NXQBvdH/view?usp=sharing>`_.
+Go ahead and run :code:`bbduk` command like so:
 
 
 .. code-block:: bash
