@@ -1,7 +1,7 @@
 #!/bin/bash
 # Pipeline uninstallation script
 # Written by: Phagomica group
-# Last updated on: 2020-10-22
+# Last updated on: 2021-05-12
 
 SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/config.sh
