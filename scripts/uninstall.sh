@@ -31,6 +31,9 @@ remove_envs(){
 
   echo "Removing concoct environment..."
   conda env remove --name metabiome-concoct
+
+  echo "Removing concoct environment..."
+  conda env remove --name metabiome-das_tool
 }
 
 remove_links(){

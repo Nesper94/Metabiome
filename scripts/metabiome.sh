@@ -30,6 +30,7 @@ Commands:
   maxbin2       Generate bins from contigs and paired-end reads.
   concoct       Generate bins from contigs and paired-end reads.
   coverm        Create read-coverage tables.
+  das_tool      Calculate non-redundant and optimized bins.
 
 Options:
   -h, --help    Show this help.
@@ -88,6 +89,9 @@ elif [[ "$1" = "concoct" ]]; then
 
 elif [[ "$1" = "coverm" ]]; then
   bash "$SCRIPTS_DIR"/coverm.sh ${@:2}
+
+elif [[ "$1" = "coverm" ]]; then
+  bash "$SCRIPTS_DIR"/das_tool.sh ${@:2}
 
 elif [[ "$1" = "-h" ]] || [[ "$1" = "--help" ]]; then
   usage
