@@ -90,7 +90,7 @@ File extensions accepted are:
 Metabiome modules
 -----------------
 
-This pipeline contains 7 modules that comprise the necessary tools for the analysis
+This pipeline contains 8 modules that comprise the necessary tools for the analysis
 of the main points within metagenomics. They are separated by conda environments,
 created from a ``.yaml`` file, which describes the software that each one implements
 and the required version. These files are stored in the :file:`conda_envs/` directory. A module
@@ -112,10 +112,6 @@ metabiome-taxonomic-profiling
 *****************************
 
 - MetaPhlAn3 (v3.0)
-
-metabiome-humann
-****************
-
 - HUMAnN3 (v3.0)
 
 metabiome-taxonomic-binning
@@ -137,9 +133,18 @@ metabiome-genome-assembly
 - QUAST (v5.0)
 - SPAdes (v3.12)
 
-metabiome-genome-binning
-*************************
+metabiome-concoct
+*****************
+
 - CONCOCT (v1.1)
 - CoverM (v0.6)
+
+metabiome-maxbin2
+*****************
+
 - MaxBin2 (v2.2)
+
+metabiome-metabat2
+******************
+
 - MetaBAT2 (v2.15)
