@@ -32,7 +32,7 @@ remove_envs(){
   echo "Removing concoct environment..."
   conda env remove --name metabiome-concoct
 
-  echo "Removing concoct environment..."
+  echo "Removing DAS Tool environment..."
   conda env remove --name metabiome-das_tool
 }
 
