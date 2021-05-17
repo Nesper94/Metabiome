@@ -85,7 +85,7 @@ if [[ ! -d "$proteins" ]]; then
 
 
         elif [[ ! "$file" == *.@(fa|fna|fasta) ]] && [[ ! "$file" == *.@(tsv) ]]; then
-            echo "$file is not either a bin or a scaffold-to-bin tsv file, so it will be ignore"
+            echo "$file is not either a bin or a scaffold-to-bin tsv file, so it will be ignored"
         fi
     done
 
