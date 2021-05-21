@@ -41,7 +41,7 @@ while (("$#")); do
         -h|--help ) usage; exit 0 ;;
         -i )        input_dir=$(readlink -f "$2"); shift 2 ;;
         -o )        out_dir=$(readlink -m "$2"); shift 2 ;;
-        -D )        database=$(readlink -f "$2"); shift 2 ;;
+        -D )        database=$(readlink -m "$2"); shift 2 ;;
         -d )        name_kaijudb="$2"; shift 2 ;;
         -t )        threads="$2"; shift 2 ;;
         -c )        class=class; shift 1 ;;
