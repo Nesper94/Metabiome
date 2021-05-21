@@ -367,7 +367,7 @@ Genome binning
 **************
 
 The following step is to generate bins from the previous draft genomes or
-contigs. To do so, we will use the contigs from MEGAHIT's output through three
+contigs. To do so, we will use the contigs from MetaSPAdes's output through three
 different binners: `MetaBAT2 <https://bitbucket.org/berkeleylab/metabat/>`_,
 `MaxBin2 <https://sourceforge.net/projects/maxbin2/>`_ and
 `CONCOCT <https://concoct.readthedocs.io/en/latest/>`_.
