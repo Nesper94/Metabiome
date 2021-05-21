@@ -50,7 +50,7 @@ according to the ``_1.``/``_2.`` naming convention:
 ------------------------------------------------------
 
 If you want to create read-based coverage files to boost the
-binning of your contigs or genomes, you can do it easily
+binning of your contigs, you can do it easily
 through our pipeline Metabiome. Metabiome has three different
 software (CONCOCT, MaxBin2 and MetaBAT2) for genome binning. So,
 let's just take a look on how to create these read-based coverage
