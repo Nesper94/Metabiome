@@ -18,11 +18,6 @@ Usage: metabiome [Commands|Options]
     qc            Check read quality with FastQC and MultiQC.
     trimmomatic   Perform quality trimming on Illumina sequence data.
 
-  Genome Assembly:
-    megahit       Assemble reads into contigs.
-    metaquast     Evaluate genome assembly.
-    metaspades    Assemble reads into contigs.
-
   Taxonomic binning:
     kaiju         Perform taxonomic classification of sequences.
     kraken2       Perform taxonomic classification of sequences.
@@ -34,6 +29,11 @@ Usage: metabiome [Commands|Options]
 
   Picking 16S rDNA sequences:
     bbduk         Extract 16S rDNA sequences.
+
+  Genome Assembly:
+    megahit       Assemble reads into contigs.
+    metaquast     Evaluate genome assembly.
+    metaspades    Assemble reads into contigs.
 
   Genome binning:
     concoct       Generate bins from contigs and paired-end reads.
