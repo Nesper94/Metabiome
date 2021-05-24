@@ -13,27 +13,38 @@ function usage() {
 cat<<HELP_USAGE
 Usage: metabiome [Commands|Options]
 
-Commands:
-  qc            Check read quality with FastQC and MultiQC.
-  trimmomatic   Perform quality trimming on Illumina sequence data.
-  bowtie2       Remove contaminant sequences.
-  humann        Profile the abundance of microbial metabolic pathways and molecular functions.
-  kraken2       Perform taxonomic classification of sequences.
-  krona         Create Krona charts using Kraken2 output.
-  metaspades    Assemble reads into contigs.
-  megahit       Assemble reads into contigs.
-  kaiju         Generate taxonomc bins.
-  metaphlan3    Generate taxonomic profiling bins.
-  metaquast     Evaluate genome assembly.
-  bbduk         Extract 16S rDNA sequences.
-  metabat2      Generate bins from contigs and paired-end reads.
-  maxbin2       Generate bins from contigs and paired-end reads.
-  concoct       Generate bins from contigs and paired-end reads.
-  coverm        Create read-coverage tables.
+  Preprocessing:
+    bowtie2       Remove contaminant sequences.
+    qc            Check read quality with FastQC and MultiQC.
+    trimmomatic   Perform quality trimming on Illumina sequence data.
 
-Options:
-  -h, --help    Show this help.
-  -v, --version Show Metabiome's version.
+  Genome Assembly:
+    megahit       Assemble reads into contigs.
+    metaquast     Evaluate genome assembly.
+    metaspades    Assemble reads into contigs.
+
+  Taxonomic binning:
+    kaiju         Perform taxonomic classification of sequences.
+    kraken2       Perform taxonomic classification of sequences.
+    krona         Create Krona charts using Kraken2 output.
+
+  Taxonomic profiling:
+    humann        Profile the abundance of microbial metabolic pathways and molecular functions.
+    metaphlan3    Generate taxonomic profiling bins.
+
+  Picking 16S rDNA sequences:
+    bbduk         Extract 16S rDNA sequences.
+
+  Genome binning:
+    concoct       Generate bins from contigs and paired-end reads.
+    coverm        Create read-coverage tables.
+    maxbin2       Generate bins from contigs and paired-end reads.
+    metabat2      Generate bins from contigs and paired-end reads.
+
+  Options:
+    -h, --help    Show this help.
+    -v, --version Show Metabiome's version.
+
 HELP_USAGE
 }
 
