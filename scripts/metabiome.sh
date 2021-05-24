@@ -27,7 +27,7 @@ Usage: metabiome [Commands|Options]
     humann        Profile the abundance of microbial metabolic pathways and molecular functions.
     metaphlan3    Generate taxonomic profiling bins.
 
-  Pick 16S rDNA sequences:
+  Extract 16S rDNA sequences:
     bbduk         Extract 16S rDNA sequences.
 
   Genome Assembly:
