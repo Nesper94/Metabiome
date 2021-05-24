@@ -14,7 +14,7 @@ By the end of the tutorial, you will be able to:
     * Perform the taxonomic profiling of metagenomic reads.
     * Perform the taxonomic binning of metagenomic reads.
     * Perform the functional profiling of metagenomic reads.
-    * Pick 16S rDNA sequences from metagenomic reads.
+    * Extract 16S rDNA sequences from metagenomic reads.
     * Assembly metagenomic paired-end reads into contigs.
     * Assess the quality of the metagenomic contigs.
     * Generate bins with metagenomic contigs and their respective paired-end reads.
@@ -273,10 +273,10 @@ After downloading databases we are ready to profile our samples with HUMAnN:
     metabiome humann -i decontaminated_reads/ -o humann_results/
 
 
-16S rDNA picking
-----------------
+Extract 16S rDNA sequences
+--------------------------
 Now, lets suppose you want to perform additional analyses based on the 16S rDNA.
-The :code:`bbduk` command can pick the 16S rDNA from your metagenomic samples through
+The :code:`bbduk` command can extract the 16S rDNA from your metagenomic samples through
 `BBDuk <https://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/bbduk-guide/>`_.
 But first, you will need to download the 16S rDNA sequences from the database of
 your choice. In this case, we will use our `custom 16S rDNA database of the phylum Firmicutes
