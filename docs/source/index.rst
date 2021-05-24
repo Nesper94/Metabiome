@@ -27,6 +27,12 @@ step that gives the possibility to carry out comparative
 analyzes, in relation to abundance, between the bacterial
 composition of a sample analyzed from different approaches.
 
+Contribute
+~~~~~~~~~~
+
+- `Issue tracker <https://github.com/Nesper94/Metabiome/issues>`__
+- `Source code <https://github.com/Nesper94/Metabiome>`__
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
