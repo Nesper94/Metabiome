@@ -5,7 +5,7 @@ Tutorial
 
 The purpose of this tutorial is to perform several steps of a metagenomic
 analysis through our pipeline
-`Metabiome <https://github.com/Nesper94/metabiome>`_ .
+`Metabiome <https://github.com/Nesper94/metabiome>`_.
 
 By the end of the tutorial, you will be able to:
     * Get to know the ``Metabiome`` working environment.
@@ -51,7 +51,7 @@ parameters it needs or accepts.
 Tutorial Data Set
 *****************
 
-The  data set for this tutorial is from the
+The data set for this tutorial is from the
 `project PRJEB10295 <https://www.ebi.ac.uk/ena/browser/view/PRJEB10295>`_,
 which is a metagenomic study of the human palms. It consists of two samples derived
 from paired-end sequencing: *ERR981212* and *EEE981213*. However, for tutorial
@@ -392,7 +392,7 @@ Using MetaBAT2
 
 Let's begin with MetaBAT2, which requires the contigs in gzip format in
 order to run. Here is an example of how you should do it before running
-:code:`metabat2` command :
+:code:`metabat2` command:
 
 .. code-block:: bash
 
