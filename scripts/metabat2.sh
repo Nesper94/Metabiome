@@ -1,7 +1,7 @@
 #!/bin/bash
 # MetaBAT2 wrapper script for the binning of contig assemblies.
 # Written by: Phagomica Group
-# Last updated on: 2021-03-24
+# Last updated on: 2021-05-24
 
 set -e
 SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
@@ -25,6 +25,7 @@ Options:
   -t NUM            Number of threads. (default=1)
   -opts OPTIONS     MetaBAT2's options.
   -h, --help        Show this help.
+  -hh               Show MetaBAT2's help message.
 HELP_USAGE
 }
 
@@ -35,6 +36,7 @@ validate_arguments "$#"
 while (("$#")); do
     case "$1" in
         -h|--help ) usage; exit 0 ;;
+        -hh )      activate_env metabiome-metabat2; metabat2 -h; exit 0 ;;
         -i )       input_dir=$(readlink -f "$2"); shift 2 ;;
         -o )       out_dir=$(readlink -m "$2"); shift 2 ;;
         -co )      cov_dir=$(readlink -m "$2"); shift 2 ;;

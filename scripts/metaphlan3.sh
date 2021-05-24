@@ -1,7 +1,7 @@
 #!/bin/bash
 # MetaPhlAn3 wrapper script for the taxonomic profiling of metagenomic reads.
 # Written by: Phagomica Group
-# Last updated on: 2021-02-05
+# Last updated on: 2021-05-24
 
 set -e
 SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
@@ -23,6 +23,7 @@ Options:
   -t    NUM         Number of threads to use. (default=1)
   -opts OPTIONS     MetaPhlAn3's options.
   -h, --help        Show this help.
+  -hh               Show MetaPhlAn3's help message.
 HELP_USAGE
 }
 
@@ -33,6 +34,7 @@ validate_arguments "$#"
 while (("$#")); do
     case "$1" in
         -h|--help ) usage; exit 0;;
+        -hh )       activate_env metabiome-taxonomic-profiling; metaphlan -h; exit 0;;
         -i )        input_dir=$(readlink -f "$2"); shift 2;;
         -o )        out_dir=$(readlink -m "$2"); shift 2;;
         -d )        met_db=$(readlink -m "$2"); shift 2;;
