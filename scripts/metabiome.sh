@@ -100,6 +100,9 @@ elif [[ "$1" = "concoct" ]]; then
 elif [[ "$1" = "coverm" ]]; then
   bash "$SCRIPTS_DIR"/coverm.sh ${@:2}
 
+elif [[ "$1" = "das_tool" ]]; then
+  bash "$SCRIPTS_DIR"/das_tool.sh ${@:2}
+
 elif [[ "$1" = "-h" ]] || [[ "$1" = "--help" ]]; then
   usage
 

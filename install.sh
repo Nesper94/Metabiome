@@ -47,6 +47,9 @@ create_envs(){
 
     echo "Creating CONCOCT environment..."
     conda env create --file "$METABIOME_DIR"/conda-envs/concoct.yml
+
+    echo "Creating DAS Tool environment..."
+    conda env create --file "$METABIOME_DIR"/conda-envs/das_tool.yml
 }
 
 # Copy link to bash completion script

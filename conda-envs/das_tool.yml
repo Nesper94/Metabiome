@@ -1,0 +1,8 @@
+name: metabiome-das_tool
+channels:
+  - conda-forge
+  - bioconda
+  - default
+  - defaults
+dependencies:
+  - das_tool=1.1.*
