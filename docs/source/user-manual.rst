@@ -121,7 +121,7 @@ metabiome-taxonomic-binning
 - Kraken2 (v2.1)
 - Krona (v2.7)
 
-metabiome-picking16S
+metabiome-extract16S
 ********************
 
 - BBMap (v38.87)
