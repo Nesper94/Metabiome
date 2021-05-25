@@ -1,7 +1,7 @@
 #!/bin/bash
 # Kaiju wrapper script for the taxonomic binning of metagenomic samples.
 # Written by: Phagomica Group
-# Last updated on: 2021-04-7
+# Last updated on: 2021-05-24
 
 set -e
 
@@ -29,6 +29,7 @@ Options:
   -k                Generate krona graphs of Kaiju's output files.
   -opts OPTIONS     Kaiju's options.
   -h, --help        Show this help.
+  -hh               Show Kaiju's help message.
 HELP_USAGE
 }
 
@@ -39,6 +40,7 @@ validate_arguments "$#"
 while (("$#")); do
     case "$1" in
         -h|--help ) usage; exit 0 ;;
+        -hh )       activate_env metabiome-taxonomic-binning; kaiju -h; exit 0 ;;
         -i )        input_dir=$(readlink -f "$2"); shift 2 ;;
         -o )        out_dir=$(readlink -m "$2"); shift 2 ;;
         -D )        database=$(readlink -m "$2"); shift 2 ;;
