@@ -26,6 +26,7 @@ Options:
 -t  NUM             Number of threads to use. (default=1)
 -opts OPTIONS       DAS Tool's options.
 -h, --help          Show this help.
+-hh                 Show DAS Tool's help message
 
 HELP_USAGE
 }
@@ -37,6 +38,7 @@ validate_arguments "$#"
 while (("$#")); do
     case "$1" in
         -h|--help ) usage; exit 0 ;;
+        -hh )      activate_env metabiome-das_tool; DAS_Tool -h; exit 0 ;;
         -i )       input_dir=$(readlink -f "$2"); shift 2 ;;
         -o )       out_dir=$(readlink -m "$2"); shift 2 ;;
         -t )       threads="$2"; shift 2 ;;
