@@ -1,5 +1,5 @@
 #!/bin/bash
-# BBDuk wrapper script to pick 16S rDNA sequences from metagenomic samples.
+# BBDuk wrapper script to extract 16S rDNA sequences from metagenomic samples.
 # Written by: Phagomica Group
 # Last updated on: 2020-12-11
 
@@ -57,7 +57,7 @@ echo "Reference database: ${database:?'reference database not set'}"
 echo "BBDuk called with options: $bbduk_opts"
 
 # Activate conda environment
-activate_env metabiome-picking16S
+activate_env metabiome-extract16S
 
 # Match reads against the 16S rDNA SSU from SILVA Database
 for file in "$input_dir"/*; do
