@@ -20,8 +20,8 @@ remove_envs(){
   echo "Removing metaphlan environment..."
   conda env remove --name metabiome-taxonomic-profiling
 
-  echo "Removing picking16S environment..."
-  conda env remove --name metabiome-picking16S
+  echo "Removing extract16S environment..."
+  conda env remove --name metabiome-extract16S
 
   echo "Removing metabat2 environment..."
   conda env remove --name metabiome-metabat2

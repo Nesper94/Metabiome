@@ -36,8 +36,8 @@ create_envs(){
     echo "Creating MetaPhlAn3 environment..."
     conda env create --file "$METABIOME_DIR"/conda-envs/taxonomic-profiling.yml
 
-    echo "Creating picking16S environment..."
-    conda env create --file "$METABIOME_DIR"/conda-envs/picking16S.yml
+    echo "Creating extract16S environment..."
+    conda env create --file "$METABIOME_DIR"/conda-envs/extract16S.yml
 
     echo "Creating MetaBAT2 environment..."
     conda env create --file "$METABIOME_DIR"/conda-envs/metabat2.yml
