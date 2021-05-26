@@ -155,7 +155,7 @@ Software native help message
 
 Metabiome commmand line option includes an additional flag named ``-hh``
 that allows the users to see the programs native help message. For example,
-If you want more information about the assembler metaSPAdes the ``-hh``
+if you want more information about the assembler metaSPAdes the ``-hh``
 would show the help message from this software:
 
 .. code-block:: bash
@@ -166,4 +166,4 @@ would show the help message from this software:
 .. note::
 
     It seems that Krona doesn't have a help command, and FastQC 
-    and MultiQC usage in our pipeline is very simple, so they don't have this flag.
+    and MultiQC usage in our pipeline is very simple, so they don't have this option.
