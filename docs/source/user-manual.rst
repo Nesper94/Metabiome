@@ -68,7 +68,7 @@ the flag ``--presets`` from MEGAHIT, then you would do the following:
 
 .. code-block:: bash
 
-    metabiome megahit -i in_dir -o out_dir -opts --preset meta-large
+    metabiome megahit -i in_dir -o out_dir -opts --presets meta-large
 
 Naming convention
 -----------------
