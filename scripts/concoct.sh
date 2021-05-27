@@ -1,7 +1,7 @@
 #!/bin/bash
 # CONCOCT wrapper script for the binning of contig assemblies.
 # Written by: Phagomica Group
-# Last updated on: 2021-02-14
+# Last updated on: 2021-05-24
 
 set -e
 SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
@@ -26,6 +26,7 @@ Options:
   -ch NUM           Contigs's chunk size. (default=1000)
   -opts OPTIONS     CONCOCT's options.
   -h, --help        Show this help.
+  -hh               Show CONCOCT's help message.
 HELP_USAGE
 }
 
@@ -36,6 +37,7 @@ validate_arguments "$#"
 while (("$#")); do
     case "$1" in
         -h|--help ) usage; exit 0 ;;
+        -hh )       activate_env metabiome-concoct; concoct -h; exit 0 ;;
         -i )        input_dir=$(readlink -f "$2"); shift 2 ;;
         -o )        out_dir=$(readlink -m "$2"); shift 2 ;;
         -ch )       chunk_size="$2"; shift 2 ;;

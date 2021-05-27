@@ -1,7 +1,7 @@
 #!/bin/bash
 # HUMAnN 3.0 wrapper script
 # Written by: Estefany Lorenzana, Cristian Grisales and Juan Camilo Arboleda
-# Last updated on: 2021-02-15
+# Last updated on: 2021-05-24
 
 set -e
 
@@ -20,6 +20,7 @@ Required:
 Options:
   -t  NUM     Number of threads to use
   -h, --help  Show this help
+  -hh         Show HUMAnN3's help message.
 
 Note: Before running this script you should have downloaded the nucleotide and
 protein databases with humann_databases. Activate environment with
@@ -35,6 +36,7 @@ validate_arguments "$#"
 while [[ -n "$1" ]]; do
     case "$1" in
         -h|--help ) usage; exit 0 ;;
+        -hh )       activate_env metabiome-taxonomic-profiling; humann -h; exit 0 ;;
         -i )        input_dir=$(readlink -f "$2"); shift ;;
         -o )        out_dir=$(readlink -m "$2"); shift ;;
         -t )        threads="$2"; shift ;;
@@ -63,7 +65,8 @@ mkdir "$out_dir"/tmp
 
 # Cat paired-end reads and save to tmp/.
 # HUMAnN doesn't use paired-end information, however it is useful to convert the
-# paired reads to a single input file: https://forum.biobakery.org/t/paired-end-files-humann2/396/4
+# paired reads to a single input file:
+# https://forum.biobakery.org/t/paired-end-files-humann2/396/4
 for file in "$input_dir"/*; do
 
     # Make sure to process only fastq, fq.gz or fastq.gz files

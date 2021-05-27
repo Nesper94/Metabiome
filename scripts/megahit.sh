@@ -1,6 +1,7 @@
 #!/bin/bash
 # Metagenomic assembly using MEGAHIT-1.2.9
 # Written by: Phagomica_club
+# Last updated on: 2021-05-24
 
 set -e
 
@@ -20,6 +21,7 @@ Options:
   -t NUM          Number of threads to use (default: 4).
   -opts OPTIONS   Megahit's options.
   -h, --help      Show this help.
+  -hh             Show MEGAHIT's help message.
 HELP_USAGE
 }
 
@@ -29,6 +31,7 @@ validate_arguments "$#"
 while [[ -n "$1" ]]; do
     case "$1" in
         -h|--help ) usage; exit 0 ;;
+        -hh )       activate_env metabiome-genome-assembly; megahit -h; exit 0 ;;
         -i )        input_dir=$(readlink -f "$2"); shift ;;
         -o )        out_dir=$(readlink -m "$2"); shift ;;
         -t )        threads="$2"; shift ;;

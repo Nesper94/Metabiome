@@ -1,7 +1,7 @@
 #!/bin/bash
 # BBDuk wrapper script to extract 16S rDNA sequences from metagenomic samples.
 # Written by: Phagomica Group
-# Last updated on: 2020-12-11
+# Last updated on: 2021-05-24
 
 set -e
 
@@ -23,6 +23,7 @@ Options:
   -t NUM            Number of threads to use. (default=1)
   -opts OPTIONS     BBDuk's options.
   -h, --help        Show this help.
+  -hh               Show BBDuk's help message.
 HELP_USAGE
 }
 
@@ -33,11 +34,12 @@ validate_arguments "$#"
 while (("$#")); do
     case "$1" in
         -h|--help ) usage; exit 0 ;;
+        -hh )       activate_env metabiome-picking16S; bbduk.sh -h; exit 0 ;;
         -i )        input_dir=$(readlink -f "$2"); shift 2 ;;
         -o )        out_dir=$(readlink -m "$2"); shift 2 ;;
         -D )        database=$(readlink -m "$2"); shift 2 ;;
         -t )        threads="$2"; shift 2 ;;
-        -opts )     shift;bbduk_opts="$@"; break ;;
+        -opts )     shift; bbduk_opts="$@"; break ;;
         * )         echo "Option '$1' not recognized"; exit 1 ;;
     esac
 done
