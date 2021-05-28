@@ -102,7 +102,7 @@ sequencing machines, so we will remove reads coming from these sources using
 Before running :code:`bowtie2` command let's download through the next links the
 `subsampled Human reference Genome <https://drive.google.com/file/d/1f49lWDaX63FefH150PZ_p9FUa5UwE5zk/view?usp=sharing>`_
 and the `Phi-X174 genome <https://drive.google.com/file/d/1uRdEzysZCySSkBqp-uEn-Cx5MbsQ5F8n/view?usp=sharing>`_,
-which we will use to decontaminate the filtered reads.Also, place the subsampled
+which we will use to decontaminate the filtered reads. Also, place the subsampled
 Human reference Genome and the Phi-X174 genome into the :file:`filtered_reads/` directory.
 
 
