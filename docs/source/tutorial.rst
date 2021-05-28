@@ -161,7 +161,7 @@ we will use `MetaPhlAn3 <https://huttenhower.sph.harvard.edu/metaphlan/>`_.
 However, due to tutorial purposes only, you will have to download our custom
 database located here: `metaphlan3_custom_db <https://drive.google.com/drive/folders/1xNzSYTjSYlfycDsSC6_QM47y9Yid9Oe5?usp=sharing>`_.
 Be aware that this database is compressed and after downloading it, you must
-extract the folder :file:`metaphlan_custom_db.tar.gz` :
+extract the folder :file:`metaphlan_custom_db.tar.gz`:
 
 .. code-block:: bash
 
