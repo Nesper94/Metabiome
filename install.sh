@@ -33,7 +33,7 @@ create_envs(){
     echo "Creating assembly environment..."
     conda env create --file "$METABIOME_DIR"/conda-envs/genome-assembly.yml
 
-    echo "Creating MetaPhlAn3 environment..."
+    echo "Creating profiling environment..."
     conda env create --file "$METABIOME_DIR"/conda-envs/taxonomic-profiling.yml
 
     echo "Creating extract16S environment..."
