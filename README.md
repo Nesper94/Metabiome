@@ -1,5 +1,5 @@
 # Metabiome
-Pipeline for metagenomics of rhizosphere and associated phages.
+A flexible and modular pipeline for microbiome analysis.
 
 ## Installation
 
@@ -18,7 +18,7 @@ can use with Metabiome.
 - Bowtie2
 
 ## Functional profiling
-- HUMAnN 2.0 [![install with bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat)](http://bioconda.github.io/recipes/humann2/README.html)
+- HUMAnN 2.0
 - Kraken2
 - Kaiju
 - MetaPhlAn3
@@ -31,4 +31,4 @@ can use with Metabiome.
 - MetaQUAST
 
 ## Pipeline
-![Pipeline](https://i.imgur.com/nnm7qi3.png)
+![Pipeline](https://i.imgur.com/NcpxAXI.png)
