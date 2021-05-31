@@ -270,7 +270,7 @@ After downloading databases we are ready to profile our samples with HUMAnN:
 
 .. code-block:: bash
 
-    metabiome humann -i decontaminated_reads/ -o humann_results/
+    metabiome humann3 -i decontaminated_reads/ -o humann_results/
 
 
 Extract 16S rDNA sequences

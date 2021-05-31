@@ -24,7 +24,7 @@ Usage: metabiome [Commands|Options]
     krona         Create Krona charts using Kraken2 output.
 
   Taxonomic profiling:
-    humann        Profile the abundance of microbial metabolic pathways and molecular functions.
+    humann3       Profile the abundance of microbial metabolic pathways and molecular functions.
     metaphlan3    Generate taxonomic profiling bins.
 
   Extract 16S rDNA sequences:
@@ -58,7 +58,7 @@ if [[ "$1" = "bbduk" ]]; then
 elif [[ "$1" = "bowtie2" ]]; then
   bash "$SCRIPTS_DIR"/bowtie2.sh ${@:2}
 
-elif [[ "$1" = "humann" ]]; then
+elif [[ "$1" = "humann3" ]]; then
   bash "$SCRIPTS_DIR"/humann3.sh ${@:2}
 
 elif [[ "$1" = "kaiju" ]]; then

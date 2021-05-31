@@ -11,7 +11,7 @@ source "$SCRIPTS_DIR"/functions.sh
 usage() {
 cat <<EOF
 Profile the abundance of microbial metabolic pathways and molecular functions.
-Usage: metabiome humann [Options] -i <in_dir> -o <out_dir>
+Usage: metabiome humann3 [Options] -i <in_dir> -o <out_dir>
 Required:
   -i in_dir   Directory containing FASTQ files
   -o out_dir  Directory to write results. This directory
