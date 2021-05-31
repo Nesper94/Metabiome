@@ -18,6 +18,7 @@ By the end of the tutorial, you will be able to:
     * Assembly metagenomic paired-end reads into contigs.
     * Assess the quality of the metagenomic contigs.
     * Generate bins with metagenomic contigs and their respective paired-end reads.
+    * Refine bins out of different metagenomic binning algorithms.
 
 .. contents:: Tutorial contents
     :depth: 1
@@ -377,11 +378,13 @@ use both files located in the directory :file:`contigs_reads/`.
     .. code-block:: bash
 
         # Contig and their respective paired-end reads of the sample ERR981212
+
         ERR981212_sub_paired_bt2.fasta
         ERR981212_sub_paired_bt2_1.fq.gz
         ERR981212_sub_paired_bt2_2.fq.gz
 
         # Contig and their respective paired-end reads of the sample ERR981213
+
         ERR981213_sub_paired_bt2.fasta
         ERR981213_sub_paired_bt2_1.fq.gz
         ERR981213_sub_paired_bt2_2.fq.gz
@@ -468,3 +471,58 @@ of the sample ERR981212, which are located in
     read-based coverage files that will help improve the bins,
     see :ref:`How to create read-based coverage files for genome
     binning <boost_binning>`.
+
+
+Bin refinement
+**************
+
+You can also refine your bins through bioinformatic tools like
+`DAS Tool <https://github.com/cmks/DAS_Tool>`_. DAS Tool
+calculates a set of optimized and non-redundant bins from the
+output of different metagenomic binners. It requires tab separated
+scaffolds-to-bin tables from each metagenomic binner and the contigs in
+fasta format that were used to generate these bins.
+
+.. note::
+
+    If you want to know how to create these scaffolds-to-bin tsv files
+    for DAS Tool, please see :ref:`scaffolds-to-bin tsv files for
+    DAS Tool <scaffolds2bin>`.
+
+For the purpose of the tutorial, we will run DAS Tool with a different
+set of samples. This is because DAS Tool needs a specific quality
+threshold that the previous bins did not yield. Please, download the
+input samples from here
+`DAS_Tool_input <https://drive.google.com/drive/folders/1BxtHEh2sMdPB30Q0mB4iX2sFVeeASDEg?usp=sharing>`_.
+Place this file where you are running this tutorial and decompress it:
+
+.. code-block:: bash
+
+    tar -xvzf das_tool_input.tar.gz
+
+Now that we are all set, go ahead and run :code:`metabiome das_tool`
+command like so:
+
+.. warning::
+
+        :code:`metabiome-das_tool` requires that each scaffolds-to-bin
+        tsv filename must match to their respective contig filename:
+
+        .. code-block:: bash
+
+            # Contig and their respective scaffolds-to-bin tsv files of the human gut sample
+
+            sample_human_gut.fasta
+            sample_human_gut_concoct_scaffolds2bin.tsv
+            sample_human_gut_maxbin2_scaffolds2bin.tsv
+            sample_human_gut_metabat2_scaffolds2bin.tsv
+
+.. code-block:: bash
+
+    metabiome das_tool -i das_tool_input -o das_tool_out -opts --write_bins \
+         --create_plots -l concoct,maxbin2,metabat2 --search_engine diamond
+
+
+In the output directory :file:`das_tool_out`, you will find a directory
+(:file:`sample_human_gut_DASTool_bins`) containing the 12 bins that
+were finally selected from this sample.
