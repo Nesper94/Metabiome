@@ -148,3 +148,18 @@ metabiome-metabat2
 ******************
 
 - MetaBAT2 (v2.15)
+
+Debug mode
+----------
+
+Sometimes errors can appear when you try to run a command. If you are a
+developer and/or have knowledge in bash, you can use the Metabiome's debug
+mode to obtain more information about the error. The debug mode is turned on
+by setting the :envvar:`DEBUG_METABIOME` environment variable:
+
+.. code-block:: bash
+
+    export DEBUG_METABIOME="yes"
+
+Then you can run the command again and see a detailed output that can help
+in the debugging process.

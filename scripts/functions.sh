@@ -100,3 +100,8 @@ get_genome_format(){
         fi
     fi
 }
+
+# Enable debug mode
+if [[ "$DEBUG_METABIOME" = "yes" ]]; then
+	set -x
+fi
