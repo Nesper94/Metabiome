@@ -57,7 +57,7 @@ which is a metagenomic study of the human palms. It consists of two samples deri
 from paired-end sequencing: *ERR981212* and *EEE981213*. However, for tutorial
 purposes only, we have subsampled these files which you can download from here:
 `sample data <https://drive.google.com/drive/folders/1TxZPUrRVkoRa8rJNHiOx1sm7GdYN__5y?usp=sharing>`_.
-After you download these samples, store them in a directory called
+After you download these samples, place them in a directory called
 :file:`sample_data` for downstream analysis.
 
 Preprocessing
@@ -97,11 +97,13 @@ The next step is to remove contaminant reads from our data. Two common
 contaminants are sequences coming from researchers or people manipulating the
 samples and sequences from the Phi-X174 phage used as control in the
 sequencing machines, so we will remove reads coming from these sources using
-`Bowtie2 <http://bowtie-bio.sourceforge.net/bowtie2/index.shtml>`_. Thus, before
-running :code:`bowtie2` command let's download through the next links the
-`subsampled Human Genome <https://drive.google.com/file/d/1f49lWDaX63FefH150PZ_p9FUa5UwE5zk/view?usp=sharing>`_
+`Bowtie2 <http://bowtie-bio.sourceforge.net/bowtie2/index.shtml>`_.
+
+Before running :code:`bowtie2` command let's download through the next links the
+`subsampled Human reference Genome <https://drive.google.com/file/d/1f49lWDaX63FefH150PZ_p9FUa5UwE5zk/view?usp=sharing>`_
 and the `Phi-X174 genome <https://drive.google.com/file/d/1uRdEzysZCySSkBqp-uEn-Cx5MbsQ5F8n/view?usp=sharing>`_,
-which we will use to decontaminate the filtered reads like so:
+which we will use to decontaminate the filtered reads. Also, place the subsampled
+Human reference Genome and the Phi-X174 genome into the :file:`filtered_reads/` directory.
 
 
 .. warning:: Be aware that we subsampled the Human Reference Genome in order to
@@ -110,8 +112,8 @@ which we will use to decontaminate the filtered reads like so:
 
 .. code-block:: bash
 
-    metabiome bowtie2 -i filtered_reads/ -o decontaminated_reads/ -hu GRCh38_sub.fna \
-        -ph PhiX_NC_001422.1.fasta
+    metabiome bowtie2 -i filtered_reads/ -o decontaminated_reads/ \
+        -hu filtered_reads/GRCh38_sub.fna -ph filtered_reads/PhiX_NC_001422.1.fasta
 
 The most important output files from this step are located in
 :file:`decontaminated_reads/`. These files are each of the paired-end and
@@ -159,19 +161,21 @@ we will use `MetaPhlAn3 <https://huttenhower.sph.harvard.edu/metaphlan/>`_.
 However, due to tutorial purposes only, you will have to download our custom
 database located here: `metaphlan3_custom_db <https://drive.google.com/drive/folders/1xNzSYTjSYlfycDsSC6_QM47y9Yid9Oe5?usp=sharing>`_.
 Be aware that this database is compressed and after downloading it, you must
-extract the :file:`metaphlan_custom_db.tar.gz` like so:
+extract the folder :file:`metaphlan_custom_db.tar.gz`:
 
 .. code-block:: bash
 
     tar -xvf metaphlan3_custom_db.tar.gz
 
-Now, we can perfom the taxonomic profiling of the metagenomics samples with the
-:code:`metaphlan3` command like so:
+Now, move the folder :file:`metaphlan3_custom_db/` to where you
+are running this tutorial and perform the taxonomic profiling of the
+metagenomic samples like so:
 
 .. code-block:: bash
 
-    metabiome metaphlan3 -i decontaminated_reads/ -o mphlan_out/ -d metaphlan3_custom_db/ \
-        -opts --add_viruses --ignore_eukaryotes --ignore_bacteria --ignore_archaea
+    metabiome metaphlan3 -i decontaminated_reads/ -o mphlan_out/ \
+        -d metaphlan3_custom_db/ -opts --add_viruses --ignore_eukaryotes \
+        --ignore_bacteria --ignore_archaea
 
 In the output directory :file:`mphlan_out/`, you will find the taxa identity and
 relative abundances of the metagenomic samples. Additionally, you will find the
@@ -281,13 +285,13 @@ The :code:`bbduk` command can extract the 16S rDNA from your metagenomic samples
 But first, you will need to download the 16S rDNA sequences from the database of
 your choice. In this case, we will use our `custom 16S rDNA database of the phylum Firmicutes
 <https://drive.google.com/file/d/1dOIgupiE-xpORIR-7jxaTMI63NXQBvdH/view?usp=sharing>`_.
-Go ahead and run :code:`bbduk` command like so:
-
+Place this database into a directory called :file:`16S_db` and go ahead and
+run :code:`bbduk` command like so:
 
 .. code-block:: bash
 
     metabiome bbduk -i decontaminated_reads/ -o bbduk_out/ \
-        -D Firmicutes_rRNA_16S_silva.fa.gz -opts -Xmx2g
+        -D 16S_db/Firmicutes_rRNA_16S_silva.fa.gz -opts -Xmx2g
 
 The output of :code:`bbduk` command is located in :file:`bbduk_out/`. This output is
 very similar to the `Decontamination section <Decontamination_>`_ output.
@@ -363,9 +367,11 @@ Genome binning
 **************
 
 The following step is to generate bins from the previous draft genomes or
-contigs (wether from MetaSPAdes or MEGAHIT). To do so, we will use three
+contigs (either from MetaSPAdes or MEGAHIT). In this tutorial, we will
+use the contigs from MEGAHIT's output through three
 different binners: `MetaBAT2 <https://bitbucket.org/berkeleylab/metabat/>`_,
-`MaxBin2 <https://sourceforge.net/projects/maxbin2/>`_ and `CONCOCT <https://concoct.readthedocs.io/en/latest/>`_.
+`MaxBin2 <https://sourceforge.net/projects/maxbin2/>`_ and
+`CONCOCT <https://concoct.readthedocs.io/en/latest/>`_.
 Depending on the options you provide, these binners will need the contigs and
 the reads that generated those contigs in order to run. In this case, we will
 use both files located in the directory :file:`contigs_reads/`.
