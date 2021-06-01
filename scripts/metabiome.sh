@@ -41,6 +41,9 @@ Usage: metabiome [Commands|Options]
     maxbin2       Generate bins from contigs and paired-end reads.
     metabat2      Generate bins from contigs and paired-end reads.
 
+  Bins assessment:
+    das_tool      Calculate non-redundant and optimized bins.
+
   Options:
     -h, --help    Show this help.
     -v, --version Show Metabiome's version.
