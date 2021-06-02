@@ -13,6 +13,18 @@ function usage() {
 cat<<HELP_USAGE
 Usage: metabiome [Commands|Options]
 
+
+							Welcome to:
+
+			███╗   ███╗███████╗████████╗ █████╗ ██████╗ ██╗ ██████╗ ███╗   ███╗███████╗
+			████╗ ████║██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║██╔═══██╗████╗ ████║██╔════╝
+			██╔████╔██║█████╗     ██║   ███████║██████╔╝██║██║   ██║██╔████╔██║█████╗
+			██║╚██╔╝██║██╔══╝     ██║   ██╔══██║██╔══██╗██║██║   ██║██║╚██╔╝██║██╔══╝
+			██║ ╚═╝ ██║███████╗   ██║   ██║  ██║██████╔╝██║╚██████╔╝██║ ╚═╝ ██║███████╗
+			╚═╝     ╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═════╝ ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝
+
+				A flexible and modular pipeline for metagenomic analysis!!!
+
   Preprocessing:
     bowtie2       Remove contaminant sequences.
     qc            Check read quality with FastQC and MultiQC.
@@ -47,6 +59,9 @@ Usage: metabiome [Commands|Options]
   Options:
     -h, --help    Show this help.
     -v, --version Show Metabiome's version.
+
+If you are having problems running Metabiome, please do not hesitate to contact us through
+github (https://github.com/Nesper94/Metabiome)
 
 HELP_USAGE
 }
