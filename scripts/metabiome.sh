@@ -13,7 +13,6 @@ function usage() {
 cat<<HELP_USAGE
 Usage: metabiome [Commands|Options]
 
-
 							Welcome to:
 
 			███╗   ███╗███████╗████████╗ █████╗ ██████╗ ██╗ ██████╗ ███╗   ███╗███████╗
