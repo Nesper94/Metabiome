@@ -118,5 +118,5 @@ In this case, we will use the bins from MaxBin2's output (:file:`maxbin_bins/`).
 In this case, we have succesfully created scaffolds-to-bin tsv files
 of MaxBin2's ouput from sample ERR981212. You can now do it with
 other metagenomic binners. Keep in mind that, for example, MetaBAT2
-generate bins in :code:`.fa` format. So, you must change the
+generate bins with :code:`.fa` extension. So, you must change the
 :code:`-e` flag from :code:`fasta` to :code:`fa`.
