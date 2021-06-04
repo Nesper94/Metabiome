@@ -59,8 +59,8 @@ Usage: metabiome [Commands|Options]
     -h, --help    Show this help.
     -v, --version Show Metabiome's version.
 
-If you are having problems running Metabiome, please do not hesitate to contact us through
-github (https://github.com/Nesper94/Metabiome)
+If you are having problems running Metabiome, please do not hesitate to
+contact us through GitHub (https://github.com/Nesper94/Metabiome)
 
 HELP_USAGE
 }
