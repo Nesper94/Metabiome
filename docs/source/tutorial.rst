@@ -500,9 +500,6 @@ Place this file where you are running this tutorial and decompress it:
 
     tar -xvzf das_tool_input.tar.gz
 
-Now that we are all set, go ahead and run :code:`metabiome das_tool`
-command like so:
-
 .. warning::
 
         :code:`metabiome-das_tool` requires that each scaffolds-to-bin
@@ -516,6 +513,9 @@ command like so:
             sample_human_gut_concoct_scaffolds2bin.tsv
             sample_human_gut_maxbin2_scaffolds2bin.tsv
             sample_human_gut_metabat2_scaffolds2bin.tsv
+
+Now that we are all set, go ahead and run :code:`metabiome das_tool`
+command like so:
 
 .. code-block:: bash
 
