@@ -97,7 +97,7 @@ creating these read-based coverage files.
 -------------------------------------------------
 
 Besides of contigs in fasta format, DAS Tool requires a tab separated
-scaffolds to bin file from each metagenomic binner. To create these files,
+scaffolds-to-bin file from each metagenomic binner. To create these files,
 you must have the bins from each metagenomic binner in distinct directories.
 In this case, we will use the bins from MaxBin2's output (:file:`maxbin_bins/`).
 
