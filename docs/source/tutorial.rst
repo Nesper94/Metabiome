@@ -502,7 +502,7 @@ Place this file where you are running this tutorial and decompress it:
 
 .. warning::
 
-        :code:`metabiome-das_tool` requires that each scaffolds-to-bin
+        :code:`metabiome das_tool` requires that each scaffolds-to-bin
         tsv filename must match to their respective contig filename:
 
         .. code-block:: bash
