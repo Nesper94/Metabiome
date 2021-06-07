@@ -13,7 +13,7 @@ function usage() {
 cat<<HELP_USAGE
 Usage: metabiome [Commands|Options]
 
-				Welcome to:
+                              Welcome to:
 
   ███╗   ███╗███████╗████████╗ █████╗ ██████╗ ██╗ ██████╗ ███╗   ███╗███████╗
   ████╗ ████║██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║██╔═══██╗████╗ ████║██╔════╝
@@ -22,7 +22,7 @@ Usage: metabiome [Commands|Options]
   ██║ ╚═╝ ██║███████╗   ██║   ██║  ██║██████╔╝██║╚██████╔╝██║ ╚═╝ ██║███████╗
   ╚═╝     ╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═════╝ ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝
 
-	A flexible and modular pipeline for metagenomic analysis!!!
+       A flexible and modular pipeline for metagenomic analysis!!!
 
   Preprocessing:
     bowtie2       Remove contaminant sequences.
