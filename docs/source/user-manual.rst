@@ -90,7 +90,7 @@ File extensions accepted are:
 Metabiome modules
 -----------------
 
-This pipeline contains 8 modules that comprise the necessary tools for the analysis
+Metabiome contains 9 modules that comprise the necessary tools for the analysis
 of the main points within metagenomics. They are separated by conda environments,
 created from a ``.yaml`` file, which describes the software that each one implements
 and the required version. These files are stored in the :file:`conda_envs/` directory. A module
@@ -148,6 +148,11 @@ metabiome-metabat2
 ******************
 
 - MetaBAT2 (v2.15)
+
+metabiome-das_tool
+******************
+
+- DAS Tool (v1.1.2)
 
 Debug mode
 ----------

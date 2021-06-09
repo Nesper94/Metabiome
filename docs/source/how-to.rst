@@ -90,3 +90,33 @@ order to run:
 Moreover, if you already have your read-based coverage files, you can also
 provide it to any of the binners and automatically skip the process of
 creating these read-based coverage files.
+
+.. _scaffolds2bin:
+
+...create scaffolds-to-bin tsv files for DAS Tool
+-------------------------------------------------
+
+Besides of contigs in fasta format, DAS Tool requires a tab separated
+scaffolds-to-bin file from each metagenomic binner. To create these files,
+you must have the bins from each metagenomic binner in distinct directories.
+Now, we will use the bins from MaxBin2's output (:file:`maxbin_bins/`).
+
+.. code-block:: bash
+
+    # Move to directory containing bins
+    cd ~/maxbin_bins/
+
+    # Activate environment
+    conda activate metabiome-das_tool
+
+    # Create scaffolds-to-bin tsv files
+    Fasta_to_Scaffolds2Bin.sh -e fasta > ERR981212_scaffolds2bin_maxbin2.tsv
+
+    # Deactivate environment
+    conda deactivate metabiome-das_tool
+
+In this case, we have succesfully created scaffolds-to-bin tsv files
+of MaxBin2's ouput from sample ERR981212. You can now do it with
+other metagenomic binners. Keep in mind that, for example, MetaBAT2
+generate bins with :code:`fa` extension. So, you must change the
+:code:`-e` flag from :code:`fasta` to :code:`fa`.
