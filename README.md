@@ -35,4 +35,4 @@ If you want to know more about Metabiome, please check out the
 - MetaQUAST
 
 ## Pipeline
-![Pipeline](https://i.imgur.com/NcpxAXI.png)
+![Pipeline](https://i.imgur.com/ZpCIXYV.png)
