@@ -11,6 +11,10 @@ bash install.sh
 The installation script will create Conda environments with all the software you
 can use with Metabiome.
 
+## More info
+If you want to know more about Metabiome, please check out the
+[Official Documentation](https://metabiome.readthedocs.io/en/latest/).
+
 ## Pre-processing of reads
 - FastQC
 - MultiQC
