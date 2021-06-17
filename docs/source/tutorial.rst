@@ -5,7 +5,7 @@ Tutorial
 
 The purpose of this tutorial is to perform several steps of a metagenomic
 analysis through our pipeline
-`Metabiome <https://github.com/Nesper94/metabiome>`_.
+`Metabiome <https://github.com/Nesper94/metabiome>`_ .
 
 By the end of the tutorial, you will be able to:
     * Get to know the ``Metabiome`` working environment.
@@ -18,6 +18,7 @@ By the end of the tutorial, you will be able to:
     * Assembly metagenomic paired-end reads into contigs.
     * Assess the quality of the metagenomic contigs.
     * Generate bins with metagenomic contigs and their respective paired-end reads.
+    * Refine bins out of different metagenomic binning algorithms.
 
 .. contents:: Tutorial contents
     :depth: 1
@@ -51,13 +52,13 @@ parameters it needs or accepts.
 Tutorial Data Set
 *****************
 
-The data set for this tutorial is from the
+The  data set for this tutorial is from the
 `project PRJEB10295 <https://www.ebi.ac.uk/ena/browser/view/PRJEB10295>`_,
 which is a metagenomic study of the human palms. It consists of two samples derived
 from paired-end sequencing: *ERR981212* and *EEE981213*. However, for tutorial
 purposes only, we have subsampled these files which you can download from here:
 `sample data <https://drive.google.com/drive/folders/1TxZPUrRVkoRa8rJNHiOx1sm7GdYN__5y?usp=sharing>`_.
-After you download these samples, store them in a directory called
+After you download these samples, place them in a directory called
 :file:`sample_data` for downstream analysis.
 
 Preprocessing
@@ -97,11 +98,13 @@ The next step is to remove contaminant reads from our data. Two common
 contaminants are sequences coming from researchers or people manipulating the
 samples and sequences from the Phi-X174 phage used as control in the
 sequencing machines, so we will remove reads coming from these sources using
-`Bowtie2 <http://bowtie-bio.sourceforge.net/bowtie2/index.shtml>`_. Thus, before
-running :code:`bowtie2` command let's download through the next links the
-`subsampled Human Genome <https://drive.google.com/file/d/1f49lWDaX63FefH150PZ_p9FUa5UwE5zk/view?usp=sharing>`_
+`Bowtie2 <http://bowtie-bio.sourceforge.net/bowtie2/index.shtml>`_.
+
+Before running :code:`bowtie2` command let's download through the next links the
+`subsampled Human reference Genome <https://drive.google.com/file/d/1f49lWDaX63FefH150PZ_p9FUa5UwE5zk/view?usp=sharing>`_
 and the `Phi-X174 genome <https://drive.google.com/file/d/1uRdEzysZCySSkBqp-uEn-Cx5MbsQ5F8n/view?usp=sharing>`_,
-which we will use to decontaminate the filtered reads like so:
+which we will use to decontaminate the filtered reads. Also, place the subsampled
+Human reference Genome and the Phi-X174 genome into the :file:`filtered_reads/` directory.
 
 
 .. warning:: Be aware that we subsampled the Human Reference Genome in order to
@@ -110,8 +113,8 @@ which we will use to decontaminate the filtered reads like so:
 
 .. code-block:: bash
 
-    metabiome bowtie2 -i filtered_reads/ -o decontaminated_reads/ -hu GRCh38_sub.fna \
-        -ph PhiX_NC_001422.1.fasta
+    metabiome bowtie2 -i filtered_reads/ -o decontaminated_reads/ \
+        -hu filtered_reads/GRCh38_sub.fna -ph filtered_reads/PhiX_NC_001422.1.fasta
 
 The most important output files from this step are located in
 :file:`decontaminated_reads/`. These files are each of the paired-end and
@@ -159,19 +162,21 @@ we will use `MetaPhlAn3 <https://huttenhower.sph.harvard.edu/metaphlan/>`_.
 However, due to tutorial purposes only, you will have to download our custom
 database located here: `metaphlan3_custom_db <https://drive.google.com/drive/folders/1xNzSYTjSYlfycDsSC6_QM47y9Yid9Oe5?usp=sharing>`_.
 Be aware that this database is compressed and after downloading it, you must
-extract the :file:`metaphlan_custom_db.tar.gz` like so:
+extract the folder :file:`metaphlan_custom_db.tar.gz`:
 
 .. code-block:: bash
 
     tar -xvf metaphlan3_custom_db.tar.gz
 
-Now, we can perfom the taxonomic profiling of the metagenomics samples with the
-:code:`metaphlan3` command like so:
+Now, move the folder :file:`metaphlan3_custom_db/` to where you
+are running this tutorial and perform the taxonomic profiling of the
+metagenomic samples like so:
 
 .. code-block:: bash
 
-    metabiome metaphlan3 -i decontaminated_reads/ -o mphlan_out/ -d metaphlan3_custom_db/ \
-        -opts --add_viruses --ignore_eukaryotes --ignore_bacteria --ignore_archaea
+    metabiome metaphlan3 -i decontaminated_reads/ -o mphlan_out/ \
+        -d metaphlan3_custom_db/ -opts --add_viruses --ignore_eukaryotes \
+        --ignore_bacteria --ignore_archaea
 
 In the output directory :file:`mphlan_out/`, you will find the taxa identity and
 relative abundances of the metagenomic samples. Additionally, you will find the
@@ -270,7 +275,7 @@ After downloading databases we are ready to profile our samples with HUMAnN:
 
 .. code-block:: bash
 
-    metabiome humann -i decontaminated_reads/ -o humann_results/
+    metabiome humann3 -i decontaminated_reads/ -o humann_results/
 
 
 Extract 16S rDNA sequences
@@ -281,13 +286,13 @@ The :code:`bbduk` command can extract the 16S rDNA from your metagenomic samples
 But first, you will need to download the 16S rDNA sequences from the database of
 your choice. In this case, we will use our `custom 16S rDNA database of the phylum Firmicutes
 <https://drive.google.com/file/d/1dOIgupiE-xpORIR-7jxaTMI63NXQBvdH/view?usp=sharing>`_.
-Go ahead and run :code:`bbduk` command like so:
-
+Place this database into a directory called :file:`16S_db` and go ahead and
+run :code:`bbduk` command like so:
 
 .. code-block:: bash
 
     metabiome bbduk -i decontaminated_reads/ -o bbduk_out/ \
-        -D Firmicutes_rRNA_16S_silva.fa.gz -opts -Xmx2g
+        -D 16S_db/Firmicutes_rRNA_16S_silva.fa.gz -opts -Xmx2g
 
 The output of :code:`bbduk` command is located in :file:`bbduk_out/`. This output is
 very similar to the `Decontamination section <Decontamination_>`_ output.
@@ -363,9 +368,11 @@ Genome binning
 **************
 
 The following step is to generate bins from the previous draft genomes or
-contigs (wether from MetaSPAdes or MEGAHIT). To do so, we will use three
+contigs (either from MetaSPAdes or MEGAHIT). In this tutorial, we will
+use the contigs from MEGAHIT's output through three
 different binners: `MetaBAT2 <https://bitbucket.org/berkeleylab/metabat/>`_,
-`MaxBin2 <https://sourceforge.net/projects/maxbin2/>`_ and `CONCOCT <https://concoct.readthedocs.io/en/latest/>`_.
+`MaxBin2 <https://sourceforge.net/projects/maxbin2/>`_ and
+`CONCOCT <https://concoct.readthedocs.io/en/latest/>`_.
 Depending on the options you provide, these binners will need the contigs and
 the reads that generated those contigs in order to run. In this case, we will
 use both files located in the directory :file:`contigs_reads/`.
@@ -377,11 +384,13 @@ use both files located in the directory :file:`contigs_reads/`.
     .. code-block:: bash
 
         # Contig and their respective paired-end reads of the sample ERR981212
+
         ERR981212_sub_paired_bt2.fasta
         ERR981212_sub_paired_bt2_1.fq.gz
         ERR981212_sub_paired_bt2_2.fq.gz
 
         # Contig and their respective paired-end reads of the sample ERR981213
+
         ERR981213_sub_paired_bt2.fasta
         ERR981213_sub_paired_bt2_1.fq.gz
         ERR981213_sub_paired_bt2_2.fq.gz
@@ -392,7 +401,7 @@ Using MetaBAT2
 
 Let's begin with MetaBAT2, which requires the contigs in gzip format in
 order to run. Here is an example of how you should do it before running
-:code:`metabat2` command:
+:code:`metabat2` command :
 
 .. code-block:: bash
 
@@ -468,3 +477,58 @@ of the sample ERR981212, which are located in
     read-based coverage files that will help improve the bins,
     see :ref:`How to create read-based coverage files for genome
     binning <boost_binning>`.
+
+
+Bin refinement
+**************
+
+You can also refine your bins through bioinformatic tools like
+`DAS Tool <https://github.com/cmks/DAS_Tool>`_. DAS Tool
+calculates a set of optimized and non-redundant bins from the
+output of different metagenomic binners. It requires tab separated
+scaffolds-to-bin tables from each metagenomic binner and the contigs in
+fasta format that were used to generate these bins.
+
+.. note::
+
+    If you want to know how to create these scaffolds-to-bin tsv files
+    for DAS Tool, please see :ref:`scaffolds-to-bin tsv files for
+    DAS Tool <scaffolds2bin>`.
+
+For the purpose of the tutorial, we will run DAS Tool with a different
+set of samples. This is because DAS Tool needs a specific quality
+threshold that the previous bins did not yield. Please, download the
+input samples from here
+`DAS_Tool_input <https://drive.google.com/drive/folders/1BxtHEh2sMdPB30Q0mB4iX2sFVeeASDEg?usp=sharing>`_.
+Place this file where you are running this tutorial and decompress it:
+
+.. code-block:: bash
+
+    tar -xvzf das_tool_input.tar.gz
+
+.. warning::
+
+        :code:`metabiome das_tool` requires that each scaffolds-to-bin
+        tsv filename must match to their respective contig filename:
+
+        .. code-block:: bash
+
+            # Contig and their respective scaffolds-to-bin tsv files of the human gut sample
+
+            sample_human_gut.fasta
+            sample_human_gut_concoct_scaffolds2bin.tsv
+            sample_human_gut_maxbin2_scaffolds2bin.tsv
+            sample_human_gut_metabat2_scaffolds2bin.tsv
+
+Now that we are all set, go ahead and run :code:`metabiome das_tool`
+command like so:
+
+.. code-block:: bash
+
+    metabiome das_tool -i das_tool_input -o das_tool_out -opts --write_bins \
+         --create_plots -l concoct,maxbin2,metabat2 --search_engine diamond
+
+
+In the output directory :file:`das_tool_out`, you will find a directory
+(:file:`sample_human_gut_DASTool_bins`) containing the 12 bins that
+were finally selected from this sample.

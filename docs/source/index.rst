@@ -16,7 +16,8 @@ high quality software tools that perform main steps in metagenomic analysis:
 - Functional profiling
 - 16S extraction
 - Genome assembly
-- Contig binning
+- Genome binning
+- Bin refinement
 
 Why this is important?
 ~~~~~~~~~~~~~~~~~~~~~~~

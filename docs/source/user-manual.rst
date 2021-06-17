@@ -68,8 +68,7 @@ the flag ``--presets`` from MEGAHIT, then you would do the following:
 
 .. code-block:: bash
 
-    metabiome megahit -i in_dir -o out_dir -opts --preset meta-large
-
+    metabiome megahit -i in_dir -o out_dir -opts --presets meta-large
 
 Naming convention
 -----------------
@@ -91,7 +90,7 @@ File extensions accepted are:
 Metabiome modules
 -----------------
 
-This pipeline contains 8 modules that comprise the necessary tools for the analysis
+Metabiome contains 9 modules that comprise the necessary tools for the analysis
 of the main points within metagenomics. They are separated by conda environments,
 created from a ``.yaml`` file, which describes the software that each one implements
 and the required version. These files are stored in the :file:`conda_envs/` directory. A module
@@ -122,7 +121,7 @@ metabiome-taxonomic-binning
 - Kraken2 (v2.1)
 - Krona (v2.7)
 
-metabiome-extract16S
+metabiome-picking16S
 ********************
 
 - BBMap (v38.87)
@@ -150,20 +149,22 @@ metabiome-metabat2
 
 - MetaBAT2 (v2.15)
 
-Software native help message
------------------------------
+metabiome-das_tool
+******************
 
-Metabiome commmand line option includes an additional flag named ``-hh``
-that allows the users to see the programs native help message. For example,
-if you want more information about the assembler metaSPAdes the ``-hh``
-would show the help message from this software:
+- DAS Tool (v1.1.2)
+
+Debug mode
+----------
+
+Sometimes errors can appear when you try to run a command. If you are a
+developer and/or have knowledge in bash, you can use the Metabiome's debug
+mode to obtain more information about the error. The debug mode is turned on
+by setting the :envvar:`DEBUG_METABIOME` environment variable:
 
 .. code-block:: bash
 
-    metabiome metaspades -hh
-    
+    export DEBUG_METABIOME="yes"
 
-.. note::
-
-    It seems that Krona doesn't have a help command, and FastQC 
-    and MultiQC usage in our pipeline is very simple, so they don't have this option.
+Then you can run the command again and see a detailed output that can help
+in the debugging process.
