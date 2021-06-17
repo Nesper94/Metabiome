@@ -13,14 +13,14 @@ cat <<HELP_USAGE
 Perform taxonomic classification of sequences.
 Usage: metabiome kraken2 [Options] -i <input directory> -o <output directory>
 Required:
-  -i in_dir       Input directory containing FASTQ files."
-  -o out_dir      Directory in which results will be saved. This directory"
-                  will be created if it doesn't exist."
+  -i in_dir       Input directory containing FASTQ files.
+  -o out_dir      Directory in which results will be saved. This directory
+                  will be created if it doesn't exist.
 
 Options:
-  -db database    Path to database used to assign the taxonomic labels to sequences (default: standard-kraken2-db)"
-  -t  NUM         Number of threads to use (default: 1)"
-  -h, --help      Show this help"
+  -db database    Path to database used to assign the taxonomic labels to sequences (default: standard-kraken2-db)
+  -t  NUM         Number of threads to use (default: 1)
+  -h, --help      Show this help
   -hh             Show Kraken2's help message.
 HELP_USAGE
 }
