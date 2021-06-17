@@ -46,7 +46,6 @@ microbiome analysis:
 
 ## Pipeline
 ![Pipeline](https://i.imgur.com/ZpCIXYV.png)
-)
 
 ## Prerequisites for running Metabiome
 
