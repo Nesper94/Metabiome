@@ -6,43 +6,26 @@ A flexible and modular pipeline for microbiome analysis.
 [![Made with: bash](https://img.shields.io/badge/Made%20with-Bash-1f425f.svg)](https://www.gnu.org/software/bash/)
 [![Read: the docs](https://img.shields.io/badge/read-the%20docs-blue)](https://metabiome.readthedocs.io/en/latest/)
 
+
+<p align="left">
+  <img width = "500" src="https://i.imgur.com/FGbY9Ed.png"/>
+</p>
+
 ## About Metabiome
 
-`Metabiome` is a bioinformatic pipeline for microbiome analysis. It consists of
+Metabiome is a bioinformatic pipeline for microbiome analysis. It consists of
 a series of wrapper scripts written in Bash. It is also contained in Conda
 environments to ease its use. Metabiome includes several features of common
 microbiome analysis:
 
-### Reads preprocessing
-- FastQC
-- MultiQC
-- Trimmomatic
-- Bowtie2
-
-### Taxonomic and functional profiling
-- HUMAnN 3.0
-- MetaPhlAn 3.0
-
-### Taxonomic binning
-- Kraken2
-- Kaiju
-
-### Genome assembly
-- MetaSPADES
-- MEGAHIT
-
-#### Assembly evaluation
-- MetaQUAST
-
-### Genome binning
-- CONCOCT
-- MetaBAT2
-- MaxBin2
-- CoverM
-
-#### Bins refinement and assessment
-- DAS Tool
-- CheckM
+1. [Reads preprocessing](https://metabiome.readthedocs.io/en/latest/tutorial.html#preprocessing)
+2. [Taxonomic and functional profiling](https://metabiome.readthedocs.io/en/latest/tutorial.html#read-based-analysis)
+3. [Taxonomic binning](https://metabiome.readthedocs.io/en/latest/tutorial.html#read-based-analysis)
+4. [16S rDNA extraction](https://metabiome.readthedocs.io/en/latest/tutorial.html#read-based-analysis)
+4. [Genome assembly](https://metabiome.readthedocs.io/en/latest/tutorial.html#de-novo-assembly)
+5. [Assembly evaluation](https://metabiome.readthedocs.io/en/latest/tutorial.html#de-novo-assembly)
+6. [Genome binning](https://metabiome.readthedocs.io/en/latest/tutorial.html#genome-binning)
+7. [Bins refinement and assessment](https://metabiome.readthedocs.io/en/latest/tutorial.html#genome-binning)
 
 ## Pipeline
 ![Pipeline](https://i.imgur.com/ZpCIXYV.png)
