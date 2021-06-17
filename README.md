@@ -64,7 +64,7 @@ cd metabiome/
 bash install.sh
 ```
 The installation script will create Conda environments with all the software you
-can use with `Metabiome`.
+can use with Metabiome.
 
 
 ## Basic usage
