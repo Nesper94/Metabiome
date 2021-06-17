@@ -97,9 +97,9 @@ order to avoid duplications.
 If you have questions about how to use `Metabiome`, or are interested in
 active collaboration of this project, do not hesitate to contact:
 
-Cristian Grisales-Vargas: cristian.grisales@udea.edu.co
-Estefany Lorenzana: estefany.lorenzana@udea.edu.co
-Juan Camilo Arboleda: juan.arboleda2@udea.edu.co
+[Cristian Grisales-Vargas](mailto:cristian.grisales@udea.edu.co)  
+[Estefany Lorenzana](mailto:estefany.lorenzana@udea.edu.co)  
+[Juan Camilo Arboleda](mailto:juan.arboleda2@udea.edu.co)  
 
 ## Acknowledgements
 
