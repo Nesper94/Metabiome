@@ -10,7 +10,7 @@ A flexible and modular pipeline for microbiome analysis.
 
 `Metabiome` is a bioinformatic pipeline for microbiome analysis. It consists of
 a series of wrapper scripts written in Bash. It is also contained in Conda
-environments to ease its use. `Metabiome` includes several features of common
+environments to ease its use. Metabiome includes several features of common
 microbiome analysis:
 
 ### Reads preprocessing
