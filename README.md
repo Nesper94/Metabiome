@@ -93,7 +93,7 @@ order to avoid duplications.
 
 ## Ask for help
 
-If you have questions about how to use `Metabiome`, or are interested in
+If you have questions about how to use Metabiome, or are interested in
 active collaboration of this project, do not hesitate to contact:
 
 [Cristian Grisales-Vargas](mailto:cristian.grisales@udea.edu.co)  
