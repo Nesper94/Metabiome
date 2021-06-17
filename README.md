@@ -1,7 +1,7 @@
 <img src="https://i.imgur.com/FGbY9Ed.png" width=120 align="left" />
 
 # Metabiome
-A flexible and modular pipeline for microbiome analysis.
+A flexible and modular pipeline for metagenomic analysis.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-orange.svg)](https://github.com/Nesper94/Metabiome/blob/master/LICENSE)
 [![Maintained?](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/Nesper94/Metabiome/pulse)
