@@ -86,7 +86,7 @@ evaluated by the current developers.
 
 ## Submit an issue
 
-If you have problems or suggestions regarding `Metabiome`, please submit an
+If you have problems or suggestions regarding Metabiome, please submit an
 issue on [Metabiome issues](https://github.com/Nesper94/Metabiome/issues).
 Also, please search the previous issues (if any) before submiting a new one in
 order to avoid duplications.
