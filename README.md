@@ -16,13 +16,13 @@ environments to ease its use. Metabiome includes several features of common
 microbiome analysis:
 
 1. [Reads preprocessing](https://metabiome.readthedocs.io/en/latest/tutorial.html#preprocessing)
-2. [Taxonomic and functional profiling](https://metabiome.readthedocs.io/en/latest/tutorial.html#read-based-analysis)
-3. [Taxonomic binning](https://metabiome.readthedocs.io/en/latest/tutorial.html#read-based-analysis)
-4. [16S rDNA extraction](https://metabiome.readthedocs.io/en/latest/tutorial.html#read-based-analysis)
+2. [Taxonomic and functional profiling](https://metabiome.readthedocs.io/en/latest/tutorial.html#taxonomic-profiling)
+3. [Taxonomic binning](https://metabiome.readthedocs.io/en/latest/tutorial.html#taxonomic-binning)
+4. [16S rDNA extraction](https://metabiome.readthedocs.io/en/latest/tutorial.html#extract-16s-rdna-sequences)
 4. [Genome assembly](https://metabiome.readthedocs.io/en/latest/tutorial.html#de-novo-assembly)
-5. [Assembly evaluation](https://metabiome.readthedocs.io/en/latest/tutorial.html#de-novo-assembly)
+5. [Assembly evaluation](https://metabiome.readthedocs.io/en/latest/tutorial.html#quality-assembly)
 6. [Genome binning](https://metabiome.readthedocs.io/en/latest/tutorial.html#genome-binning)
-7. [Bins refinement and assessment](https://metabiome.readthedocs.io/en/latest/tutorial.html#genome-binning)
+7. [Bins refinement and assessment](https://metabiome.readthedocs.io/en/latest/tutorial.html#bin-refinement)
 
 ## Pipeline
 ![Pipeline](https://i.imgur.com/ZpCIXYV.png)
