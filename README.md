@@ -80,7 +80,7 @@ further details.
 
 ## Contribute to Metabiome
 
-If you want to contribute to `Metabiome`, you should fork the project.
+If you want to contribute to Metabiome, you should fork the project.
 Then, make your desired changes and submit a pull request in order to be
 evaluated by the current developers.
 
