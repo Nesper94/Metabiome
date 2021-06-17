@@ -49,7 +49,7 @@ microbiome analysis:
 
 ## Prerequisites for running Metabiome
 
-There are two prerequisites for running `Metabiome`:
+There are two prerequisites for running Metabiome:
 
 1. [Miniconda](https://docs.conda.io/en/latest/miniconda.html) installed
 in Linux systems.
