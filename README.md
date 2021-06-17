@@ -1,3 +1,5 @@
+<img src="https://i.imgur.com/FGbY9Ed.png" width=120 align="left" />
+
 # Metabiome
 A flexible and modular pipeline for microbiome analysis.
 
@@ -5,11 +7,6 @@ A flexible and modular pipeline for microbiome analysis.
 [![Maintained?](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/Nesper94/Metabiome/pulse)
 [![Made with: bash](https://img.shields.io/badge/Made%20with-Bash-1f425f.svg)](https://www.gnu.org/software/bash/)
 [![Read: the docs](https://img.shields.io/badge/read-the%20docs-blue)](https://metabiome.readthedocs.io/en/latest/)
-
-
-<p align="left">
-  <img width = "500" src="https://i.imgur.com/FGbY9Ed.png"/>
-</p>
 
 ## About Metabiome
 
