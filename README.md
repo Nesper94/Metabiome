@@ -69,7 +69,7 @@ can use with Metabiome.
 
 ## Basic usage
 
-`Metabiome` can be invoked like so:
+Metabiome can be invoked like so:
 
 ```bash
 metabiome --help
