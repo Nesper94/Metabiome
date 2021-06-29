@@ -40,7 +40,7 @@ in Linux systems.
 Download or clone this repository and run `install.sh` in the command line:
 
 ```bash
-cd metabiome/
+cd Metabiome/
 bash install.sh
 ```
 The installation script will create Conda environments with all the software you
