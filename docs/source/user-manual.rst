@@ -29,7 +29,7 @@ In order to install, clone Metabiome into your machine and execute
 .. code-block:: bash
 
     git clone -b master https://github.com/Nesper94/metabiome.git
-    cd metabiome/
+    cd Metabiome/
     bash install.sh
 
 You can also download Metabiome directly from the `Github page
