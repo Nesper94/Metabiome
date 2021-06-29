@@ -70,6 +70,7 @@ the flag ``--presets`` from MEGAHIT, then you would do the following:
 
     metabiome megahit -i in_dir -o out_dir -opts --presets meta-large
 
+
 Naming convention
 -----------------
 
@@ -168,3 +169,21 @@ by setting the :envvar:`DEBUG_METABIOME` environment variable:
 
 Then you can run the command again and see a detailed output that can help
 in the debugging process.
+
+Software native help message
+-----------------------------
+
+Metabiome commmand line option includes an additional flag named ``-hh``
+that allows the users to see the programs native help message. For example,
+if you want more information about the assembler metaSPAdes the ``-hh``
+would show the help message from this software:
+
+.. code-block:: bash
+
+    metabiome metaspades -hh
+    
+
+.. note::
+
+    It seems that Krona doesn't have a help command, and FastQC 
+    and MultiQC usage in our pipeline is very simple, so they don't have this option.

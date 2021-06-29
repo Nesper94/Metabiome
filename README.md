@@ -46,7 +46,6 @@ bash install.sh
 The installation script will create Conda environments with all the software you
 can use with Metabiome.
 
-
 ## Basic usage
 
 Metabiome can be invoked like so:
@@ -54,9 +53,8 @@ Metabiome can be invoked like so:
 ```bash
 metabiome --help
 ```
-See the  [documentation](https://metabiome.readthedocs.io/en/latest/) for
+See the [documentation](https://metabiome.readthedocs.io/en/latest/) for
 further details.
-
 
 ## Contribute to Metabiome
 
