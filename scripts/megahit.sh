@@ -1,6 +1,7 @@
 #!/bin/bash
 # Metagenomic assembly using MEGAHIT-1.2.9
 # Written by: Phagomica_club
+# Last updated on: 2021-05-24
 
 set -e
 
@@ -9,7 +10,7 @@ source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
 cat <<HELP_USAGE
-Alignment of sequences derived from metagenomic samples with MEGAHIT.
+Assembly of sequences derived from metagenomic samples with MEGAHIT.
 Usage: metabiome megahit [Options] -i <input directory> -o <output directory> [-opts Megahit_OPTIONS]
 Required:
   -i in_dir       Input directory containing FASTQ files.
@@ -20,6 +21,7 @@ Options:
   -t NUM          Number of threads to use (default: 4).
   -opts OPTIONS   Megahit's options.
   -h, --help      Show this help.
+  -hh             Show MEGAHIT's help message.
 HELP_USAGE
 }
 
@@ -29,6 +31,7 @@ validate_arguments "$#"
 while [[ -n "$1" ]]; do
     case "$1" in
         -h|--help ) usage; exit 0 ;;
+        -hh )       activate_env metabiome-genome-assembly; megahit -h; exit 0 ;;
         -i )        input_dir=$(readlink -f "$2"); shift ;;
         -o )        out_dir=$(readlink -m "$2"); shift ;;
         -t )        threads="$2"; shift ;;
@@ -48,7 +51,7 @@ validate_output_dir
 # Activate conda environment
 activate_env metabiome-genome-assembly
 
-#Output info
+# Output info
 echo "Input directory: $input_dir"
 echo "Output directory: $out_dir"
 echo "Number of threads: ${threads:=4}"
@@ -68,3 +71,9 @@ for file in "$input_dir"/*; do
             --presets meta-large # Optimization for large & complex metagenomes, like soil
     fi
 done
+
+echo "Done."
+echo "You can now use assembled reads to:"
+echo "- Perform taxonomic binning with metabiome kraken2 or metabiome metaphlan3"
+echo "- Perform functional profiling using metabiome humann"
+echo "- Extract 16S sequences with metabiome bbduk"

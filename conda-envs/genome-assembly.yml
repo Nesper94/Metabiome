@@ -6,3 +6,4 @@ channels:
 dependencies:
   - spades=3.12.*
   - megahit=1.2.*
+  - quast=5.0

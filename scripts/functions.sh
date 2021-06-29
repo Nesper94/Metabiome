@@ -1,3 +1,7 @@
+#
+# Definition of functions used in wrapper scripts
+#
+
 # Exit if command is called with no arguments
 validate_arguments(){
     if [[ "$1" == 0 ]]; then
@@ -20,7 +24,7 @@ validate_input_dir(){
     fi
 }
 
-# Create output directory if it doesn't exists.
+# Create output directory if it doesn't exists
 validate_output_dir(){
     if [[ -z "$out_dir" ]]; then
         echo "$0: Error: Output directory is not set." >&2
@@ -68,12 +72,36 @@ get_core_name(){
     fi
 }
 
+# Create output directories
 create_dir(){
-	if (( $# == 2 ));then
-        if [[ ! -d "$1"/"$2" ]];then
-            echo -e "output directory path: $1"
-            echo -e "Name of the folder to be created: $2"
-			mkdir "$1"/"$2"
+    if (( $# >= 2 )); then
+        local dir_path="$1"
+        local new_dir
+        for new_dir in "$@"; do
+            if [[ "$new_dir" != "$dir_path" ]] && [[ ! -d "$dir_path"/"$new_dir" ]]; then
+                echo -e "Output directory path: $dir_path"
+                echo -e "Name of the directory to be created: $new_dir"
+                mkdir "$dir_path"/"$new_dir"
+            fi
+        done
+    fi
+}
+
+# get contig file format
+get_genome_format(){
+    if (( $# == 1 )); then
+        local filename="$1"
+        if [[ -e "$filename".fa ]]; then
+            echo "$filename.fa"
+        elif [[ -e "$filename".fasta ]]; then
+            echo "$filename.fasta"
+        elif [[ -e "$filename".fna ]]; then
+            echo "$filename.fna"
         fi
     fi
 }
+
+# Enable debug mode
+if [[ "$DEBUG_METABIOME" = "yes" ]]; then
+	set -x
+fi

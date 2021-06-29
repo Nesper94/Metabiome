@@ -1,16 +1,13 @@
 #!/bin/bash
 # Pipeline uninstallation script
 # Written by: Phagomica group
-# Last updated on: 2020-10-22
+# Last updated on: 2021-05-12
 
 SCRIPTS_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 source "$SCRIPTS_DIR"/config.sh
 
 # Remove Conda environments
 remove_envs(){
-  echo "Removing hummann2 environment..."
-  conda env remove --name metabiome-humann2
-
   echo "Removing preprocessing environment..."
   conda env remove --name metabiome-preprocessing
 
@@ -20,11 +17,23 @@ remove_envs(){
   echo "Removing assembly environment..."
   conda env remove --name metabiome-genome-assembly
 
-  echo "Removing metaphlan environment..."
+  echo "Removing profiling environment..."
   conda env remove --name metabiome-taxonomic-profiling
 
-  echo "Removing picking16S environment..."
-  conda env remove --name metabiome-picking16S
+  echo "Removing extract16S environment..."
+  conda env remove --name metabiome-extract16S
+
+  echo "Removing metabat2 environment..."
+  conda env remove --name metabiome-metabat2
+
+  echo "Removing maxbin2 environment..."
+  conda env remove --name metabiome-maxbin2
+
+  echo "Removing concoct environment..."
+  conda env remove --name metabiome-concoct
+
+  echo "Removing DAS Tool environment..."
+  conda env remove --name metabiome-das_tool
 }
 
 remove_links(){

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Kraken2 wrapper script for the taxonomic binning of reads.
 # Written by: Phagomica group
-# Last updated on: 2021-02-08
+# Last updated on: 2021-05-24
 
 set -e
 
@@ -10,16 +10,18 @@ source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
 cat <<HELP_USAGE
+Perform taxonomic classification of sequences.
 Usage: metabiome kraken2 [Options] -i <input directory> -o <output directory>
 Required:
-  -i in_dir       Input directory containing FASTQ files."
-  -o out_dir      Directory in which results will be saved. This directory"
-                  will be created if it doesn't exist."
+  -i in_dir       Input directory containing FASTQ files.
+  -o out_dir      Directory in which results will be saved. This directory
+                  will be created if it doesn't exist.
 
 Options:
-  -db database    Path to database used to assign the taxonomic labels to sequences (default: standard-kraken2-db)"
-  -t  NUM         Number of threads to use (default: 1)"
-  -h, --help      Show this help"
+  -db database    Path to database used to assign the taxonomic labels to sequences (default: standard-kraken2-db)
+  -t  NUM         Number of threads to use (default: 1)
+  -h, --help      Show this help
+  -hh             Show Kraken2's help message.
 HELP_USAGE
 }
 
@@ -30,6 +32,7 @@ validate_arguments "$#"
 while [[ -n "$1" ]]; do
     case "$1" in
         -h|--help ) usage; exit 0 ;;
+        -hh )       activate_env metabiome-taxonomic-binning; kraken2 -h; exit 0 ;;
         -i )        input_dir=$(readlink -f "$2"); shift ;;
         -o )        out_dir=$(readlink -m "$2"); shift ;;
         -db )       DBNAME="$2"; shift ;;

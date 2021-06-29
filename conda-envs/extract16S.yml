@@ -1,4 +1,4 @@
-name: metabiome-picking16S
+name: metabiome-extract16S
 channels:
   - bioconda
   - conda-forge

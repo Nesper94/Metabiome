@@ -1,6 +1,7 @@
 #!/bin/bash
 # Metagenomic assembly using metaSPAdes from SPAdes-3.12.0
 # Written by: Phagomica_club
+# Last updated on: 2021-05-24
 
 set -e
 
@@ -9,7 +10,7 @@ source "$SCRIPTS_DIR"/functions.sh
 
 function usage() {
 cat <<HELP_USAGE
-Alignment of sequences derived from metagenomic samples with metaSPAdes.
+Assembly of sequences derived from metagenomic samples with metaSPAdes.
 Usage: metabiome metaspades [Options] -i <input directory> -o <output directory> [-opts MetaSPADES_OPTIONS]
 
 Required:
@@ -21,6 +22,7 @@ Options:
   -t NUM          Number of threads to use (default: 4).
   -opts OPTIONS   MetaSPADES's options.
   -h, --help      Show this help.
+  -hh             Show metaSPAdes's help message.
 HELP_USAGE
 }
 
@@ -30,6 +32,7 @@ validate_arguments "$#"
 while [[ -n "$1" ]]; do
     case "$1" in
         -h|--help ) usage; exit 0 ;;
+        -hh )       activate_env metabiome-genome-assembly; metaspades.py -h; exit 0 ;;
         -i )        input_dir=$(readlink -f "$2"); shift ;;
         -o )        out_dir=$(readlink -m "$2"); shift ;;
         -t )        threads="$2"; shift ;;
@@ -69,3 +72,9 @@ for file in "$input_dir"/*; do
             -t "$threads" $MetaSPADES_opts # Obtain other options for metaSPAdes
     fi
 done
+
+echo "Done."
+echo "You can now use assembled reads to:"
+echo "- Perform taxonomic binning with metabiome kraken2 or metabiome metaphlan3"
+echo "- Perform functional profiling using metabiome humann"
+echo "- Extract 16S sequences with metabiome bbduk"

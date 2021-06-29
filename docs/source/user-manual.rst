@@ -29,7 +29,7 @@ In order to install, clone Metabiome into your machine and execute
 .. code-block:: bash
 
     git clone -b master https://github.com/Nesper94/metabiome.git
-    cd metabiome/
+    cd Metabiome/
     bash install.sh
 
 You can also download Metabiome directly from the `Github page
@@ -68,7 +68,7 @@ the flag ``--presets`` from MEGAHIT, then you would do the following:
 
 .. code-block:: bash
 
-    metabiome megahit -i in_dir -o out_dir -opts --preset meta-large
+    metabiome megahit -i in_dir -o out_dir -opts --presets meta-large
 
 
 Naming convention
@@ -91,7 +91,7 @@ File extensions accepted are:
 Metabiome modules
 -----------------
 
-This pipeline contains 8 modules that comprise the necessary tools for the analysis
+Metabiome contains 9 modules that comprise the necessary tools for the analysis
 of the main points within metagenomics. They are separated by conda environments,
 created from a ``.yaml`` file, which describes the software that each one implements
 and the required version. These files are stored in the :file:`conda_envs/` directory. A module
@@ -149,6 +149,26 @@ metabiome-metabat2
 ******************
 
 - MetaBAT2 (v2.15)
+
+metabiome-das_tool
+******************
+
+- DAS Tool (v1.1.2)
+
+Debug mode
+----------
+
+Sometimes errors can appear when you try to run a command. If you are a
+developer and/or have knowledge in bash, you can use the Metabiome's debug
+mode to obtain more information about the error. The debug mode is turned on
+by setting the :envvar:`DEBUG_METABIOME` environment variable:
+
+.. code-block:: bash
+
+    export DEBUG_METABIOME="yes"
+
+Then you can run the command again and see a detailed output that can help
+in the debugging process.
 
 Software native help message
 -----------------------------

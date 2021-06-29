@@ -24,9 +24,6 @@ create_link(){
 
 # Create Conda environments
 create_envs(){
-    echo "Creating hummann2 environment..."
-    conda env create --file "$METABIOME_DIR"/conda-envs/humann2-env.yml
-
     echo "Creating preprocessing environment..."
     conda env create --file "$METABIOME_DIR"/conda-envs/preprocessing.yml
 
@@ -36,11 +33,23 @@ create_envs(){
     echo "Creating assembly environment..."
     conda env create --file "$METABIOME_DIR"/conda-envs/genome-assembly.yml
 
-    echo "Creating MetaPhlAn3 environment..."
+    echo "Creating profiling environment..."
     conda env create --file "$METABIOME_DIR"/conda-envs/taxonomic-profiling.yml
 
-    echo "Creating picking16S environment..."
-    conda env create --file "$METABIOME_DIR"/conda-envs/picking16S.yml
+    echo "Creating extract16S environment..."
+    conda env create --file "$METABIOME_DIR"/conda-envs/extract16S.yml
+
+    echo "Creating MetaBAT2 environment..."
+    conda env create --file "$METABIOME_DIR"/conda-envs/metabat2.yml
+
+    echo "Creating MaxBin2 environment..."
+    conda env create --file "$METABIOME_DIR"/conda-envs/maxbin2.yml
+
+    echo "Creating CONCOCT environment..."
+    conda env create --file "$METABIOME_DIR"/conda-envs/concoct.yml
+
+    echo "Creating DAS Tool environment..."
+    conda env create --file "$METABIOME_DIR"/conda-envs/das_tool.yml
 }
 
 # Copy link to bash completion script
