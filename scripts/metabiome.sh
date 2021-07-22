@@ -54,6 +54,7 @@ Usage: metabiome [Commands|Options]
 
   Bins assessment:
     das_tool      Calculate non-redundant and optimized bins.
+    checkm        Assess bin's quality
 
   Options:
     -h, --help    Show this help.
@@ -119,6 +120,9 @@ elif [[ "$1" = "coverm" ]]; then
 
 elif [[ "$1" = "das_tool" ]]; then
   bash "$SCRIPTS_DIR"/das_tool.sh ${@:2}
+
+elif [[ "$1" = "checkm" ]]; then
+  bash "$SCRIPTS_DIR"/checkm.sh ${@:2}
 
 elif [[ "$1" = "-h" ]] || [[ "$1" = "--help" ]]; then
   usage

@@ -5,7 +5,7 @@ _metabiome(){
 word=${COMP_WORDS[COMP_CWORD]}
 
 if [ "$COMP_CWORD" -eq 1 ]; then
-		COMPREPLY=($(compgen -W "bbduk bowtie2 concoct coverm das_tool humann3 kaiju
+		COMPREPLY=($(compgen -W "bbduk bowtie2 concoct coverm checkm das_tool humann3 kaiju
         kraken2 krona maxbin2 megahit metabat2 metaphlan3 metaquast metaspades
         qc trimmomatic" "${word}"))
     elif [ "$3" == "-i" ] || [ "$3" == "-o" ]; then
