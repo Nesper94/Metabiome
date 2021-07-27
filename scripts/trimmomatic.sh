@@ -13,9 +13,9 @@ Perform quality trimming on Illumina sequence data.
 Usage: metabiome trimmomatic [Options] -i <input directory> -o <output directory> -opts TRIMMOMATIC_OPTIONS
 
 Required:
-  -i in_dir	   Input directory containing clean FASTQ files.
-  -o out_dir   	   Directory in which results will be saved. This directory
-               	   will be created if it doesn't exist.
+  -i in_dir        Input directory containing clean FASTQ files.
+  -o out_dir       Directory in which results will be saved. This directory
+                   will be created if it doesn't exist.
 
 Options:
   -t NUM           Number of threads to use (default: 4)
