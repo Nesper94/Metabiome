@@ -48,6 +48,12 @@ while (("$#")); do
     esac
 done
 
+# Verify that input directory is set and exists
+validate_input_dir
+
+# Create output directory if it doesn't exists
+validate_output_dir
+
 # Activate Conda environment
 activate_env metabiome-preprocessing
 
@@ -84,12 +90,6 @@ if [[ ! -e "$PhiX" ]]; then
         fi
     done
 fi
-
-# Verify that input directory is set and exists
-validate_input_dir
-
-# Create output directory if it doesn't exists
-validate_output_dir
 
 # Output info
 echo "Conda environment: $CONDA_DEFAULT_ENV"
