@@ -13,21 +13,20 @@ Assess bin quality with CheckM workflows.
 Usage: metabiome checkm [options] -i <in_dir> -o <out_dir> [-opts CheckM_options]
 
 Required:
--i in_dir           Input directory containing bins per samples. (each sample with their
-                    respective bins must have its own directory)
--o out_dir          Directory in which results will be saved. This directory
-                    will be created if it doesn't exist.
+  -i in_dir           Input directory containing bins per samples. (each sample with their
+                      respective bins must have its own directory)
+  -o out_dir          Directory in which results will be saved. This directory
+                      will be created if it doesn't exist.
 
 Options:
--w STRING           CheckM's Workflow. Choose between lineage_wf (lineage analysis workflow)
-                    or taxonomy_wf (taxonomic analysis workflow). (default=lineage_wf)
--r STRING           Taxonomic rank (Required only if taxonomic_wf is chosen in -w flag)
--ta STRING          Taxon of interest (Required only if taxonomic_wf is chosen in -w flag)
--t  NUM             Number of threads to use. (default=1)
--opts OPTIONS       CheckM's options.
--h, --help          Show this help.
--hh                 Show CheckM's help message.
-
+  -w STRING           CheckM's Workflow. Choose between lineage_wf (lineage analysis workflow)
+                      or taxonomy_wf (taxonomic analysis workflow). (default=lineage_wf)
+  -r STRING           Taxonomic rank (Required only if taxonomic_wf is chosen in -w flag)
+  -ta STRING          Taxon of interest (Required only if taxonomic_wf is chosen in -w flag)
+  -t  NUM             Number of threads to use. (default=1)
+  -opts OPTIONS       CheckM's options.
+  -h, --help          Show this help.
+  -hh                 Show CheckM's help message.
 HELP_USAGE
 }
 
