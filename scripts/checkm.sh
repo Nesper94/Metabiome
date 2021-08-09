@@ -10,7 +10,7 @@ source "$SCRIPTS_DIR"/functions.sh
 function usage() {
 cat <<HELP_USAGE
 Assess bin quality with CheckM workflows.
-Usage: metabiome checkm [options] -i <in_dir> -o <out_dir> -opts CheckM_options
+Usage: metabiome checkm [options] -i <in_dir> -o <out_dir> [-opts CheckM_options]
 
 Required:
 -i in_dir           Input directory containing bins per samples. (each sample with their
