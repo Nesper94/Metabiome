@@ -34,6 +34,9 @@ remove_envs(){
 
   echo "Removing DAS Tool environment..."
   conda env remove --name metabiome-das_tool
+
+  echo "Removing CheckM environment..."
+  conda env remove --name metabiome-checkm
 }
 
 remove_links(){

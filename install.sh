@@ -50,6 +50,9 @@ create_envs(){
 
     echo "Creating DAS Tool environment..."
     conda env create --file "$METABIOME_DIR"/conda-envs/das_tool.yml
+
+    echo "Creating CheckM environment..."
+    conda env create --file "$METABIOME_DIR"/conda-envs/checkm.yml
 }
 
 # Copy link to bash completion script
