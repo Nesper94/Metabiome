@@ -13,14 +13,15 @@ Perform quality trimming on Illumina sequence data.
 Usage: metabiome trimmomatic [Options] -i <input directory> -o <output directory> -opts TRIMMOMATIC_OPTIONS
 
 Required:
-  -i in_dir    Input directory containing clean FASTQ files.
-  -o out_dir   Directory in which results will be saved. This directory
-               will be created if it doesn't exist.
+  -i in_dir        Input directory containing clean FASTQ files.
+  -o out_dir       Directory in which results will be saved. This directory
+                   will be created if it doesn't exist.
 
 Options:
-  -t NUM       Number of threads to use (default: 4)
-  -h, --help   Show this help
-  -hh          Show Trimmomatic's help message.
+  -t NUM           Number of threads to use (default: 4)
+  -opts OPTIONS    Trimmomatic's options.
+  -h, --help       Show this help
+  -hh              Show Trimmomatic's help message.
 HELP_USAGE
 }
 
@@ -56,11 +57,6 @@ echo "Number of threads: ${threads:=4}"
 echo "Trimmomatic version: $(trimmomatic -version)"
 echo "Trimmomatic called with options: $trimopt"
 echo
-
-# Las opciones utilizadas con los reads de prueba el 2020-07-13
-# fueron: MINLEN:140 TRAILING:25 HEADCROP:20
-# Es importante recordar que en Trimmomatic el orden de las opciones indica
-# su orden de ejecución.
 
 for file in "$input_dir"/*; do
 
